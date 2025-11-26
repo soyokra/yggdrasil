@@ -1,0 +1,16 @@
+- RootBeanDefinition
+  - AbstractBeanDefinition
+    - BeanMetadataAttributeAccessor
+    - BeanDefinition
+      - AttributeAccessor
+      - BeanMetadataElement
+- AnnotatedGenericBeanDefinition
+  - GenericBeanDefinition
+    - AbstractBeanDefinition
+  - AnnotatedBeanDefinition
+    - BeanDefinition
+- ChildBeanDefinition
+  - AbstractBeanDefinition
+- ScannedGenericBeanDefinition
+  - GenericBeanDefinition
+  - AnnotatedBeanDefinition
