@@ -328,6 +328,9 @@ class DocSiteBuilder:
         html_content = self.md.convert(md_content)
         self.md.reset()
         
+        # 处理 Mermaid 代码块
+        html_content = self._process_mermaid(html_content)
+        
         # 处理链接
         html_content = self._process_links(html_content, html_rel_path)
         
@@ -478,6 +481,33 @@ class DocSiteBuilder:
             except ValueError:
                 # 图片不在 src 目录内，保持原路径
                 pass
+        
+        return str(soup)
+    
+    def _process_mermaid(self, html_content: str) -> str:
+        """处理 Mermaid 代码块，将其转换为 Mermaid 可识别的格式"""
+        soup = BeautifulSoup(html_content, 'html.parser')
+        
+        # 查找所有 class 包含 "language-mermaid" 的 code 标签
+        def has_mermaid_class(class_attr):
+            if not class_attr:
+                return False
+            # 处理 class 可能是字符串或列表的情况
+            if isinstance(class_attr, list):
+                return 'language-mermaid' in class_attr
+            return 'language-mermaid' in str(class_attr)
+        
+        for code in soup.find_all('code', class_=has_mermaid_class):
+            # 获取代码内容
+            mermaid_code = code.get_text()
+            
+            # 找到父级 pre 标签
+            pre = code.find_parent('pre')
+            if pre:
+                # 将 pre 标签替换为 div.mermaid
+                new_div = soup.new_tag('div', class_='mermaid')
+                new_div.string = mermaid_code
+                pre.replace_with(new_div)
         
         return str(soup)
     
