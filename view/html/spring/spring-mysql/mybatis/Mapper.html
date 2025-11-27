@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapper - 技术文档</title>
+    <link rel="stylesheet" href="../../../../assets/style.css">
+    <link rel="stylesheet" href="../../../../assets/github.min.css">
+    <script src="../../../../assets/highlight.min.js"></script>
+    <script src="../../../../assets/python.min.js"></script>
+    <script src="../../../../assets/java.min.js"></script>
+    <script src="../../../../assets/javascript.min.js"></script>
+    <script src="../../../../assets/xml.min.js"></script>
+    <script src="../../../../assets/css.min.js"></script>
+    <script src="../../../../assets/bash.min.js"></script>
+    <script src="../../../../assets/sql.min.js"></script>
+</head>
+
+<body>
+    <!-- 顶部导航栏 -->
+    <div class="top-navbar">
+        <div class="site-title">技术文档</div>
+    </div>
+
+    <!-- 侧边导航栏 -->
+    <div class="sidebar">
+        <ul class="nav-tree">
+            <li class="nav-item">
+<div class="nav-link has-children active">
+<span class="nav-link-icon expanded" data-toggle="collapse"></span>
+<a href="../../../../html/spring/index.html" class="nav-link-text" data-path="html/spring/index.html">spring</a>
+</div>
+<ul class="nav-children expanded">
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/spring/spring-boot/index.html" class="nav-link-text" data-path="html/spring/spring-boot/index.html">spring-boot</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-boot/actuator.html" class="nav-link-text" data-path="html/spring/spring-boot/actuator.html">Actuator</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-boot/autoconfigure.html" class="nav-link-text" data-path="html/spring/spring-boot/autoconfigure.html">Autoconfigure</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-boot/EnableConfigurationProperties注解.html" class="nav-link-text" data-path="html/spring/spring-boot/EnableConfigurationProperties注解.html">Enableconfigurationproperties注解</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-cloud/index.html" class="nav-link-text" data-path="html/spring/spring-cloud/index.html">spring-cloud</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-cloud-alibaba/index.html" class="nav-link-text" data-path="html/spring/spring-cloud-alibaba/index.html">spring-cloud-alibaba</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/spring/spring-framework/index.html" class="nav-link-text" data-path="html/spring/spring-framework/index.html">spring-framework</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework/BeanDefinition.class.graph.html" class="nav-link-text" data-path="html/spring/spring-framework/BeanDefinition.class.graph.html">Beandefinition.Class.Graph</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework/BeanLifecycle.html" class="nav-link-text" data-path="html/spring/spring-framework/BeanLifecycle.html">Beanlifecycle</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/spring/spring-framework-start/index.html" class="nav-link-text" data-path="html/spring/spring-framework-start/index.html">spring-framework-start</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/spring/spring-framework-start/src/index.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/index.html">src</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AbstractApplicationContext.cancelRefresh.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.cancelRefresh.html">Abstractapplicationcontext.Cancelrefresh</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AbstractApplicationContext.destroyBeans.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.destroyBeans.html">Abstractapplicationcontext.Destroybeans</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AbstractApplicationContext.finishBeanFactoryInitialization.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.finishBeanFactoryInitialization.html">Abstractapplicationcontext.Finishbeanfactoryinitialization</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AbstractApplicationContext.finishRefresh.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.finishRefresh.html">Abstractapplicationcontext.Finishrefresh</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AbstractApplicationContext.initApplicationEventMulticaster.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.initApplicationEventMulticaster.html">Abstractapplicationcontext.Initapplicationeventmulticaster</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AbstractApplicationContext.initMessageSource.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.initMessageSource.html">Abstractapplicationcontext.Initmessagesource</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AbstractApplicationContext.invokeBeanFactoryPostProcessors.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.invokeBeanFactoryPostProcessors.html">Abstractapplicationcontext.Invokebeanfactorypostprocessors</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AbstractApplicationContext.obtainFreshBeanFactory.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.obtainFreshBeanFactory.html">Abstractapplicationcontext.Obtainfreshbeanfactory</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AbstractApplicationContext.onRefresh.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.onRefresh.html">Abstractapplicationcontext.Onrefresh</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AbstractApplicationContext.postProcessBeanFactory.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.postProcessBeanFactory.html">Abstractapplicationcontext.Postprocessbeanfactory</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AbstractApplicationContext.prepareBeanFactory.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.prepareBeanFactory.html">Abstractapplicationcontext.Preparebeanfactory</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AbstractApplicationContext.prepareRefresh.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.prepareRefresh.html">Abstractapplicationcontext.Preparerefresh</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AbstractApplicationContext.registerBeanPostProcessors.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.registerBeanPostProcessors.html">Abstractapplicationcontext.Registerbeanpostprocessors</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AbstractApplicationContext.registerListeners.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.registerListeners.html">Abstractapplicationcontext.Registerlisteners</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AbstractApplicationContext.resetCommonCaches.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.resetCommonCaches.html">Abstractapplicationcontext.Resetcommoncaches</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/Application.createApplicationContext.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/Application.createApplicationContext.html">Application.Createapplicationcontext</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/Application.refreshContext.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/Application.refreshContext.html">Application.Refreshcontext</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/Application.run.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/Application.run.html">Application.Run</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AutoConfigurationImportSelector.getAutoConfigurationEntry.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AutoConfigurationImportSelector.getAutoConfigurationEntry.html">Autoconfigurationimportselector.Getautoconfigurationentry</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/ClassPathMapperScanner.scan.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/ClassPathMapperScanner.scan.html">Classpathmapperscanner.Scan</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/ConfigurationClassParser.parse.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/ConfigurationClassParser.parse.html">Configurationclassparser.Parse</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/ConfigurationClassPostProcessor.processConfigBeanDefinitions.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/ConfigurationClassPostProcessor.processConfigBeanDefinitions.html">Configurationclasspostprocessor.Processconfigbeandefinitions</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/MapperScannerConfigurer.postProcessBeanDefinitionRegistry.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/MapperScannerConfigurer.postProcessBeanDefinitionRegistry.html">Mapperscannerconfigurer.Postprocessbeandefinitionregistry</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/ServletWebServerApplicationContext.onRefresh.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/ServletWebServerApplicationContext.onRefresh.html">Servletwebserverapplicationcontext.Onrefresh</a>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children active">
+<span class="nav-link-icon expanded" data-toggle="collapse"></span>
+<a href="../../../../html/spring/spring-mysql/index.html" class="nav-link-text" data-path="html/spring/spring-mysql/index.html">spring-mysql</a>
+</div>
+<ul class="nav-children expanded">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-mysql/hikari/index.html" class="nav-link-text" data-path="html/spring/spring-mysql/hikari/index.html">hikari</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-mysql/jdbc/index.html" class="nav-link-text" data-path="html/spring/spring-mysql/jdbc/index.html">jdbc</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children active">
+<span class="nav-link-icon expanded" data-toggle="collapse"></span>
+<a href="../../../../html/spring/spring-mysql/mybatis/index.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis/index.html">mybatis</a>
+</div>
+<ul class="nav-children expanded">
+<li class="nav-item">
+<div class="nav-link active">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-mysql/mybatis/Mapper.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis/Mapper.html">Mapper</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-mysql/mybatis/XML.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis/XML.html">Xml</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/spring/spring-mysql/mybatis-plus/index.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis-plus/index.html">mybatis-plus</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-mysql/mybatis-plus/DataSource.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis-plus/DataSource.html">Datasource</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-mysql/mybatis-plus/Mapper.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis-plus/Mapper.html">Mapper</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-mysql/mybatis-plus/SQL执行.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis-plus/SQL执行.html">Sql执行</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-mysql/mybatis-plus/SQL模板注册.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis-plus/SQL模板注册.html">Sql模板注册</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-mysql/p6spy/index.html" class="nav-link-text" data-path="html/spring/spring-mysql/p6spy/index.html">p6spy</a>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/index.html" class="nav-link-text" data-path="html/java/index.html">java</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/k8s/index.html" class="nav-link-text" data-path="html/k8s/index.html">k8s</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/more/index.html" class="nav-link-text" data-path="html/more/index.html">more</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/more/ai/index.html" class="nav-link-text" data-path="html/more/ai/index.html">ai</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/more/algorithm/index.html" class="nav-link-text" data-path="html/more/algorithm/index.html">algorithm</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/more/clickhouse/index.html" class="nav-link-text" data-path="html/more/clickhouse/index.html">clickhouse</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/more/data-structure/index.html" class="nav-link-text" data-path="html/more/data-structure/index.html">data-structure</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/more/design-pattern/index.html" class="nav-link-text" data-path="html/more/design-pattern/index.html">design-pattern</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/more/diagram/index.html" class="nav-link-text" data-path="html/more/diagram/index.html">diagram</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/more/elasticsearch/index.html" class="nav-link-text" data-path="html/more/elasticsearch/index.html">elasticsearch</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/more/kakfa/index.html" class="nav-link-text" data-path="html/more/kakfa/index.html">kakfa</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/more/mongodb/index.html" class="nav-link-text" data-path="html/more/mongodb/index.html">mongodb</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/more/nginx/index.html" class="nav-link-text" data-path="html/more/nginx/index.html">nginx</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/more/prometheus/index.html" class="nav-link-text" data-path="html/more/prometheus/index.html">prometheus</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/more/rabbitmq/index.html" class="nav-link-text" data-path="html/more/rabbitmq/index.html">rabbitmq</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/more/redis/index.html" class="nav-link-text" data-path="html/more/redis/index.html">redis</a>
+</div>
+</li>
+</ul>
+</li>
+        </ul>
+    </div>
+
+    <!-- 主内容区 -->
+    <div class="main-content">
+        <div class="content-body">
+            <h1 id="mybatis-mapper">mybatis Mapper接口源码分析</h1>
+<h2 id="_1">使用示例</h2>
+<p>mybatis的一个简单使用示例：</p>
+<ol>
+<li>定义XML映射</li>
+</ol>
+<div class="hljs"><pre><span></span><code><span class="nt">&lt;mapper</span><span class="w"> </span><span class="na">namespace=</span><span class="s">"com.sprival.UserMapper"</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;select</span><span class="w"> </span><span class="na">id=</span><span class="s">"selectUser"</span><span class="w"> </span><span class="na">parameterType=</span><span class="s">"int"</span><span class="w"> </span><span class="na">resultType=</span><span class="s">"User"</span><span class="nt">&gt;</span>
+<span class="w">        </span>SELECT<span class="w"> </span>*<span class="w"> </span>FROM<span class="w"> </span>users<span class="w"> </span>WHERE<span class="w"> </span>id<span class="w"> </span>=<span class="w"> </span>#{id}
+<span class="w">    </span><span class="nt">&lt;/select&gt;</span>
+<span class="nt">&lt;/mapper&gt;</span>
+</code></pre></div>
+<ol>
+<li>定义接口</li>
+</ol>
+<div class="hljs"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">UserMapper</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">User</span><span class="w"> </span><span class="nf">selectUser</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">id</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<ol>
+<li>执行查询</li>
+</ol>
+<div class="hljs"><pre><span></span><code><span class="k">class</span> <span class="n">Test</span> {
+    <span class="n">public</span> <span class="n">static</span> <span class="n">void</span> <span class="n">main</span>(<span class="n">String</span>[] <span class="nb">args</span>) {
+        // <span class="mi">1</span>. <span class="n">从</span> <span class="n">XML</span> <span class="n">配置构建</span> <span class="n">SqlSessionFactory</span>
+        <span class="n">String</span> <span class="n">resource</span> = <span class="s">"mybatis-config.xml"</span>;
+        <span class="n">InputStream</span> <span class="n">inputStream</span> = <span class="n">Resources</span>.<span class="n">getResourceAsStream</span>(<span class="n">resource</span>);
+        <span class="n">SqlSessionFactory</span> <span class="n">sqlSessionFactory</span> = <span class="nb">new</span> <span class="n">SqlSessionFactoryBuilder</span>().<span class="n">build</span>(<span class="n">inputStream</span>);
+
+        // <span class="mi">2</span>. <span class="n">获取</span> <span class="n">SqlSession</span> <span class="n">并执行</span> <span class="n">SQL</span>
+        <span class="k">try</span> (<span class="n">SqlSession</span> <span class="n">session</span> = <span class="n">sqlSessionFactory</span>.<span class="n">openSession</span>()) {
+            <span class="n">UserMapper</span> <span class="n">mapper</span> = <span class="n">session</span>.<span class="n">getMapper</span>(<span class="n">UserMapper</span>.<span class="k">class</span>);
+            <span class="n">User</span> <span class="n">user</span> = <span class="n">mapper</span>.<span class="n">selectUser</span>(<span class="mi">1</span>);
+        } <span class="n">catch</span>(<span class="nb">Exception</span> <span class="nb">e</span>) {
+            <span class="nb">e</span>.<span class="n">printStackTrace</span>();
+        }
+    }
+}
+</code></pre></div>
+<h2 id="mapperproxy">MapperProxy</h2>
+<p>我们定义的UserMapper是一个接口，那么通过<code>UserMapper mapper = session.getMapper(UserMapper.class)</code><br/>
+获取到的实现是什么呢？<br/>
+mybatis负责mapper实例化的类如下：<br/>
+- MapperRegistry：MapperProxyFactory的注册缓存<br/>
+- MapperProxyFactory：创建MapperProxy实例<br/>
+- MapperProxy：动态代理Mapper接口<br/>
+- MapperMethod：将Mapper面向业务的方法转换为操作数据库的方法</p>
+<div class="hljs"><pre><span></span><code><span class="n">MapperRegistry</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">MapperProxyFactory</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">MapperProxy</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">MapperMethod</span>
+</code></pre></div>
+<p>mybatis通过JDK动态代理的方式为Mapper接口创建了代理实现MapperProxy，MapperProxy的invoke方法又将具体实现逻辑交由MapperMethod进行处理</p>
+<p>此处为示例代码，用于演示实现原理，方便理解，实际逻辑可以查看源码文件</p>
+<h3 id="_2">接口</h3>
+<div class="hljs"><pre><span></span><code>public interface UserMapper {
+    String queryUser(String id);
+}
+</code></pre></div>
+<h3 id="_3">代理</h3>
+<div class="hljs"><pre><span></span><code><span class="nx">public</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nx">MapperProxy</span><span class="w"> </span><span class="nx">implements</span><span class="w"> </span><span class="nx">InvocationHandler</span><span class="w"> </span><span class="p">{</span>
+<span class="w">     </span><span class="err">@</span><span class="nx">Override</span>
+<span class="w">    </span><span class="nx">public</span><span class="w"> </span><span class="nx">Object</span><span class="w"> </span><span class="nx">invoke</span><span class="p">(</span><span class="nx">Object</span><span class="w"> </span><span class="nx">proxy</span><span class="p">,</span><span class="w"> </span><span class="nx">Method</span><span class="w"> </span><span class="nx">method</span><span class="p">,</span><span class="w"> </span><span class="nx">Object</span><span class="p">[]</span><span class="w"> </span><span class="nx">args</span><span class="p">)</span><span class="w"> </span><span class="nx">throws</span><span class="w"> </span><span class="nx">Throwable</span><span class="w"> </span><span class="p">{</span>
+<span class="w">       </span><span class="c1">// 转为mapperMethod处理</span>
+<span class="w">       </span><span class="nx">mapperMethod</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="nx">sqlSession</span><span class="p">,</span><span class="w"> </span><span class="nx">args</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="_4">生成动态代理对象</h3>
+<div class="hljs"><pre><span></span><code>UserMapper userMapper = (UserMapper) Proxy.newProxyInstance(UserMapper.class.getClassLoader(), new Class[] { UserMapper.class }, mapperProxy);
+userMapper.queryUser("10028301010"); // 实际调用 MapperProxy.invoke 方法。
+</code></pre></div>
+<h2 id="mapperscan">MapperScan</h2>
+<p>集成到Spring的时候，除了SqlSession bean注册，一个关键点是如何将用户定义的Mapper接口<br/>
+mybatis负责mapperScan的类如下：<br/>
+- MapperScan<br/>
+- MapperScannerRegistrar<br/>
+- MapperScannerConfigurer<br/>
+- MapperFactoryBean<br/>
+- ClassPathMapperScanner</p>
+<p>主要的调用链路如下，MapperScan扫描包目录下的文件，用MapperFactoryBean注册为BeanClass，通过getObject()转到SqlSessionTemplate.getMapper()。<br/>
+最终回到MapperRegistry.getMapper()，MapperProxy代理实现</p>
+<div class="hljs"><pre><span></span><code>@MapperScan("com.soyokra.sprival.dao.*.mapper")
+=&gt; MapperScan @Import({MapperScannerRegistrar.class})：注册MapperScannerRegistrar
+=&gt; MapperScannerRegistrar.registerBeanDefinitions：设置MapperScannerConfigurer属性的basePackage为com.soyokra.sprival.dao.*.mapper
+=&gt; MapperScannerConfigurer.postProcessBeanDefinitionRegistry
+=&gt; ClassPathMapperScanner.processBeanDefinitions：扫描basePackage生成BeanDefinition，并且设置BeanClass为MapperFactoryBean
+=&gt; Mapper注册为Bean的时候，通过MapperFactoryBean的getObject()转到了SqlSessionTemplate.getMapper()
+=&gt; SqlSessionTemplate.getMapper()方法最终调用到MapperRegistry.getMapper()
+</code></pre></div>
+        </div>
+    </div>
+
+    <script src="../../../../assets/script.js"></script>
+    <script>
+        // 初始化代码高亮
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
+        });
+    </script>
+</body>
+
+</html>

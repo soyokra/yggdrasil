@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classpathmapperscanner.Scan - 技术文档</title>
+    <link rel="stylesheet" href="../../../../assets/style.css">
+    <link rel="stylesheet" href="../../../../assets/github.min.css">
+    <script src="../../../../assets/highlight.min.js"></script>
+    <script src="../../../../assets/python.min.js"></script>
+    <script src="../../../../assets/java.min.js"></script>
+    <script src="../../../../assets/javascript.min.js"></script>
+    <script src="../../../../assets/xml.min.js"></script>
+    <script src="../../../../assets/css.min.js"></script>
+    <script src="../../../../assets/bash.min.js"></script>
+    <script src="../../../../assets/sql.min.js"></script>
+</head>
+
+<body>
+    <!-- 顶部导航栏 -->
+    <div class="top-navbar">
+        <div class="site-title">技术文档</div>
+    </div>
+
+    <!-- 侧边导航栏 -->
+    <div class="sidebar">
+        <ul class="nav-tree">
+            <li class="nav-item">
+<div class="nav-link has-children active">
+<span class="nav-link-icon expanded" data-toggle="collapse"></span>
+<a href="../../../../html/spring/index.html" class="nav-link-text" data-path="html/spring/index.html">spring</a>
+</div>
+<ul class="nav-children expanded">
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/spring/spring-boot/index.html" class="nav-link-text" data-path="html/spring/spring-boot/index.html">spring-boot</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-boot/actuator.html" class="nav-link-text" data-path="html/spring/spring-boot/actuator.html">Actuator</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-boot/autoconfigure.html" class="nav-link-text" data-path="html/spring/spring-boot/autoconfigure.html">Autoconfigure</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-boot/EnableConfigurationProperties注解.html" class="nav-link-text" data-path="html/spring/spring-boot/EnableConfigurationProperties注解.html">Enableconfigurationproperties注解</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-cloud/index.html" class="nav-link-text" data-path="html/spring/spring-cloud/index.html">spring-cloud</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-cloud-alibaba/index.html" class="nav-link-text" data-path="html/spring/spring-cloud-alibaba/index.html">spring-cloud-alibaba</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/spring/spring-framework/index.html" class="nav-link-text" data-path="html/spring/spring-framework/index.html">spring-framework</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework/BeanDefinition.class.graph.html" class="nav-link-text" data-path="html/spring/spring-framework/BeanDefinition.class.graph.html">Beandefinition.Class.Graph</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework/BeanLifecycle.html" class="nav-link-text" data-path="html/spring/spring-framework/BeanLifecycle.html">Beanlifecycle</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children active">
+<span class="nav-link-icon expanded" data-toggle="collapse"></span>
+<a href="../../../../html/spring/spring-framework-start/index.html" class="nav-link-text" data-path="html/spring/spring-framework-start/index.html">spring-framework-start</a>
+</div>
+<ul class="nav-children expanded">
+<li class="nav-item">
+<div class="nav-link has-children active">
+<span class="nav-link-icon expanded" data-toggle="collapse"></span>
+<a href="../../../../html/spring/spring-framework-start/src/index.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/index.html">src</a>
+</div>
+<ul class="nav-children expanded">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AbstractApplicationContext.cancelRefresh.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.cancelRefresh.html">Abstractapplicationcontext.Cancelrefresh</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AbstractApplicationContext.destroyBeans.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.destroyBeans.html">Abstractapplicationcontext.Destroybeans</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AbstractApplicationContext.finishBeanFactoryInitialization.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.finishBeanFactoryInitialization.html">Abstractapplicationcontext.Finishbeanfactoryinitialization</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AbstractApplicationContext.finishRefresh.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.finishRefresh.html">Abstractapplicationcontext.Finishrefresh</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AbstractApplicationContext.initApplicationEventMulticaster.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.initApplicationEventMulticaster.html">Abstractapplicationcontext.Initapplicationeventmulticaster</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AbstractApplicationContext.initMessageSource.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.initMessageSource.html">Abstractapplicationcontext.Initmessagesource</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AbstractApplicationContext.invokeBeanFactoryPostProcessors.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.invokeBeanFactoryPostProcessors.html">Abstractapplicationcontext.Invokebeanfactorypostprocessors</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AbstractApplicationContext.obtainFreshBeanFactory.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.obtainFreshBeanFactory.html">Abstractapplicationcontext.Obtainfreshbeanfactory</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AbstractApplicationContext.onRefresh.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.onRefresh.html">Abstractapplicationcontext.Onrefresh</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AbstractApplicationContext.postProcessBeanFactory.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.postProcessBeanFactory.html">Abstractapplicationcontext.Postprocessbeanfactory</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AbstractApplicationContext.prepareBeanFactory.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.prepareBeanFactory.html">Abstractapplicationcontext.Preparebeanfactory</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AbstractApplicationContext.prepareRefresh.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.prepareRefresh.html">Abstractapplicationcontext.Preparerefresh</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AbstractApplicationContext.registerBeanPostProcessors.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.registerBeanPostProcessors.html">Abstractapplicationcontext.Registerbeanpostprocessors</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AbstractApplicationContext.registerListeners.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.registerListeners.html">Abstractapplicationcontext.Registerlisteners</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AbstractApplicationContext.resetCommonCaches.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.resetCommonCaches.html">Abstractapplicationcontext.Resetcommoncaches</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/Application.createApplicationContext.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/Application.createApplicationContext.html">Application.Createapplicationcontext</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/Application.refreshContext.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/Application.refreshContext.html">Application.Refreshcontext</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/Application.run.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/Application.run.html">Application.Run</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AutoConfigurationImportSelector.getAutoConfigurationEntry.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AutoConfigurationImportSelector.getAutoConfigurationEntry.html">Autoconfigurationimportselector.Getautoconfigurationentry</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link active">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/ClassPathMapperScanner.scan.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/ClassPathMapperScanner.scan.html">Classpathmapperscanner.Scan</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/ConfigurationClassParser.parse.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/ConfigurationClassParser.parse.html">Configurationclassparser.Parse</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/ConfigurationClassPostProcessor.processConfigBeanDefinitions.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/ConfigurationClassPostProcessor.processConfigBeanDefinitions.html">Configurationclasspostprocessor.Processconfigbeandefinitions</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/MapperScannerConfigurer.postProcessBeanDefinitionRegistry.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/MapperScannerConfigurer.postProcessBeanDefinitionRegistry.html">Mapperscannerconfigurer.Postprocessbeandefinitionregistry</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/ServletWebServerApplicationContext.onRefresh.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/ServletWebServerApplicationContext.onRefresh.html">Servletwebserverapplicationcontext.Onrefresh</a>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/spring/spring-mysql/index.html" class="nav-link-text" data-path="html/spring/spring-mysql/index.html">spring-mysql</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-mysql/hikari/index.html" class="nav-link-text" data-path="html/spring/spring-mysql/hikari/index.html">hikari</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-mysql/jdbc/index.html" class="nav-link-text" data-path="html/spring/spring-mysql/jdbc/index.html">jdbc</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/spring/spring-mysql/mybatis/index.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis/index.html">mybatis</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-mysql/mybatis/Mapper.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis/Mapper.html">Mapper</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-mysql/mybatis/XML.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis/XML.html">Xml</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/spring/spring-mysql/mybatis-plus/index.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis-plus/index.html">mybatis-plus</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-mysql/mybatis-plus/DataSource.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis-plus/DataSource.html">Datasource</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-mysql/mybatis-plus/Mapper.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis-plus/Mapper.html">Mapper</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-mysql/mybatis-plus/SQL执行.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis-plus/SQL执行.html">Sql执行</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-mysql/mybatis-plus/SQL模板注册.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis-plus/SQL模板注册.html">Sql模板注册</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-mysql/p6spy/index.html" class="nav-link-text" data-path="html/spring/spring-mysql/p6spy/index.html">p6spy</a>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/index.html" class="nav-link-text" data-path="html/java/index.html">java</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/k8s/index.html" class="nav-link-text" data-path="html/k8s/index.html">k8s</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/more/index.html" class="nav-link-text" data-path="html/more/index.html">more</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/more/ai/index.html" class="nav-link-text" data-path="html/more/ai/index.html">ai</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/more/algorithm/index.html" class="nav-link-text" data-path="html/more/algorithm/index.html">algorithm</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/more/clickhouse/index.html" class="nav-link-text" data-path="html/more/clickhouse/index.html">clickhouse</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/more/data-structure/index.html" class="nav-link-text" data-path="html/more/data-structure/index.html">data-structure</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/more/design-pattern/index.html" class="nav-link-text" data-path="html/more/design-pattern/index.html">design-pattern</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/more/diagram/index.html" class="nav-link-text" data-path="html/more/diagram/index.html">diagram</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/more/elasticsearch/index.html" class="nav-link-text" data-path="html/more/elasticsearch/index.html">elasticsearch</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/more/kakfa/index.html" class="nav-link-text" data-path="html/more/kakfa/index.html">kakfa</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/more/mongodb/index.html" class="nav-link-text" data-path="html/more/mongodb/index.html">mongodb</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/more/nginx/index.html" class="nav-link-text" data-path="html/more/nginx/index.html">nginx</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/more/prometheus/index.html" class="nav-link-text" data-path="html/more/prometheus/index.html">prometheus</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/more/rabbitmq/index.html" class="nav-link-text" data-path="html/more/rabbitmq/index.html">rabbitmq</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/more/redis/index.html" class="nav-link-text" data-path="html/more/redis/index.html">redis</a>
+</div>
+</li>
+</ul>
+</li>
+        </ul>
+    </div>
+
+    <!-- 主内容区 -->
+    <div class="main-content">
+        <div class="content-body">
+            <div class="hljs"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ClassPathBeanDefinitionScanner</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">ClassPathScanningCandidateComponentProvider</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">scan</span><span class="p">(</span><span class="n">String</span><span class="p">...</span><span class="w"> </span><span class="n">basePackages</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">beanCountAtScanStart</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">registry</span><span class="p">.</span><span class="na">getBeanDefinitionCount</span><span class="p">();</span>
+
+<span class="w">        </span><span class="n">doScan</span><span class="p">(</span><span class="n">basePackages</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Register annotation config processors, if necessary.</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">includeAnnotationConfig</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">AnnotationConfigUtils</span><span class="p">.</span><span class="na">registerAnnotationConfigProcessors</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">registry</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">registry</span><span class="p">.</span><span class="na">getBeanDefinitionCount</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">beanCountAtScanStart</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">protected</span><span class="w"> </span><span class="n">Set</span><span class="o">&lt;</span><span class="n">BeanDefinitionHolder</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">doScan</span><span class="p">(</span><span class="n">String</span><span class="p">...</span><span class="w"> </span><span class="n">basePackages</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Assert</span><span class="p">.</span><span class="na">notEmpty</span><span class="p">(</span><span class="n">basePackages</span><span class="p">,</span><span class="w"> </span><span class="s">"At least one base package must be specified"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Set</span><span class="o">&lt;</span><span class="n">BeanDefinitionHolder</span><span class="o">&gt;</span><span class="w"> </span><span class="n">beanDefinitions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">LinkedHashSet</span><span class="o">&lt;&gt;</span><span class="p">();</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">basePackage</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">basePackages</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Set</span><span class="o">&lt;</span><span class="n">BeanDefinition</span><span class="o">&gt;</span><span class="w"> </span><span class="n">candidates</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">findCandidateComponents</span><span class="p">(</span><span class="n">basePackage</span><span class="p">);</span>
+<span class="w">            </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">BeanDefinition</span><span class="w"> </span><span class="n">candidate</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">candidates</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">ScopeMetadata</span><span class="w"> </span><span class="n">scopeMetadata</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">scopeMetadataResolver</span><span class="p">.</span><span class="na">resolveScopeMetadata</span><span class="p">(</span><span class="n">candidate</span><span class="p">);</span>
+<span class="w">                </span><span class="n">candidate</span><span class="p">.</span><span class="na">setScope</span><span class="p">(</span><span class="n">scopeMetadata</span><span class="p">.</span><span class="na">getScopeName</span><span class="p">());</span>
+<span class="w">                </span><span class="n">String</span><span class="w"> </span><span class="n">beanName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">beanNameGenerator</span><span class="p">.</span><span class="na">generateBeanName</span><span class="p">(</span><span class="n">candidate</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">registry</span><span class="p">);</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">candidate</span><span class="w"> </span><span class="k">instanceof</span><span class="w"> </span><span class="n">AbstractBeanDefinition</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="n">postProcessBeanDefinition</span><span class="p">((</span><span class="n">AbstractBeanDefinition</span><span class="p">)</span><span class="w"> </span><span class="n">candidate</span><span class="p">,</span><span class="w"> </span><span class="n">beanName</span><span class="p">);</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">candidate</span><span class="w"> </span><span class="k">instanceof</span><span class="w"> </span><span class="n">AnnotatedBeanDefinition</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="n">AnnotationConfigUtils</span><span class="p">.</span><span class="na">processCommonDefinitionAnnotations</span><span class="p">((</span><span class="n">AnnotatedBeanDefinition</span><span class="p">)</span><span class="w"> </span><span class="n">candidate</span><span class="p">);</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">checkCandidate</span><span class="p">(</span><span class="n">beanName</span><span class="p">,</span><span class="w"> </span><span class="n">candidate</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="n">BeanDefinitionHolder</span><span class="w"> </span><span class="n">definitionHolder</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">BeanDefinitionHolder</span><span class="p">(</span><span class="n">candidate</span><span class="p">,</span><span class="w"> </span><span class="n">beanName</span><span class="p">);</span>
+<span class="w">                    </span><span class="n">definitionHolder</span><span class="w"> </span><span class="o">=</span>
+<span class="w">                            </span><span class="n">AnnotationConfigUtils</span><span class="p">.</span><span class="na">applyScopedProxyMode</span><span class="p">(</span><span class="n">scopeMetadata</span><span class="p">,</span><span class="w"> </span><span class="n">definitionHolder</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">registry</span><span class="p">);</span>
+<span class="w">                    </span><span class="n">beanDefinitions</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="n">definitionHolder</span><span class="p">);</span>
+<span class="w">                    </span><span class="n">registerBeanDefinition</span><span class="p">(</span><span class="n">definitionHolder</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">registry</span><span class="p">);</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">beanDefinitions</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<div class="hljs"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ClassPathMapperScanner</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">ClassPathBeanDefinitionScanner</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Set</span><span class="o">&lt;</span><span class="n">BeanDefinitionHolder</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">doScan</span><span class="p">(</span><span class="n">String</span><span class="p">...</span><span class="w"> </span><span class="n">basePackages</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Set</span><span class="o">&lt;</span><span class="n">BeanDefinitionHolder</span><span class="o">&gt;</span><span class="w"> </span><span class="n">beanDefinitions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">super</span><span class="p">.</span><span class="na">doScan</span><span class="p">(</span><span class="n">basePackages</span><span class="p">);</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">beanDefinitions</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">LOGGER</span><span class="p">.</span><span class="na">warn</span><span class="p">(()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="s">"No MyBatis mapper was found in '"</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Arrays</span><span class="p">.</span><span class="na">toString</span><span class="p">(</span><span class="n">basePackages</span><span class="p">)</span>
+<span class="w">                    </span><span class="o">+</span><span class="w"> </span><span class="s">"' package. Please check your configuration."</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">processBeanDefinitions</span><span class="p">(</span><span class="n">beanDefinitions</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">beanDefinitions</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+        </div>
+    </div>
+
+    <script src="../../../../assets/script.js"></script>
+    <script>
+        // 初始化代码高亮
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
+        });
+    </script>
+</body>
+
+</html>

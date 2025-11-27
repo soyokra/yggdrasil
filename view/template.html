@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} - 技术文档</title>
+    <link rel="stylesheet" href="{{ base_path }}assets/style.css">
+    <link rel="stylesheet" href="{{ base_path }}assets/github.min.css">
+    <script src="{{ base_path }}assets/highlight.min.js"></script>
+    <script src="{{ base_path }}assets/python.min.js"></script>
+    <script src="{{ base_path }}assets/java.min.js"></script>
+    <script src="{{ base_path }}assets/javascript.min.js"></script>
+    <script src="{{ base_path }}assets/xml.min.js"></script>
+    <script src="{{ base_path }}assets/css.min.js"></script>
+    <script src="{{ base_path }}assets/bash.min.js"></script>
+    <script src="{{ base_path }}assets/sql.min.js"></script>
+</head>
+
+<body>
+    <!-- 顶部导航栏 -->
+    <div class="top-navbar">
+        <div class="site-title">技术文档</div>
+    </div>
+
+    <!-- 侧边导航栏 -->
+    <div class="sidebar">
+        <ul class="nav-tree">
+            {{ nav_tree | safe }}
+        </ul>
+    </div>
+
+    <!-- 主内容区 -->
+    <div class="main-content">
+        <div class="content-body">
+            {{ content | safe }}
+        </div>
+    </div>
+
+    <script src="{{ base_path }}assets/script.js"></script>
+    <script>
+        // 初始化代码高亮
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
+        });
+    </script>
+</body>
+
+</html>

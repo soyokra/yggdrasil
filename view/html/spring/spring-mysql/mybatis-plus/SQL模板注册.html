@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sql模板注册 - 技术文档</title>
+    <link rel="stylesheet" href="../../../../assets/style.css">
+    <link rel="stylesheet" href="../../../../assets/github.min.css">
+    <script src="../../../../assets/highlight.min.js"></script>
+    <script src="../../../../assets/python.min.js"></script>
+    <script src="../../../../assets/java.min.js"></script>
+    <script src="../../../../assets/javascript.min.js"></script>
+    <script src="../../../../assets/xml.min.js"></script>
+    <script src="../../../../assets/css.min.js"></script>
+    <script src="../../../../assets/bash.min.js"></script>
+    <script src="../../../../assets/sql.min.js"></script>
+</head>
+
+<body>
+    <!-- 顶部导航栏 -->
+    <div class="top-navbar">
+        <div class="site-title">技术文档</div>
+    </div>
+
+    <!-- 侧边导航栏 -->
+    <div class="sidebar">
+        <ul class="nav-tree">
+            <li class="nav-item">
+<div class="nav-link has-children active">
+<span class="nav-link-icon expanded" data-toggle="collapse"></span>
+<a href="../../../../html/spring/index.html" class="nav-link-text" data-path="html/spring/index.html">spring</a>
+</div>
+<ul class="nav-children expanded">
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/spring/spring-boot/index.html" class="nav-link-text" data-path="html/spring/spring-boot/index.html">spring-boot</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-boot/actuator.html" class="nav-link-text" data-path="html/spring/spring-boot/actuator.html">Actuator</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-boot/autoconfigure.html" class="nav-link-text" data-path="html/spring/spring-boot/autoconfigure.html">Autoconfigure</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-boot/EnableConfigurationProperties注解.html" class="nav-link-text" data-path="html/spring/spring-boot/EnableConfigurationProperties注解.html">Enableconfigurationproperties注解</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-cloud/index.html" class="nav-link-text" data-path="html/spring/spring-cloud/index.html">spring-cloud</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-cloud-alibaba/index.html" class="nav-link-text" data-path="html/spring/spring-cloud-alibaba/index.html">spring-cloud-alibaba</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/spring/spring-framework/index.html" class="nav-link-text" data-path="html/spring/spring-framework/index.html">spring-framework</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework/BeanDefinition.class.graph.html" class="nav-link-text" data-path="html/spring/spring-framework/BeanDefinition.class.graph.html">Beandefinition.Class.Graph</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework/BeanLifecycle.html" class="nav-link-text" data-path="html/spring/spring-framework/BeanLifecycle.html">Beanlifecycle</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/spring/spring-framework-start/index.html" class="nav-link-text" data-path="html/spring/spring-framework-start/index.html">spring-framework-start</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/spring/spring-framework-start/src/index.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/index.html">src</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AbstractApplicationContext.cancelRefresh.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.cancelRefresh.html">Abstractapplicationcontext.Cancelrefresh</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AbstractApplicationContext.destroyBeans.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.destroyBeans.html">Abstractapplicationcontext.Destroybeans</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AbstractApplicationContext.finishBeanFactoryInitialization.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.finishBeanFactoryInitialization.html">Abstractapplicationcontext.Finishbeanfactoryinitialization</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AbstractApplicationContext.finishRefresh.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.finishRefresh.html">Abstractapplicationcontext.Finishrefresh</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AbstractApplicationContext.initApplicationEventMulticaster.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.initApplicationEventMulticaster.html">Abstractapplicationcontext.Initapplicationeventmulticaster</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AbstractApplicationContext.initMessageSource.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.initMessageSource.html">Abstractapplicationcontext.Initmessagesource</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AbstractApplicationContext.invokeBeanFactoryPostProcessors.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.invokeBeanFactoryPostProcessors.html">Abstractapplicationcontext.Invokebeanfactorypostprocessors</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AbstractApplicationContext.obtainFreshBeanFactory.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.obtainFreshBeanFactory.html">Abstractapplicationcontext.Obtainfreshbeanfactory</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AbstractApplicationContext.onRefresh.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.onRefresh.html">Abstractapplicationcontext.Onrefresh</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AbstractApplicationContext.postProcessBeanFactory.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.postProcessBeanFactory.html">Abstractapplicationcontext.Postprocessbeanfactory</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AbstractApplicationContext.prepareBeanFactory.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.prepareBeanFactory.html">Abstractapplicationcontext.Preparebeanfactory</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AbstractApplicationContext.prepareRefresh.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.prepareRefresh.html">Abstractapplicationcontext.Preparerefresh</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AbstractApplicationContext.registerBeanPostProcessors.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.registerBeanPostProcessors.html">Abstractapplicationcontext.Registerbeanpostprocessors</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AbstractApplicationContext.registerListeners.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.registerListeners.html">Abstractapplicationcontext.Registerlisteners</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AbstractApplicationContext.resetCommonCaches.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.resetCommonCaches.html">Abstractapplicationcontext.Resetcommoncaches</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/Application.createApplicationContext.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/Application.createApplicationContext.html">Application.Createapplicationcontext</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/Application.refreshContext.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/Application.refreshContext.html">Application.Refreshcontext</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/Application.run.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/Application.run.html">Application.Run</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/AutoConfigurationImportSelector.getAutoConfigurationEntry.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AutoConfigurationImportSelector.getAutoConfigurationEntry.html">Autoconfigurationimportselector.Getautoconfigurationentry</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/ClassPathMapperScanner.scan.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/ClassPathMapperScanner.scan.html">Classpathmapperscanner.Scan</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/ConfigurationClassParser.parse.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/ConfigurationClassParser.parse.html">Configurationclassparser.Parse</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/ConfigurationClassPostProcessor.processConfigBeanDefinitions.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/ConfigurationClassPostProcessor.processConfigBeanDefinitions.html">Configurationclasspostprocessor.Processconfigbeandefinitions</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/MapperScannerConfigurer.postProcessBeanDefinitionRegistry.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/MapperScannerConfigurer.postProcessBeanDefinitionRegistry.html">Mapperscannerconfigurer.Postprocessbeandefinitionregistry</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework-start/src/ServletWebServerApplicationContext.onRefresh.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/ServletWebServerApplicationContext.onRefresh.html">Servletwebserverapplicationcontext.Onrefresh</a>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children active">
+<span class="nav-link-icon expanded" data-toggle="collapse"></span>
+<a href="../../../../html/spring/spring-mysql/index.html" class="nav-link-text" data-path="html/spring/spring-mysql/index.html">spring-mysql</a>
+</div>
+<ul class="nav-children expanded">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-mysql/hikari/index.html" class="nav-link-text" data-path="html/spring/spring-mysql/hikari/index.html">hikari</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-mysql/jdbc/index.html" class="nav-link-text" data-path="html/spring/spring-mysql/jdbc/index.html">jdbc</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/spring/spring-mysql/mybatis/index.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis/index.html">mybatis</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-mysql/mybatis/Mapper.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis/Mapper.html">Mapper</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-mysql/mybatis/XML.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis/XML.html">Xml</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children active">
+<span class="nav-link-icon expanded" data-toggle="collapse"></span>
+<a href="../../../../html/spring/spring-mysql/mybatis-plus/index.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis-plus/index.html">mybatis-plus</a>
+</div>
+<ul class="nav-children expanded">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-mysql/mybatis-plus/DataSource.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis-plus/DataSource.html">Datasource</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-mysql/mybatis-plus/Mapper.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis-plus/Mapper.html">Mapper</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-mysql/mybatis-plus/SQL执行.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis-plus/SQL执行.html">Sql执行</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link active">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-mysql/mybatis-plus/SQL模板注册.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis-plus/SQL模板注册.html">Sql模板注册</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-mysql/p6spy/index.html" class="nav-link-text" data-path="html/spring/spring-mysql/p6spy/index.html">p6spy</a>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/index.html" class="nav-link-text" data-path="html/java/index.html">java</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/k8s/index.html" class="nav-link-text" data-path="html/k8s/index.html">k8s</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/more/index.html" class="nav-link-text" data-path="html/more/index.html">more</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/more/ai/index.html" class="nav-link-text" data-path="html/more/ai/index.html">ai</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/more/algorithm/index.html" class="nav-link-text" data-path="html/more/algorithm/index.html">algorithm</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/more/clickhouse/index.html" class="nav-link-text" data-path="html/more/clickhouse/index.html">clickhouse</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/more/data-structure/index.html" class="nav-link-text" data-path="html/more/data-structure/index.html">data-structure</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/more/design-pattern/index.html" class="nav-link-text" data-path="html/more/design-pattern/index.html">design-pattern</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/more/diagram/index.html" class="nav-link-text" data-path="html/more/diagram/index.html">diagram</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/more/elasticsearch/index.html" class="nav-link-text" data-path="html/more/elasticsearch/index.html">elasticsearch</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/more/kakfa/index.html" class="nav-link-text" data-path="html/more/kakfa/index.html">kakfa</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/more/mongodb/index.html" class="nav-link-text" data-path="html/more/mongodb/index.html">mongodb</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/more/nginx/index.html" class="nav-link-text" data-path="html/more/nginx/index.html">nginx</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/more/prometheus/index.html" class="nav-link-text" data-path="html/more/prometheus/index.html">prometheus</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/more/rabbitmq/index.html" class="nav-link-text" data-path="html/more/rabbitmq/index.html">rabbitmq</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/more/redis/index.html" class="nav-link-text" data-path="html/more/redis/index.html">redis</a>
+</div>
+</li>
+</ul>
+</li>
+        </ul>
+    </div>
+
+    <!-- 主内容区 -->
+    <div class="main-content">
+        <div class="content-body">
+            <h1 id="sql">SQL模板注册</h1>
+<p>SQL模板注册，就是创建和添加MappedStatement</p>
+<p>mybatis-plus会复用mybatis，将xxxMapper.xml文件定义的sql模板解析成MappedStatement。因此在xxxMapper.xml定义sql用法和mybatis一样</p>
+<p>同时，mybatis-plus会执行自己的的方法，将预定义的selectList,insert,update,delete等方法，通过生成mybatis脚本的方式转成MappedStatement。 </p>
+<p>mybatis-plus的Wrapper是mybatis的实体，mybatis会反射解析属性，对脚本动态内容进行判断和替换</p>
+<p>脚本代码会转成sqlNode对象，脚本动态内容进行判断和替换的过程是转成sqlNode后执行的</p>
+<div class="hljs"><pre><span></span><code><span class="nt">&lt;script&gt;</span>
+<span class="w">    </span><span class="nt">&lt;if</span><span class="w"> </span><span class="na">test=</span><span class="s">"ew != null and ew.sqlFirst != null"</span><span class="nt">&gt;</span>
+<span class="w">        </span>${ew.sqlFirst}
+<span class="w">    </span><span class="nt">&lt;/if&gt;</span><span class="w"> </span>
+
+<span class="w">    </span>SELECT<span class="w"> </span>
+
+<span class="w">    </span><span class="nt">&lt;choose&gt;</span>
+<span class="w">        </span><span class="nt">&lt;when</span><span class="w"> </span><span class="na">test=</span><span class="s">"ew != null and ew.sqlSelect != null"</span><span class="nt">&gt;</span>
+<span class="w">            </span>${ew.sqlSelect}
+<span class="w">        </span><span class="nt">&lt;/when&gt;</span>
+<span class="w">        </span><span class="nt">&lt;otherwise&gt;</span>
+<span class="w">            </span>trade_id,created_at,updated_at
+<span class="w">        </span><span class="nt">&lt;/otherwise&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/choose&gt;</span><span class="w"> </span>
+
+<span class="w">    </span>FROM<span class="w"> </span>trade<span class="w"> </span>
+
+<span class="w">    </span><span class="nt">&lt;if</span><span class="w"> </span><span class="na">test=</span><span class="s">"ew != null"</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;where&gt;</span>
+<span class="w">            </span><span class="nt">&lt;if</span><span class="w"> </span><span class="na">test=</span><span class="s">"ew.entity != null"</span><span class="nt">&gt;</span>
+<span class="w">                </span><span class="nt">&lt;if</span><span class="w"> </span><span class="na">test=</span><span class="s">"ew.entity['tradeId'] != null"</span><span class="nt">&gt;</span><span class="w"> </span>
+<span class="w">                    </span>AND<span class="w"> </span>trade_id=#{ew.entity.tradeId}
+<span class="w">                </span><span class="nt">&lt;/if&gt;</span>
+<span class="w">                </span><span class="nt">&lt;if</span><span class="w"> </span><span class="na">test=</span><span class="s">"ew.entity['createdAt'] != null"</span><span class="nt">&gt;</span><span class="w"> </span>
+<span class="w">                    </span>AND<span class="w"> </span>created_at=#{ew.entity.createdAt}
+<span class="w">                </span><span class="nt">&lt;/if&gt;</span>
+<span class="w">                </span><span class="nt">&lt;if</span><span class="w"> </span><span class="na">test=</span><span class="s">"ew.entity['updatedAt'] != null"</span><span class="nt">&gt;</span><span class="w"> </span>
+<span class="w">                    </span>AND<span class="w"> </span>updated_at=#{ew.entity.updatedAt}
+<span class="w">                </span><span class="nt">&lt;/if&gt;</span>
+<span class="w">            </span><span class="nt">&lt;/if&gt;</span>
+
+<span class="w">            </span><span class="nt">&lt;if</span><span class="w"> </span><span class="na">test=</span><span class="s">"ew.sqlSegment != null and ew.sqlSegment != '' and ew.nonEmptyOfWhere"</span><span class="nt">&gt;</span>
+<span class="w">                </span><span class="nt">&lt;if</span><span class="w"> </span><span class="na">test=</span><span class="s">"ew.nonEmptyOfEntity and ew.nonEmptyOfNormal"</span><span class="nt">&gt;</span><span class="w"> </span>
+<span class="w">                    </span>AND
+<span class="w">                </span><span class="nt">&lt;/if&gt;</span><span class="w"> </span>
+<span class="w">                </span>${ew.sqlSegment}
+<span class="w">            </span><span class="nt">&lt;/if&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/where&gt;</span>
+
+<span class="w">        </span><span class="nt">&lt;if</span><span class="w"> </span><span class="na">test=</span><span class="s">"ew.sqlSegment != null and ew.sqlSegment != '' and ew.emptyOfWhere"</span><span class="nt">&gt;</span>
+<span class="w">            </span>${ew.sqlSegment}
+<span class="w">        </span><span class="nt">&lt;/if&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/if&gt;</span><span class="w">  </span>
+
+<span class="w">    </span><span class="nt">&lt;if</span><span class="w"> </span><span class="na">test=</span><span class="s">"ew != null and ew.sqlComment != null"</span><span class="nt">&gt;</span>
+<span class="w">        </span>${ew.sqlComment}
+<span class="w">    </span><span class="nt">&lt;/if&gt;</span>
+<span class="nt">&lt;/script&gt;</span>
+</code></pre></div>
+<h2 id="mybatisplusautoconfiguration">MybatisPlusAutoConfiguration</h2>
+<p>MybatisPlusAutoConfiguration的sqlSessionFactory()方法注册SqlSessionFactory类型的bean。是由MybatisSqlSessionFactoryBean进行处理的</p>
+<div class="hljs"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MybatisPlusAutoConfiguration</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">InitializingBean</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nd">@Bean</span>
+<span class="w">    </span><span class="nd">@ConditionalOnMissingBean</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">SqlSessionFactory</span><span class="w"> </span><span class="nf">sqlSessionFactory</span><span class="p">(</span><span class="n">DataSource</span><span class="w"> </span><span class="n">dataSource</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">MybatisSqlSessionFactoryBean</span><span class="w"> </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">MybatisSqlSessionFactoryBean</span><span class="p">();</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">factory</span><span class="p">.</span><span class="na">getObject</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="mybatissqlsessionfactorybean">MybatisSqlSessionFactoryBean</h2>
+<p>MybatisSqlSessionFactoryBean 实际上构建sqlSessionFactory是通过afterPropertiesSet方法</p>
+<div class="hljs"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MybatisSqlSessionFactoryBean</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">FactoryBean</span><span class="o">&lt;</span><span class="n">SqlSessionFactory</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">InitializingBean</span><span class="p">,</span><span class="w"> </span><span class="n">ApplicationListener</span><span class="o">&lt;</span><span class="n">ApplicationEvent</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">SqlSessionFactory</span><span class="w"> </span><span class="nf">getObject</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">sqlSessionFactory</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="na">afterPropertiesSet</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">sqlSessionFactory</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">afterPropertiesSet</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Assert</span><span class="p">.</span><span class="na">notNull</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">dataSource</span><span class="p">,</span><span class="w"> </span><span class="s">"Property 'dataSource' is required"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Assert</span><span class="p">.</span><span class="na">state</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">configuration</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">configLocation</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">configuration</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">configLocation</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w"> </span><span class="s">"Property 'configuration' and 'configLocation' can not specified with together"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">SqlRunner</span><span class="p">.</span><span class="na">DEFAULT</span><span class="p">.</span><span class="na">close</span><span class="p">();</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">sqlSessionFactory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">buildSqlSessionFactory</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">protected</span><span class="w"> </span><span class="n">SqlSessionFactory</span><span class="w"> </span><span class="nf">buildSqlSessionFactory</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// xml文件解析</span>
+<span class="w">        </span><span class="n">XMLMapperBuilder</span><span class="w"> </span><span class="n">xmlMapperBuilder</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">XMLMapperBuilder</span><span class="p">(</span><span class="n">mapperLocation</span><span class="p">.</span><span class="na">getInputStream</span><span class="p">(),</span><span class="w"> </span><span class="p">(</span><span class="n">Configuration</span><span class="p">)</span><span class="n">targetConfiguration</span><span class="p">,</span><span class="w"> </span><span class="n">mapperLocation</span><span class="p">.</span><span class="na">toString</span><span class="p">(),</span><span class="w"> </span><span class="p">((</span><span class="n">Configuration</span><span class="p">)</span><span class="n">targetConfiguration</span><span class="p">).</span><span class="na">getSqlFragments</span><span class="p">());</span>
+<span class="w">        </span><span class="n">xmlMapperBuilder</span><span class="p">.</span><span class="na">parse</span><span class="p">();</span>
+
+<span class="w">        </span><span class="c1">//</span>
+<span class="w">    </span><span class="p">}</span>
+
+
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="xmlmapperbuilder">XMLMapperBuilder</h2>
+<p>XMLMapperBuilder解析TradeMapper.xml，并将文件内的sql模板语句注册成MappedStatement</p>
+<div class="hljs"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">XMLMapperBuilder</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">BaseBuilder</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">parse</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">configuration</span><span class="p">.</span><span class="na">isResourceLoaded</span><span class="p">(</span><span class="n">resource</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">configurationElement</span><span class="p">(</span><span class="n">parser</span><span class="p">.</span><span class="na">evalNode</span><span class="p">(</span><span class="s">"/mapper"</span><span class="p">));</span>
+<span class="w">            </span><span class="n">configuration</span><span class="p">.</span><span class="na">addLoadedResource</span><span class="p">(</span><span class="n">resource</span><span class="p">);</span>
+<span class="w">            </span><span class="n">bindMapperForNamespace</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">configurationElement</span><span class="p">(</span><span class="n">XNode</span><span class="w"> </span><span class="n">context</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">buildStatementFromContext</span><span class="p">(</span><span class="n">context</span><span class="p">.</span><span class="na">evalNodes</span><span class="p">(</span><span class="s">"select|insert|update|delete"</span><span class="p">));</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Exception</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">BuilderException</span><span class="p">(</span><span class="s">"Error parsing Mapper XML. The XML location is '"</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">resource</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">"'. Cause: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">e</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">buildStatementFromContext</span><span class="p">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">XNode</span><span class="o">&gt;</span><span class="w"> </span><span class="n">list</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">requiredDatabaseId</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">XNode</span><span class="w"> </span><span class="n">context</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">list</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="kd">final</span><span class="w"> </span><span class="n">XMLStatementBuilder</span><span class="w"> </span><span class="n">statementParser</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">XMLStatementBuilder</span><span class="p">(</span><span class="n">configuration</span><span class="p">,</span><span class="w"> </span><span class="n">builderAssistant</span><span class="p">,</span><span class="w"> </span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">requiredDatabaseId</span><span class="p">);</span>
+<span class="w">            </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">statementParser</span><span class="p">.</span><span class="na">parseStatementNode</span><span class="p">();</span>
+<span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">IncompleteElementException</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">configuration</span><span class="p">.</span><span class="na">addIncompleteStatement</span><span class="p">(</span><span class="n">statementParser</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">parseStatementNode</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">builderAssistant</span><span class="p">.</span><span class="na">addMappedStatement</span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">sqlSource</span><span class="p">,</span><span class="w"> </span><span class="n">statementType</span><span class="p">,</span><span class="w"> </span><span class="n">sqlCommandType</span><span class="p">,</span>
+<span class="w">                </span><span class="n">fetchSize</span><span class="p">,</span><span class="w"> </span><span class="n">timeout</span><span class="p">,</span><span class="w"> </span><span class="n">parameterMap</span><span class="p">,</span><span class="w"> </span><span class="n">parameterTypeClass</span><span class="p">,</span><span class="w"> </span><span class="n">resultMap</span><span class="p">,</span><span class="w"> </span><span class="n">resultTypeClass</span><span class="p">,</span>
+<span class="w">                </span><span class="n">resultSetTypeEnum</span><span class="p">,</span><span class="w"> </span><span class="n">flushCache</span><span class="p">,</span><span class="w"> </span><span class="n">useCache</span><span class="p">,</span><span class="w"> </span><span class="n">resultOrdered</span><span class="p">,</span>
+<span class="w">                </span><span class="n">keyGenerator</span><span class="p">,</span><span class="w"> </span><span class="n">keyProperty</span><span class="p">,</span><span class="w"> </span><span class="n">keyColumn</span><span class="p">,</span><span class="w"> </span><span class="n">databaseId</span><span class="p">,</span><span class="w"> </span><span class="n">langDriver</span><span class="p">,</span><span class="w"> </span><span class="n">resultSets</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="mybatisconfiguration">MybatisConfiguration</h2>
+<p>XMLMapperBuilder 通过configuration，转到了MybatisConfiguration.addMapper() 方法</p>
+<div class="hljs"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">XMLMapperBuilder</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">BaseBuilder</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">bindMapperForNamespace</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">configuration</span><span class="p">.</span><span class="na">addMapper</span><span class="p">(</span><span class="n">boundType</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MybatisConfiguration</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">Configuration</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">addMapper</span><span class="p">(</span><span class="n">Class</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">type</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">mybatisMapperRegistry</span><span class="p">.</span><span class="na">addMapper</span><span class="p">(</span><span class="n">type</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="mybatismapperregistry">MybatisMapperRegistry</h2>
+<div class="hljs"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MybatisMapperRegistry</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">MapperRegistry</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">addMapper</span><span class="p">(</span><span class="n">Class</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">type</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">type</span><span class="p">.</span><span class="na">isInterface</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="kt">boolean</span><span class="w"> </span><span class="n">loadCompleted</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span>
+<span class="w">            </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// TODO 这里也换成 MybatisMapperProxyFactory 而不是 MapperProxyFactory</span>
+<span class="w">                </span><span class="n">knownMappers</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">MybatisMapperProxyFactory</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="n">type</span><span class="p">));</span>
+<span class="w">                </span><span class="c1">// TODO 这里也换成 MybatisMapperAnnotationBuilder 而不是 MapperAnnotationBuilder</span>
+<span class="w">                </span><span class="n">MybatisMapperAnnotationBuilder</span><span class="w"> </span><span class="n">parser</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">MybatisMapperAnnotationBuilder</span><span class="p">(</span><span class="n">config</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="p">);</span>
+<span class="w">                </span><span class="n">parser</span><span class="p">.</span><span class="na">parse</span><span class="p">();</span>
+<span class="w">                </span><span class="n">loadCompleted</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="k">finally</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">loadCompleted</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="n">knownMappers</span><span class="p">.</span><span class="na">remove</span><span class="p">(</span><span class="n">type</span><span class="p">);</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="mybatismapperannotationbuilder">MybatisMapperAnnotationBuilder</h2>
+<div class="hljs"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MybatisMapperAnnotationBuilder</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">MapperAnnotationBuilder</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">parse</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">resource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">type</span><span class="p">.</span><span class="na">toString</span><span class="p">();</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">configuration</span><span class="p">.</span><span class="na">isResourceLoaded</span><span class="p">(</span><span class="n">resource</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// https://github.com/baomidou/mybatis-plus/issues/3038</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">GlobalConfigUtils</span><span class="p">.</span><span class="na">isSupperMapperChildren</span><span class="p">(</span><span class="n">configuration</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="n">parserInjector</span><span class="p">();</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">IncompleteElementException</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">configuration</span><span class="p">.</span><span class="na">addIncompleteMethod</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">InjectorResolver</span><span class="p">(</span><span class="k">this</span><span class="p">));</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">parsePendingMethods</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">parserInjector</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">GlobalConfigUtils</span><span class="p">.</span><span class="na">getSqlInjector</span><span class="p">(</span><span class="n">configuration</span><span class="p">).</span><span class="na">inspectInject</span><span class="p">(</span><span class="n">assistant</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="abstractsqlinjector">AbstractSqlInjector</h2>
+<div class="hljs"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">abstract</span><span class="w"> </span><span class="kd">class</span> <span class="nc">AbstractSqlInjector</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">ISqlInjector</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">inspectInject</span><span class="p">(</span><span class="n">MapperBuilderAssistant</span><span class="w"> </span><span class="n">builderAssistant</span><span class="p">,</span><span class="w"> </span><span class="n">Class</span><span class="o">&lt;?&gt;</span><span class="w"> </span><span class="n">mapperClass</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// 循环注入自定义方法</span>
+<span class="w">        </span><span class="n">methodList</span><span class="p">.</span><span class="na">forEach</span><span class="p">(</span><span class="n">m</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="na">inject</span><span class="p">(</span><span class="n">builderAssistant</span><span class="p">,</span><span class="w"> </span><span class="n">mapperClass</span><span class="p">,</span><span class="w"> </span><span class="n">modelClass</span><span class="p">,</span><span class="w"> </span><span class="n">tableInfo</span><span class="p">));</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="abstractmethod">AbstractMethod</h2>
+<div class="hljs"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">abstract</span><span class="w"> </span><span class="kd">class</span> <span class="nc">AbstractMethod</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">Constants</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">inject</span><span class="p">(</span><span class="n">MapperBuilderAssistant</span><span class="w"> </span><span class="n">builderAssistant</span><span class="p">,</span><span class="w"> </span><span class="n">Class</span><span class="o">&lt;?&gt;</span><span class="w"> </span><span class="n">mapperClass</span><span class="p">,</span><span class="w"> </span><span class="n">Class</span><span class="o">&lt;?&gt;</span><span class="w"> </span><span class="n">modelClass</span><span class="p">,</span><span class="w"> </span><span class="n">TableInfo</span><span class="w"> </span><span class="n">tableInfo</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">injectMappedStatement</span><span class="p">(</span><span class="n">mapperClass</span><span class="p">,</span><span class="w"> </span><span class="n">modelClass</span><span class="p">,</span><span class="w"> </span><span class="n">tableInfo</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="selectlist">SelectList</h2>
+<div class="hljs"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">SelectList</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">AbstractMethod</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">MappedStatement</span><span class="w"> </span><span class="nf">injectMappedStatement</span><span class="p">(</span><span class="n">Class</span><span class="o">&lt;?&gt;</span><span class="w"> </span><span class="n">mapperClass</span><span class="p">,</span><span class="w"> </span><span class="n">Class</span><span class="o">&lt;?&gt;</span><span class="w"> </span><span class="n">modelClass</span><span class="p">,</span><span class="w"> </span><span class="n">TableInfo</span><span class="w"> </span><span class="n">tableInfo</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">SqlMethod</span><span class="w"> </span><span class="n">sqlMethod</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SqlMethod</span><span class="p">.</span><span class="na">SELECT_LIST</span><span class="p">;</span>
+<span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">sql</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">String</span><span class="p">.</span><span class="na">format</span><span class="p">(</span><span class="n">sqlMethod</span><span class="p">.</span><span class="na">getSql</span><span class="p">(),</span><span class="w"> </span><span class="n">sqlFirst</span><span class="p">(),</span><span class="w"> </span><span class="n">sqlSelectColumns</span><span class="p">(</span><span class="n">tableInfo</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">),</span><span class="w"> </span><span class="n">tableInfo</span><span class="p">.</span><span class="na">getTableName</span><span class="p">(),</span>
+<span class="w">                </span><span class="n">sqlWhereEntityWrapper</span><span class="p">(</span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="n">tableInfo</span><span class="p">),</span><span class="w"> </span><span class="n">sqlOrderBy</span><span class="p">(</span><span class="n">tableInfo</span><span class="p">),</span><span class="w"> </span><span class="n">sqlComment</span><span class="p">());</span>
+<span class="w">        </span><span class="n">SqlSource</span><span class="w"> </span><span class="n">sqlSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">languageDriver</span><span class="p">.</span><span class="na">createSqlSource</span><span class="p">(</span><span class="n">configuration</span><span class="p">,</span><span class="w"> </span><span class="n">sql</span><span class="p">,</span><span class="w"> </span><span class="n">modelClass</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">addSelectMappedStatementForTable</span><span class="p">(</span><span class="n">mapperClass</span><span class="p">,</span><span class="w"> </span><span class="n">getMethod</span><span class="p">(</span><span class="n">sqlMethod</span><span class="p">),</span><span class="w"> </span><span class="n">sqlSource</span><span class="p">,</span><span class="w"> </span><span class="n">tableInfo</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+        </div>
+    </div>
+
+    <script src="../../../../assets/script.js"></script>
+    <script>
+        // 初始化代码高亮
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
+        });
+    </script>
+</body>
+
+</html>

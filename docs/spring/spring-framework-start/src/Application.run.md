@@ -2,7 +2,7 @@
 spring boot的SpringApplication类的启动流程，本质是初始化一个ApplicationContext
 
 
-new Application，加载spring.factories
+构造方法
 ```java
 public SpringApplication(ResourceLoader resourceLoader, Class<?>... primarySources) {
     this.resourceLoader = resourceLoader;
@@ -15,6 +15,7 @@ public SpringApplication(ResourceLoader resourceLoader, Class<?>... primarySourc
 }
 ```
 
+run方法
 ```java
 public ConfigurableApplicationContext run(String... args) {
     StopWatch stopWatch = new StopWatch();

@@ -1,0 +1,330 @@
+/* Confluence风格的样式设计 */
+:root {
+    --primary-color: #0052cc;
+    --sidebar-bg: #f4f5f7;
+    --sidebar-hover: #e4e6ea;
+    --topbar-bg: #0052cc;
+    --topbar-text: #ffffff;
+    --content-bg: #ffffff;
+    --text-color: #172b4d;
+    --text-secondary: #6b778c;
+    --border-color: #dfe1e6;
+    --code-bg: #f4f5f7;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: var(--text-color);
+    background-color: var(--content-bg);
+    line-height: 1.6;
+}
+
+/* 顶部导航栏 */
+.top-navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    background-color: var(--topbar-bg);
+    color: var(--topbar-text);
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    z-index: 1000;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+
+.top-navbar .site-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-left: 10px;
+}
+
+/* 侧边导航栏 */
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 56px;
+    bottom: 0;
+    width: 280px;
+    background-color: var(--sidebar-bg);
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-right: 1px solid var(--border-color);
+    z-index: 900;
+}
+
+.sidebar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: var(--sidebar-bg);
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: #c1c7d0;
+    border-radius: 4px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: #a5adba;
+}
+
+.nav-tree {
+    list-style: none;
+    padding: 10px 0;
+}
+
+.nav-item {
+    margin: 2px 0;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    padding: 6px 12px;
+    color: var(--text-color);
+    user-select: none;
+    transition: background-color 0.2s;
+    border-radius: 3px;
+    margin: 0 8px;
+}
+
+.nav-link:hover {
+    background-color: var(--sidebar-hover);
+}
+
+.nav-link.active {
+    background-color: #deebff;
+}
+
+.nav-link.active .nav-link-text {
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+.nav-link.has-children {
+    font-weight: 500;
+}
+
+.nav-link .nav-link-text {
+    color: inherit;
+    text-decoration: none;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    padding: 2px 0;
+}
+
+.nav-link.active .nav-link-text {
+    color: var(--primary-color);
+}
+
+.nav-link-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 3px;
+    transition: transform 0.15s ease, background-color 0.15s ease;
+    flex-shrink: 0;
+    color: #6b778c;
+    font-size: 12px;
+    user-select: none;
+}
+
+.nav-link-icon[data-toggle="collapse"] {
+    cursor: pointer;
+}
+
+.nav-link-icon[data-toggle="collapse"]:hover {
+    background-color: var(--sidebar-hover);
+}
+
+.nav-link-icon[data-toggle="collapse"]::before {
+    content: '▶';
+    display: inline-block;
+    transition: transform 0.15s ease;
+}
+
+.nav-link-icon[data-toggle="collapse"].expanded::before {
+    transform: rotate(90deg);
+}
+
+
+.nav-children {
+    list-style: none;
+    padding-left: 20px;
+    display: none;
+    margin-top: 2px;
+}
+
+.nav-children.expanded {
+    display: block;
+}
+
+/* 主内容区 */
+.main-content {
+    margin-left: 280px;
+    margin-top: 56px;
+    padding: 30px 40px;
+    max-width: 1200px;
+    min-height: calc(100vh - 56px);
+}
+
+.content-body {
+    background-color: var(--content-bg);
+    padding: 30px;
+    border-radius: 3px;
+}
+
+/* Markdown 内容样式 */
+.content-body h1 {
+    font-size: 32px;
+    margin-top: 0;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.content-body h2 {
+    font-size: 24px;
+    margin-top: 32px;
+    margin-bottom: 12px;
+}
+
+.content-body h3 {
+    font-size: 20px;
+    margin-top: 24px;
+    margin-bottom: 10px;
+}
+
+.content-body h4 {
+    font-size: 16px;
+    margin-top: 20px;
+    margin-bottom: 8px;
+}
+
+.content-body p {
+    margin-bottom: 16px;
+}
+
+.content-body ul,
+.content-body ol {
+    margin-bottom: 16px;
+    padding-left: 24px;
+}
+
+.content-body li {
+    margin-bottom: 8px;
+}
+
+.content-body code {
+    background-color: var(--code-bg);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: 0.9em;
+}
+
+.content-body pre {
+    background-color: var(--code-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+    padding: 16px;
+    overflow-x: auto;
+    margin-bottom: 16px;
+}
+
+.content-body pre code {
+    background-color: transparent;
+    padding: 0;
+    border-radius: 0;
+}
+
+.content-body blockquote {
+    border-left: 3px solid var(--primary-color);
+    padding-left: 16px;
+    margin: 16px 0;
+    color: var(--text-secondary);
+}
+
+.content-body table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 16px;
+}
+
+.content-body th,
+.content-body td {
+    border: 1px solid var(--border-color);
+    padding: 8px 12px;
+    text-align: left;
+}
+
+.content-body th {
+    background-color: var(--sidebar-bg);
+    font-weight: 600;
+}
+
+.content-body img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 3px;
+    margin: 16px 0;
+}
+
+.content-body a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.content-body a:hover {
+    text-decoration: underline;
+}
+
+/* 代码高亮 */
+.hljs {
+    background: var(--code-bg) !important;
+    padding: 0 !important;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 240px;
+    }
+    
+    .main-content {
+        margin-left: 240px;
+        padding: 20px;
+    }
+}
+
+@media (max-width: 640px) {
+    .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s;
+    }
+    
+    .sidebar.open {
+        transform: translateX(0);
+    }
+    
+    .main-content {
+        margin-left: 0;
+    }
+}
+
