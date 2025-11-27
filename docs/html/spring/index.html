@@ -434,7 +434,57 @@
     <!-- 主内容区 -->
     <div class="main-content">
         <div class="content-body">
-            <h1>spring</h1><p>此目录暂无内容。</p>
+            <h1 id="spring">spring</h1>
+<h2 id="spring-framework">spring framework</h2>
+<div class="hljs"><pre><span></span><code><span class="n">flowchart</span><span class="w"> </span><span class="s">TD</span>
+<span class="w">    </span><span class="nb">subgraph</span><span class="w"> </span><span class="n">DA</span><span class="p">[</span><span class="s">"Data Access/Integration"</span><span class="p">]</span>
+<span class="w">        </span><span class="n">JDBC</span><span class="p">[</span><span class="s">"JDBC"</span><span class="p">]</span>
+<span class="w">        </span><span class="n">ORM</span><span class="p">[</span><span class="s">"ORM"</span><span class="p">]</span>
+<span class="w">        </span><span class="n">OXM</span><span class="p">[</span><span class="s">"OXM"</span><span class="p">]</span>
+<span class="w">        </span><span class="n">JMS</span><span class="p">[</span><span class="s">"JMS"</span><span class="p">]</span>
+<span class="w">        </span><span class="n">Transactions</span><span class="p">[</span><span class="s">"Transactions"</span><span class="p">]</span>
+<span class="w">    </span><span class="k">end</span>
+
+<span class="w">    </span><span class="nb">subgraph</span><span class="w"> </span><span class="n">WEB</span><span class="p">[</span><span class="s">"Web"</span><span class="p">]</span>
+<span class="w">        </span><span class="n">WebSocket</span><span class="p">[</span><span class="s">"WebSocket"</span><span class="p">]</span>
+<span class="w">        </span><span class="n">Servlet</span><span class="p">[</span><span class="s">"Servlet"</span><span class="p">]</span>
+<span class="w">        </span><span class="n">WebMVC</span><span class="p">[</span><span class="s">"Web"</span><span class="p">]</span>
+<span class="w">        </span><span class="n">Portlet</span><span class="p">[</span><span class="s">"Portlet"</span><span class="p">]</span>
+<span class="w">    </span><span class="k">end</span>
+
+<span class="w">    </span><span class="n">AOP</span><span class="p">[</span><span class="s">"AOP"</span><span class="p">]</span>
+<span class="w">    </span><span class="n">Aspects</span><span class="p">[</span><span class="s">"Aspects"</span><span class="p">]</span>
+<span class="w">    </span><span class="n">Instrumentation</span><span class="p">[</span><span class="s">"Instrumentation"</span><span class="p">]</span>
+<span class="w">    </span><span class="n">Messaging</span><span class="p">[</span><span class="s">"Messaging"</span><span class="p">]</span>
+
+<span class="w">    </span><span class="nb">subgraph</span><span class="w"> </span><span class="n">CC</span><span class="p">[</span><span class="s">"Core Container"</span><span class="p">]</span>
+<span class="w">        </span><span class="n">Beans</span><span class="p">[</span><span class="s">"Beans"</span><span class="p">]</span>
+<span class="w">        </span><span class="n">Core</span><span class="p">[</span><span class="s">"Core"</span><span class="p">]</span>
+<span class="w">        </span><span class="n">Context</span><span class="p">[</span><span class="s">"Context"</span><span class="p">]</span>
+<span class="w">        </span><span class="n">SpEL</span><span class="p">[</span><span class="s">"SpEL"</span><span class="p">]</span>
+<span class="w">    </span><span class="k">end</span>
+
+<span class="w">    </span><span class="nb">Test</span><span class="p">[</span><span class="s">"Test"</span><span class="p">]</span>
+
+<span class="w">    </span><span class="c">%% 连接关系 - 各模块依赖 Core Container</span>
+<span class="w">    </span><span class="n">DA</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">CC</span>
+<span class="w">    </span><span class="n">WEB</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">CC</span>
+<span class="w">    </span><span class="n">AOP</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">CC</span>
+<span class="w">    </span><span class="n">Aspects</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">CC</span>
+<span class="w">    </span><span class="n">Instrumentation</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">CC</span>
+<span class="w">    </span><span class="n">Messaging</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">CC</span>
+<span class="w">    </span><span class="n">CC</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="nb">Test</span>
+
+<span class="w">    </span><span class="c">%% 样式设置</span>
+<span class="w">    </span><span class="n">style</span><span class="w"> </span><span class="n">DA</span><span class="w"> </span><span class="nb">fill</span><span class="p">:</span>#<span class="n">e1f5e1</span><span class="p">,</span><span class="n">stroke</span><span class="p">:</span>#4<span class="n">caf50</span><span class="p">,</span><span class="n">stroke</span><span class="o">-</span><span class="nb">width</span><span class="p">:</span>2<span class="n">px</span>
+<span class="w">    </span><span class="n">style</span><span class="w"> </span><span class="n">WEB</span><span class="w"> </span><span class="nb">fill</span><span class="p">:</span>#<span class="n">e1f5e1</span><span class="p">,</span><span class="n">stroke</span><span class="p">:</span>#4<span class="n">caf50</span><span class="p">,</span><span class="n">stroke</span><span class="o">-</span><span class="nb">width</span><span class="p">:</span>2<span class="n">px</span>
+<span class="w">    </span><span class="n">style</span><span class="w"> </span><span class="n">AOP</span><span class="w"> </span><span class="nb">fill</span><span class="p">:</span>#<span class="n">e1f5e1</span><span class="p">,</span><span class="n">stroke</span><span class="p">:</span>#4<span class="n">caf50</span><span class="p">,</span><span class="n">stroke</span><span class="o">-</span><span class="nb">width</span><span class="p">:</span>2<span class="n">px</span>
+<span class="w">    </span><span class="n">style</span><span class="w"> </span><span class="n">Aspects</span><span class="w"> </span><span class="nb">fill</span><span class="p">:</span>#<span class="n">e1f5e1</span><span class="p">,</span><span class="n">stroke</span><span class="p">:</span>#4<span class="n">caf50</span><span class="p">,</span><span class="n">stroke</span><span class="o">-</span><span class="nb">width</span><span class="p">:</span>2<span class="n">px</span>
+<span class="w">    </span><span class="n">style</span><span class="w"> </span><span class="n">Instrumentation</span><span class="w"> </span><span class="nb">fill</span><span class="p">:</span>#<span class="n">e1f5e1</span><span class="p">,</span><span class="n">stroke</span><span class="p">:</span>#4<span class="n">caf50</span><span class="p">,</span><span class="n">stroke</span><span class="o">-</span><span class="nb">width</span><span class="p">:</span>2<span class="n">px</span>
+<span class="w">    </span><span class="n">style</span><span class="w"> </span><span class="n">Messaging</span><span class="w"> </span><span class="nb">fill</span><span class="p">:</span>#<span class="n">e1f5e1</span><span class="p">,</span><span class="n">stroke</span><span class="p">:</span>#4<span class="n">caf50</span><span class="p">,</span><span class="n">stroke</span><span class="o">-</span><span class="nb">width</span><span class="p">:</span>2<span class="n">px</span>
+<span class="w">    </span><span class="n">style</span><span class="w"> </span><span class="n">CC</span><span class="w"> </span><span class="nb">fill</span><span class="p">:</span>#<span class="n">fff3cd</span><span class="p">,</span><span class="n">stroke</span><span class="p">:</span>#<span class="n">ffc107</span><span class="p">,</span><span class="n">stroke</span><span class="o">-</span><span class="nb">width</span><span class="p">:</span>3<span class="n">px</span>
+<span class="w">    </span><span class="n">style</span><span class="w"> </span><span class="nb">Test</span><span class="w"> </span><span class="nb">fill</span><span class="p">:</span>#<span class="n">f8d7da</span><span class="p">,</span><span class="n">stroke</span><span class="p">:</span>#<span class="n">dc3545</span><span class="p">,</span><span class="n">stroke</span><span class="o">-</span><span class="nb">width</span><span class="p">:</span>2<span class="n">px</span>
+</code></pre></div>
         </div>
     </div>
 
