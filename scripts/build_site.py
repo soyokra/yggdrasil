@@ -324,12 +324,25 @@ class DocSiteBuilder:
         with open(md_path, 'r', encoding='utf-8') as f:
             md_content = f.read()
         
+        # 预处理：提取 Mermaid 代码块，避免被 codehilite 处理
+        mermaid_blocks = {}
+        placeholder_pattern = r'```mermaid\s*\n(.*?)```'
+        
+        def replace_mermaid(match):
+            block_id = f'MERMAID_PLACEHOLDER_{len(mermaid_blocks)}'
+            mermaid_blocks[block_id] = match.group(1).strip()
+            # 使用特殊标记的代码块作为占位符
+            return f'```\nMERMAID_BLOCK_ID:{block_id}\n```'
+        
+        # 提取所有 Mermaid 代码块
+        md_content = re.sub(placeholder_pattern, replace_mermaid, md_content, flags=re.DOTALL)
+        
         # 转换为 HTML
         html_content = self.md.convert(md_content)
         self.md.reset()
         
-        # 处理 Mermaid 代码块
-        html_content = self._process_mermaid(html_content)
+        # 恢复 Mermaid 代码块并转换为正确的格式
+        html_content = self._restore_mermaid_blocks(html_content, mermaid_blocks)
         
         # 处理链接
         html_content = self._process_links(html_content, html_rel_path)
@@ -484,30 +497,24 @@ class DocSiteBuilder:
         
         return str(soup)
     
-    def _process_mermaid(self, html_content: str) -> str:
-        """处理 Mermaid 代码块，将其转换为 Mermaid 可识别的格式"""
+    def _restore_mermaid_blocks(self, html_content: str, mermaid_blocks: Dict[str, str]) -> str:
+        """恢复 Mermaid 代码块并转换为正确的格式"""
         soup = BeautifulSoup(html_content, 'html.parser')
         
-        # 查找所有 class 包含 "language-mermaid" 的 code 标签
-        def has_mermaid_class(class_attr):
-            if not class_attr:
-                return False
-            # 处理 class 可能是字符串或列表的情况
-            if isinstance(class_attr, list):
-                return 'language-mermaid' in class_attr
-            return 'language-mermaid' in str(class_attr)
-        
-        for code in soup.find_all('code', class_=has_mermaid_class):
-            # 获取代码内容
-            mermaid_code = code.get_text()
-            
-            # 找到父级 pre 标签
-            pre = code.find_parent('pre')
-            if pre:
-                # 将 pre 标签替换为 div.mermaid
-                new_div = soup.new_tag('div', class_='mermaid')
-                new_div.string = mermaid_code
-                pre.replace_with(new_div)
+        # 查找所有包含 Mermaid 占位符的代码块
+        for code in soup.find_all('code'):
+            code_text = code.get_text().strip()
+            # 检查是否是 Mermaid 占位符
+            if code_text.startswith('MERMAID_BLOCK_ID:'):
+                block_id = code_text.replace('MERMAID_BLOCK_ID:', '').strip()
+                if block_id in mermaid_blocks:
+                    # 找到父级 pre 标签
+                    pre = code.find_parent('pre')
+                    if pre:
+                        # 将 pre 标签替换为 div.mermaid
+                        new_div = soup.new_tag('div', class_='mermaid')
+                        new_div.string = mermaid_blocks[block_id]
+                        pre.replace_with(new_div)
         
         return str(soup)
     
