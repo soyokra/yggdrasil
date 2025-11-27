@@ -462,25 +462,10 @@
     </div>
 
     <script src="../../../assets/script.js"></script>
-    <!-- Mermaid.js for diagram rendering -->
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script>
-        // 初始化代码高亮和 Mermaid
+        // 初始化代码高亮
         document.addEventListener('DOMContentLoaded', function () {
-            // 初始化 Mermaid
-            mermaid.initialize({ 
-                startOnLoad: true,
-                theme: 'default',
-                securityLevel: 'loose'
-            });
-            
-            // 初始化代码高亮（跳过已转换为 Mermaid 的代码块）
             document.querySelectorAll('pre code').forEach((block) => {
-                // 跳过 Mermaid 代码块（这些已经被转换为 div.mermaid）
-                if (block.classList.contains('language-mermaid') || 
-                    block.closest('.mermaid')) {
-                    return;
-                }
                 hljs.highlightElement(block);
             });
         });
