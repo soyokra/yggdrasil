@@ -1,2 +1,2 @@
 # yggdrasil
-Everything about technology
+Everything about technology. See [https://soyokra.github.io/yggdrasil/](https://soyokra.github.io/yggdrasil/)
