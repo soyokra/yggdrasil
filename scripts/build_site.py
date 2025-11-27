@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Markdown 转 HTML 文档站点生成器
-将 docs 目录下的 Markdown 文件转换为 HTML 页面
+将 src 目录下的 Markdown 文件转换为 HTML 页面
 """
 
 import os
@@ -22,7 +22,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 class DocSiteBuilder:
     """文档站点生成器"""
     
-    def __init__(self, docs_dir: str = "docs", view_dir: str = "view", config_path: str = "config.json"):
+    def __init__(self, docs_dir: str = "src", view_dir: str = "docs", config_path: str = "config.json"):
         # 将相对路径转换为绝对路径
         self.docs_dir = Path(docs_dir).resolve()
         self.view_dir = Path(view_dir).resolve()
@@ -77,7 +77,7 @@ class DocSiteBuilder:
         """构建整个站点"""
         print("开始构建文档站点...")
         
-        # 清理 view 目录（保留模板和 assets）
+        # 清理 docs 目录（保留模板和 assets）
         self._clean_view_dir()
         
         # 记录根目录 README.md 的路径映射（用于链接处理，但不显示在导航栏）
@@ -131,7 +131,7 @@ class DocSiteBuilder:
             return {}
     
     def _clean_view_dir(self):
-        """清理 view 目录，保留模板和 assets"""
+        """清理 docs 目录，保留模板和 assets"""
         # 清理根目录下的 HTML 文件（除了 index.html）
         for item in self.view_dir.iterdir():
             if item.is_file() and item.suffix == '.html' and item.name != 'index.html':
@@ -183,7 +183,7 @@ class DocSiteBuilder:
                     nav_items.append(nav_item)
                     processed_dirs.add(dir_name)
             else:
-                print(f"警告: 配置中指定的目录 '{dir_name}' 在 docs 目录中不存在")
+                print(f"警告: 配置中指定的目录 '{dir_name}' 在 src 目录中不存在")
         
         # 如果配置中没有指定所有目录，输出提示
         if len(processed_dirs) < len(all_dirs):
@@ -261,7 +261,7 @@ class DocSiteBuilder:
             # README.md -> index.html
             parent_dir = rel_path.parent
             if str(parent_dir) == '.':
-                # 根目录的 README.md -> index.html (在 view 根目录)
+                # 根目录的 README.md -> index.html (在 docs 根目录)
                 return "index.html"
             else:
                 # 子目录的 README.md -> html/parent/index.html
@@ -376,11 +376,11 @@ class DocSiteBuilder:
         
         # 如果是 Markdown 链接
         if link_path.endswith('.md'):
-            # 确定当前 HTML 文件所在的 docs 目录路径
+            # 确定当前 HTML 文件所在的 src 目录路径
             if current_html_path == "index.html":
                 docs_current_dir = self.docs_dir
             elif current_html_path.startswith("html/"):
-                # html/spring/index.html -> docs/spring
+                # html/spring/index.html -> src/spring
                 rel_path = current_html_path[5:]  # 移除 "html/"
                 if rel_path.endswith("index.html"):
                     rel_path = str(Path(rel_path).parent)
@@ -397,7 +397,7 @@ class DocSiteBuilder:
             try:
                 full_link_path = (docs_current_dir / link_path).resolve()
                 
-                # 检查路径是否在 docs 目录内
+                # 检查路径是否在 src 目录内
                 try:
                     rel_to_docs = str(full_link_path.relative_to(self.docs_dir)).replace('\\', '/')
                     if rel_to_docs in self.path_mapping:
@@ -461,10 +461,10 @@ class DocSiteBuilder:
             if not src or src.startswith('http'):
                 continue
             
-            # 计算图片在 docs 目录中的路径
+            # 计算图片在 src 目录中的路径
             img_path = (md_path.parent / src).resolve()
             try:
-                # 检查图片是否在 docs 目录内
+                # 检查图片是否在 src 目录内
                 rel_to_docs = img_path.relative_to(self.docs_dir.resolve())
                 # 图片现在在 html 目录下，路径为 html/...
                 html_img_path = f"html/{rel_to_docs}".replace('\\', '/')
@@ -476,7 +476,7 @@ class DocSiteBuilder:
                 
                 img['src'] = relative_path
             except ValueError:
-                # 图片不在 docs 目录内，保持原路径
+                # 图片不在 src 目录内，保持原路径
                 pass
         
         return str(soup)
@@ -550,11 +550,11 @@ class DocSiteBuilder:
         """生成单个 HTML 页面"""
         # 确定文件路径
         if html_path == "index.html":
-            # index.html 在 view 根目录
+            # index.html 在 docs 根目录
             view_file_path = self.view_dir / html_path
             depth = 0
         else:
-            # 其他页面在 view/html 目录下
+            # 其他页面在 docs/html 目录下
             view_file_path = self.view_dir / html_path
             # 计算深度：html/spring/actuator.html -> depth = 2 (html + spring)
             if html_path.startswith("html/"):
@@ -687,8 +687,8 @@ def main():
     os.chdir(project_root)
     
     # 构建路径
-    docs_dir = project_root / "docs"
-    view_dir = project_root / "view"
+    docs_dir = project_root / "src"
+    view_dir = project_root / "docs"
     
     builder = DocSiteBuilder(str(docs_dir), str(view_dir))
     builder.build()

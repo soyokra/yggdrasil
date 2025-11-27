@@ -49,7 +49,7 @@ def main():
     # 获取脚本所在目录的父目录（项目根目录）
     script_dir = Path(__file__).parent.resolve()
     project_root = script_dir.parent
-    assets_dir = project_root / "view" / "assets"
+    assets_dir = project_root / "docs" / "assets"
     
     # 定义要下载的资源
     resources = [
