@@ -469,22 +469,28 @@
 <p><img alt="docker-image" src="docker-image.png"/></p>
 <h2 id="_3">基础技术</h2>
 <ul>
-<li>隔离技术（Namespace）：实现进程、网络、文件系统等资源的隔离</li>
+<li>隔离技术（Namespace）：实现进程、网络、文件系统等资源的隔离<ul>
 <li>PID Namespace：进程隔离，独立的进程树</li>
 <li>Network Namespace：网络隔离，独立的网络栈</li>
 <li>IPC Namespace：进程间通信隔离</li>
 <li>Mount Namespace：文件系统挂载点隔离</li>
 <li>UTS Namespace：主机名和域名隔离</li>
-<li>资源限制（CGroup）：限制和监控容器资源使用</li>
+</ul>
+</li>
+<li>资源限制（CGroup）：限制和监控容器资源使用<ul>
 <li>CPU：CPU 使用率和核心数限制</li>
 <li>Memory：内存使用限制</li>
 <li>I/O：磁盘读写带宽限制</li>
-<li>文件系统（UnionFS）：实现镜像分层和共享机制</li>
+</ul>
+</li>
+<li>文件系统（UnionFS）：实现镜像分层和共享机制<ul>
 <li>OverlayFS：推荐使用的存储驱动，高性能</li>
 <li>AUFS：早期使用的联合文件系统</li>
 <li>btrfs：基于 Btrfs 文件系统的驱动</li>
 <li>DeviceMapper：基于设备映射的存储驱动</li>
 <li>VFS：虚拟文件系统驱动（用于测试）</li>
+</ul>
+</li>
 </ul>
 <h2 id="_4">容器生命周期</h2>
 <p><img alt="docker-lifecycle" src="docker-lifecycle.png"/></p>
@@ -582,21 +588,27 @@
 </code></pre></div>
 <h2 id="registry">镜像管理/仓库（Registry）</h2>
 <ul>
-<li>公共仓库：提供公开的镜像存储和分发服务</li>
+<li>公共仓库：提供公开的镜像存储和分发服务<ul>
 <li>Docker Hub：Docker 官方公共仓库，包含大量官方和社区镜像</li>
 <li>第三方公共仓库：Quay.io、GitHub Container Registry (ghcr.io)</li>
-<li>私有仓库：企业内部或组织内部的镜像存储解决方案</li>
+</ul>
+</li>
+<li>私有仓库：企业内部或组织内部的镜像存储解决方案<ul>
 <li>Harbor：VMware 开源的企业级镜像仓库，支持镜像扫描、RBAC、复制</li>
 <li>Nexus Repository：Sonatype 提供的仓库管理工具，支持多种包格式</li>
 <li>GitLab Container Registry：GitLab 集成的容器镜像仓库</li>
 <li>Docker Registry：Docker 官方的轻量级私有仓库实现</li>
-<li>镜像标签和版本管理</li>
+</ul>
+</li>
+<li>镜像标签和版本管理<ul>
 <li>标签类型：latest（默认）、语义化版本（v1.0.0）、Git 提交哈希、构建号</li>
 <li>版本策略：建议使用具体版本号，避免在生产环境使用 latest 标签</li>
 </ul>
+</li>
+</ul>
 <h2 id="_5">网络</h2>
 <ul>
-<li>原生网络：Docker 内置的网络驱动和模式</li>
+<li>原生网络：Docker 内置的网络驱动和模式<ul>
 <li>默认网络：Docker 自动创建的三种默认网络模式<ul>
 <li>none网络：禁用容器网络，容器完全隔离</li>
 <li>host网络：容器直接使用宿主机网络栈，无隔离</li>
@@ -609,44 +621,72 @@
 <li>自定义macvlan网络：为容器分配 MAC 地址，直接连接到物理网络</li>
 </ul>
 </li>
-<li>第三方网络：通过插件扩展的网络解决方案</li>
+</ul>
+</li>
+<li>第三方网络：通过插件扩展的网络解决方案<ul>
 <li>flannel网络：CNCF 项目，基于 VXLAN 的覆盖网络</li>
 <li>weave网络：Weaveworks 开发，自动发现和路由的容器网络</li>
 <li>calico网络：基于 BGP 的网络和网络安全策略解决方案</li>
 </ul>
+</li>
+</ul>
 <h2 id="storagevolumes">存储/数据卷（Storage/Volumes）</h2>
 <ul>
-<li>数据卷类型：Docker 提供的数据持久化方案</li>
+<li>
+<p>数据卷类型：Docker 提供的数据持久化方案</p>
+<ul>
 <li>Named Volumes（命名卷）：Docker 管理的持久化存储，生命周期独立于容器</li>
 <li>Bind Mounts（绑定挂载）：将宿主机目录或文件直接挂载到容器，完全控制路径</li>
 <li>tmpfs 挂载：将数据存储在内存中，容器停止后数据消失</li>
-<li>使用场景</li>
+</ul>
+</li>
+<li>
+<p>使用场景</p>
+<ul>
 <li>Named Volumes：数据库数据、配置文件、应用数据持久化</li>
 <li>Bind Mounts：开发环境代码挂载、配置文件挂载、日志收集</li>
 <li>tmpfs：临时文件、缓存数据、敏感数据（不落盘）</li>
-<li>数据卷管理</li>
+</ul>
+</li>
+<li>
+<p>数据卷管理</p>
+<ul>
 <li>创建和管理：<code>docker volume create</code>、<code>docker volume ls</code>、<code>docker volume inspect</code></li>
 <li>备份和恢复：通过容器挂载卷进行数据备份</li>
 <li>卷驱动：支持本地驱动和第三方驱动（如 NFS、Ceph）</li>
 </ul>
+</li>
+</ul>
 <h2 id="docker-compose">Docker Compose</h2>
 <ul>
-<li>核心概念：使用 YAML 文件定义和运行多容器 Docker 应用的工具</li>
+<li>
+<p>核心概念：使用 YAML 文件定义和运行多容器 Docker 应用的工具</p>
+<ul>
 <li>服务定义：在 docker-compose.yml 中定义多个服务及其配置</li>
 <li>网络管理：自动创建网络，服务间可通过服务名通信</li>
 <li>数据卷管理：统一管理服务所需的数据卷</li>
-<li>docker-compose.yml 核心配置项</li>
+</ul>
+</li>
+<li>
+<p>docker-compose.yml 核心配置项</p>
+<ul>
 <li>services：定义服务列表（镜像、端口、环境变量、依赖关系）</li>
 <li>networks：定义网络配置</li>
 <li>volumes：定义数据卷配置</li>
 <li>environment：环境变量配置</li>
 <li>depends_on：服务依赖关系定义</li>
-<li>常用命令</li>
+</ul>
+</li>
+<li>
+<p>常用命令</p>
+<ul>
 <li><code>docker-compose up</code>：启动所有服务（-d 后台运行）</li>
 <li><code>docker-compose down</code>：停止并删除容器、网络</li>
 <li><code>docker-compose ps</code>：查看服务状态</li>
 <li><code>docker-compose logs</code>：查看服务日志（-f 跟随输出）</li>
 <li><code>docker-compose exec</code>：在运行中的容器内执行命令</li>
+</ul>
+</li>
 </ul>
 <h2 id="_6">厂商</h2>
 <ul>

@@ -154,10 +154,12 @@ ONBUILD RUN npm install
   - Named Volumes（命名卷）：Docker 管理的持久化存储，生命周期独立于容器
   - Bind Mounts（绑定挂载）：将宿主机目录或文件直接挂载到容器，完全控制路径
   - tmpfs 挂载：将数据存储在内存中，容器停止后数据消失
+
 - 使用场景
   - Named Volumes：数据库数据、配置文件、应用数据持久化
   - Bind Mounts：开发环境代码挂载、配置文件挂载、日志收集
   - tmpfs：临时文件、缓存数据、敏感数据（不落盘）
+
 - 数据卷管理
   - 创建和管理：`docker volume create`、`docker volume ls`、`docker volume inspect`
   - 备份和恢复：通过容器挂载卷进行数据备份
@@ -168,12 +170,14 @@ ONBUILD RUN npm install
   - 服务定义：在 docker-compose.yml 中定义多个服务及其配置
   - 网络管理：自动创建网络，服务间可通过服务名通信
   - 数据卷管理：统一管理服务所需的数据卷
+
 - docker-compose.yml 核心配置项
   - services：定义服务列表（镜像、端口、环境变量、依赖关系）
   - networks：定义网络配置
   - volumes：定义数据卷配置
   - environment：环境变量配置
   - depends_on：服务依赖关系定义
+
 - 常用命令
   - `docker-compose up`：启动所有服务（-d 后台运行）
   - `docker-compose down`：停止并删除容器、网络

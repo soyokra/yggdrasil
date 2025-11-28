@@ -319,10 +319,72 @@ class DocSiteBuilder:
             if html_path not in self.html_contents:
                 self._convert_markdown_file(readme_path, html_path)
     
+    def _normalize_list_indentation(self, md_content: str) -> str:
+        """规范化列表缩进：将列表项的 2 个空格缩进转换为 4 个空格
+        
+        Python Markdown 库要求嵌套列表使用 4 个空格缩进才能正确识别嵌套结构。
+        此方法将 2 个空格的列表缩进转换为 4 个空格，以支持常见的 2 空格缩进风格。
+        
+        算法：将每个 2 空格缩进级别转换为 4 空格缩进级别。
+        例如：0空格 -> 0空格, 2空格 -> 4空格, 4空格 -> 8空格, 6空格 -> 12空格
+        """
+        lines = md_content.split('\n')
+        normalized_lines = []
+        in_code_block = False
+        
+        for line in lines:
+            stripped = line.lstrip()
+            
+            # 检测代码块开始和结束
+            if stripped.startswith('```'):
+                in_code_block = not in_code_block
+                normalized_lines.append(line)
+                continue
+            
+            # 在代码块内，保持原样
+            if in_code_block:
+                normalized_lines.append(line)
+                continue
+            
+            # 检测缩进代码块（4 个空格开头），保持原样
+            if line.startswith('    ') and not stripped.startswith(('- ', '* ', '+ ')):
+                normalized_lines.append(line)
+                continue
+            
+            # 处理列表项
+            # 匹配列表项：可选的前导空格 + 列表标记（-、*、+） + 空格
+            list_item_match = re.match(r'^(\s*)([-*+])\s+(.*)$', line)
+            if list_item_match:
+                leading_spaces = list_item_match.group(1)
+                list_marker = list_item_match.group(2)
+                content = list_item_match.group(3)
+                
+                # 计算缩进级别（以 2 空格为单位）
+                leading_len = len(leading_spaces)
+                
+                # 将每个 2 空格缩进级别转换为 4 空格
+                # 例如：0空格 -> 0空格, 2空格 -> 4空格, 4空格 -> 8空格, 6空格 -> 12空格
+                if leading_len % 2 == 0:
+                    # 是 2 的倍数，转换为 4 的倍数
+                    indent_level = leading_len // 2
+                    normalized_leading = '    ' * indent_level
+                    normalized_lines.append(normalized_leading + list_marker + ' ' + content)
+                else:
+                    # 不是 2 的倍数，保持原样（可能是 tab 或其他）
+                    normalized_lines.append(line)
+            else:
+                # 非列表项，保持原样
+                normalized_lines.append(line)
+        
+        return '\n'.join(normalized_lines)
+    
     def _convert_markdown_file(self, md_path: Path, html_rel_path: str):
         """转换单个 Markdown 文件"""
         with open(md_path, 'r', encoding='utf-8') as f:
             md_content = f.read()
+        
+        # 规范化列表缩进（将 2 空格转换为 4 空格）
+        md_content = self._normalize_list_indentation(md_content)
         
         # 转换为 HTML
         html_content = self.md.convert(md_content)

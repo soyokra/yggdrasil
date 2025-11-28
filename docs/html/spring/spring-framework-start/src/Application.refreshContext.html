@@ -467,9 +467,11 @@
 实际上调用的是spring framework的AbstractApplicationContext.refresh方法</p>
 <ul>
 <li>创建BeanFactory</li>
-<li>BeanFactory后置处理</li>
+<li>BeanFactory后置处理<ul>
 <li>处理注解类文件，生成和注册BeanDefinition</li>
 <li>占位符解析</li>
+</ul>
+</li>
 <li>消息本地化，事件广播，实例化webServer，注册监听器</li>
 <li>实例化bean</li>
 </ul>
