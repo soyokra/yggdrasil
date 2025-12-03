@@ -1,0 +1,301 @@
+Classfile /D:/zcp/github/yggdrasil/java/bytecode/LambdaExample.class
+  Last modified 2025-12-3; size 2289 bytes
+  MD5 checksum 27bce9a64729abd62aadd3d8a9346099
+  Compiled from "LambdaExample.java"
+public class java.bytecode.LambdaExample
+  minor version: 0
+  major version: 52
+  flags: ACC_PUBLIC, ACC_SUPER
+Constant pool:
+    #1 = Methodref          #2.#3         // java/lang/Object."<init>":()V
+    #2 = Class              #4            // java/lang/Object
+    #3 = NameAndType        #5:#6         // "<init>":()V
+    #4 = Utf8               java/lang/Object
+    #5 = Utf8               <init>
+    #6 = Utf8               ()V
+    #7 = InvokeDynamic      #0:#8         // #0:apply:()Ljava/util/function/Function;
+    #8 = NameAndType        #9:#10        // apply:()Ljava/util/function/Function;
+    #9 = Utf8               apply
+   #10 = Utf8               ()Ljava/util/function/Function;
+   #11 = String             #12           // Hello
+   #12 = Utf8               Hello
+   #13 = InterfaceMethodref #14.#15       // java/util/function/Function.apply:(Ljava/lang/Object;)Ljava/lang/Object;
+   #14 = Class              #16           // java/util/function/Function
+   #15 = NameAndType        #9:#17        // apply:(Ljava/lang/Object;)Ljava/lang/Object;
+   #16 = Utf8               java/util/function/Function
+   #17 = Utf8               (Ljava/lang/Object;)Ljava/lang/Object;
+   #18 = Class              #19           // java/lang/Integer
+   #19 = Utf8               java/lang/Integer
+   #20 = Methodref          #18.#21       // java/lang/Integer.intValue:()I
+   #21 = NameAndType        #22:#23       // intValue:()I
+   #22 = Utf8               intValue
+   #23 = Utf8               ()I
+   #24 = Fieldref           #25.#26       // java/lang/System.out:Ljava/io/PrintStream;
+   #25 = Class              #27           // java/lang/System
+   #26 = NameAndType        #28:#29       // out:Ljava/io/PrintStream;
+   #27 = Utf8               java/lang/System
+   #28 = Utf8               out
+   #29 = Utf8               Ljava/io/PrintStream;
+   #30 = Class              #31           // java/lang/StringBuilder
+   #31 = Utf8               java/lang/StringBuilder
+   #32 = Methodref          #30.#3        // java/lang/StringBuilder."<init>":()V
+   #33 = String             #34           // Length:
+   #34 = Utf8               Length:
+   #35 = Methodref          #30.#36       // java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+   #36 = NameAndType        #37:#38       // append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+   #37 = Utf8               append
+   #38 = Utf8               (Ljava/lang/String;)Ljava/lang/StringBuilder;
+   #39 = Methodref          #30.#40       // java/lang/StringBuilder.append:(I)Ljava/lang/StringBuilder;
+   #40 = NameAndType        #37:#41       // append:(I)Ljava/lang/StringBuilder;
+   #41 = Utf8               (I)Ljava/lang/StringBuilder;
+   #42 = Methodref          #30.#43       // java/lang/StringBuilder.toString:()Ljava/lang/String;
+   #43 = NameAndType        #44:#45       // toString:()Ljava/lang/String;
+   #44 = Utf8               toString
+   #45 = Utf8               ()Ljava/lang/String;
+   #46 = Methodref          #47.#48       // java/io/PrintStream.println:(Ljava/lang/String;)V
+   #47 = Class              #49           // java/io/PrintStream
+   #48 = NameAndType        #50:#51       // println:(Ljava/lang/String;)V
+   #49 = Utf8               java/io/PrintStream
+   #50 = Utf8               println
+   #51 = Utf8               (Ljava/lang/String;)V
+   #52 = InvokeDynamic      #1:#8         // #1:apply:()Ljava/util/function/Function;
+   #53 = String             #54           // hello
+   #54 = Utf8               hello
+   #55 = Class              #56           // java/lang/String
+   #56 = Utf8               java/lang/String
+   #57 = InvokeDynamic      #2:#58        // #2:test:()Ljava/util/function/Predicate;
+   #58 = NameAndType        #59:#60       // test:()Ljava/util/function/Predicate;
+   #59 = Utf8               test
+   #60 = Utf8               ()Ljava/util/function/Predicate;
+   #61 = Methodref          #18.#62       // java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+   #62 = NameAndType        #63:#64       // valueOf:(I)Ljava/lang/Integer;
+   #63 = Utf8               valueOf
+   #64 = Utf8               (I)Ljava/lang/Integer;
+   #65 = InterfaceMethodref #66.#67       // java/util/function/Predicate.test:(Ljava/lang/Object;)Z
+   #66 = Class              #68           // java/util/function/Predicate
+   #67 = NameAndType        #59:#69       // test:(Ljava/lang/Object;)Z
+   #68 = Utf8               java/util/function/Predicate
+   #69 = Utf8               (Ljava/lang/Object;)Z
+   #70 = String             #71           // Is 10 even?
+   #71 = Utf8               Is 10 even?
+   #72 = Methodref          #30.#73       // java/lang/StringBuilder.append:(Z)Ljava/lang/StringBuilder;
+   #73 = NameAndType        #37:#74       // append:(Z)Ljava/lang/StringBuilder;
+   #74 = Utf8               (Z)Ljava/lang/StringBuilder;
+   #75 = Methodref          #55.#76       // java/lang/String.toUpperCase:()Ljava/lang/String;
+   #76 = NameAndType        #77:#45       // toUpperCase:()Ljava/lang/String;
+   #77 = Utf8               toUpperCase
+   #78 = String             #79           // !
+   #79 = Utf8               !
+   #80 = Methodref          #55.#81       // java/lang/String.length:()I
+   #81 = NameAndType        #82:#23       // length:()I
+   #82 = Utf8               length
+   #83 = Class              #84           // java/bytecode/LambdaExample
+   #84 = Utf8               java/bytecode/LambdaExample
+   #85 = Utf8               Code
+   #86 = Utf8               LineNumberTable
+   #87 = Utf8               lambdaExample
+   #88 = Utf8               lambdaMultiLineExample
+   #89 = Utf8               lambdaPredicateExample
+   #90 = Utf8               lambda$lambdaPredicateExample$0
+   #91 = Utf8               (Ljava/lang/Integer;)Z
+   #92 = Utf8               StackMapTable
+   #93 = Utf8               lambda$lambdaMultiLineExample$0
+   #94 = Utf8               (Ljava/lang/String;)Ljava/lang/String;
+   #95 = Utf8               lambda$lambdaExample$0
+   #96 = Utf8               (Ljava/lang/String;)Ljava/lang/Integer;
+   #97 = Utf8               SourceFile
+   #98 = Utf8               LambdaExample.java
+   #99 = Utf8               BootstrapMethods
+  #100 = MethodType         #17           //  (Ljava/lang/Object;)Ljava/lang/Object;
+  #101 = MethodHandle       #6:#102       // invokestatic java/bytecode/LambdaExample.lambda$lambdaExample$0:(Ljava/lang/String;)Ljava/lang/Integer;
+  #102 = Methodref          #83.#103      // java/bytecode/LambdaExample.lambda$lambdaExample$0:(Ljava/lang/String;)Ljava/lang/Integer;
+  #103 = NameAndType        #95:#96       // lambda$lambdaExample$0:(Ljava/lang/String;)Ljava/lang/Integer;
+  #104 = MethodType         #96           //  (Ljava/lang/String;)Ljava/lang/Integer;
+  #105 = MethodHandle       #6:#106       // invokestatic java/bytecode/LambdaExample.lambda$lambdaMultiLineExample$0:(Ljava/lang/String;)Ljava/lang/String;
+  #106 = Methodref          #83.#107      // java/bytecode/LambdaExample.lambda$lambdaMultiLineExample$0:(Ljava/lang/String;)Ljava/lang/String;
+  #107 = NameAndType        #93:#94       // lambda$lambdaMultiLineExample$0:(Ljava/lang/String;)Ljava/lang/String;
+  #108 = MethodType         #94           //  (Ljava/lang/String;)Ljava/lang/String;
+  #109 = MethodType         #69           //  (Ljava/lang/Object;)Z
+  #110 = MethodHandle       #6:#111       // invokestatic java/bytecode/LambdaExample.lambda$lambdaPredicateExample$0:(Ljava/lang/Integer;)Z
+  #111 = Methodref          #83.#112      // java/bytecode/LambdaExample.lambda$lambdaPredicateExample$0:(Ljava/lang/Integer;)Z
+  #112 = NameAndType        #90:#91       // lambda$lambdaPredicateExample$0:(Ljava/lang/Integer;)Z
+  #113 = MethodType         #91           //  (Ljava/lang/Integer;)Z
+  #114 = MethodHandle       #6:#115       // invokestatic java/lang/invoke/LambdaMetafactory.metafactory:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;
+  #115 = Methodref          #116.#117     // java/lang/invoke/LambdaMetafactory.metafactory:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;
+  #116 = Class              #118          // java/lang/invoke/LambdaMetafactory
+  #117 = NameAndType        #119:#120     // metafactory:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;
+  #118 = Utf8               java/lang/invoke/LambdaMetafactory
+  #119 = Utf8               metafactory
+  #120 = Utf8               (Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;
+  #121 = Utf8               InnerClasses
+  #122 = Class              #123          // java/lang/invoke/MethodHandles$Lookup
+  #123 = Utf8               java/lang/invoke/MethodHandles$Lookup
+  #124 = Class              #125          // java/lang/invoke/MethodHandles
+  #125 = Utf8               java/lang/invoke/MethodHandles
+  #126 = Utf8               Lookup
+{
+  public java.bytecode.LambdaExample();
+    descriptor: ()V
+    flags: ACC_PUBLIC
+    Code:
+      stack=1, locals=1, args_size=1
+         0: aload_0
+         1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+         4: return
+      LineNumberTable:
+        line 9: 0
+
+  public void lambdaExample();
+    descriptor: ()V
+    flags: ACC_PUBLIC
+    Code:
+      stack=3, locals=3, args_size=1
+         0: invokedynamic #7,  0              // InvokeDynamic #0:apply:()Ljava/util/function/Function;
+         5: astore_1
+         6: aload_1
+         7: ldc           #11                 // String Hello
+         9: invokeinterface #13,  2           // InterfaceMethod java/util/function/Function.apply:(Ljava/lang/Object;)Ljava/lang/Object;
+        14: checkcast     #18                 // class java/lang/Integer
+        17: invokevirtual #20                 // Method java/lang/Integer.intValue:()I
+        20: istore_2
+        21: getstatic     #24                 // Field java/lang/System.out:Ljava/io/PrintStream;
+        24: new           #30                 // class java/lang/StringBuilder
+        27: dup
+        28: invokespecial #32                 // Method java/lang/StringBuilder."<init>":()V
+        31: ldc           #33                 // String Length:
+        33: invokevirtual #35                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+        36: iload_2
+        37: invokevirtual #39                 // Method java/lang/StringBuilder.append:(I)Ljava/lang/StringBuilder;
+        40: invokevirtual #42                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+        43: invokevirtual #46                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+        46: return
+      LineNumberTable:
+        line 13: 0
+        line 14: 6
+        line 15: 21
+        line 16: 46
+
+  public void lambdaMultiLineExample();
+    descriptor: ()V
+    flags: ACC_PUBLIC
+    Code:
+      stack=2, locals=3, args_size=1
+         0: invokedynamic #52,  0             // InvokeDynamic #1:apply:()Ljava/util/function/Function;
+         5: astore_1
+         6: aload_1
+         7: ldc           #53                 // String hello
+         9: invokeinterface #13,  2           // InterfaceMethod java/util/function/Function.apply:(Ljava/lang/Object;)Ljava/lang/Object;
+        14: checkcast     #55                 // class java/lang/String
+        17: astore_2
+        18: getstatic     #24                 // Field java/lang/System.out:Ljava/io/PrintStream;
+        21: aload_2
+        22: invokevirtual #46                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+        25: return
+      LineNumberTable:
+        line 20: 0
+        line 24: 6
+        line 25: 18
+        line 26: 25
+
+  public void lambdaPredicateExample();
+    descriptor: ()V
+    flags: ACC_PUBLIC
+    Code:
+      stack=3, locals=3, args_size=1
+         0: invokedynamic #57,  0             // InvokeDynamic #2:test:()Ljava/util/function/Predicate;
+         5: astore_1
+         6: aload_1
+         7: bipush        10
+         9: invokestatic  #61                 // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+        12: invokeinterface #65,  2           // InterfaceMethod java/util/function/Predicate.test:(Ljava/lang/Object;)Z
+        17: istore_2
+        18: getstatic     #24                 // Field java/lang/System.out:Ljava/io/PrintStream;
+        21: new           #30                 // class java/lang/StringBuilder
+        24: dup
+        25: invokespecial #32                 // Method java/lang/StringBuilder."<init>":()V
+        28: ldc           #70                 // String Is 10 even?
+        30: invokevirtual #35                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+        33: iload_2
+        34: invokevirtual #72                 // Method java/lang/StringBuilder.append:(Z)Ljava/lang/StringBuilder;
+        37: invokevirtual #42                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+        40: invokevirtual #46                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+        43: return
+      LineNumberTable:
+        line 30: 0
+        line 31: 6
+        line 32: 18
+        line 33: 43
+
+  private static boolean lambda$lambdaPredicateExample$0(java.lang.Integer);
+    descriptor: (Ljava/lang/Integer;)Z
+    flags: ACC_PRIVATE, ACC_STATIC, ACC_SYNTHETIC
+    Code:
+      stack=2, locals=1, args_size=1
+         0: aload_0
+         1: invokevirtual #20                 // Method java/lang/Integer.intValue:()I
+         4: iconst_2
+         5: irem
+         6: ifne          13
+         9: iconst_1
+        10: goto          14
+        13: iconst_0
+        14: ireturn
+      LineNumberTable:
+        line 30: 0
+      StackMapTable: number_of_entries = 2
+        frame_type = 13 /* same */
+        frame_type = 64 /* same_locals_1_stack_item */
+          stack = [ int ]
+
+  private static java.lang.String lambda$lambdaMultiLineExample$0(java.lang.String);
+    descriptor: (Ljava/lang/String;)Ljava/lang/String;
+    flags: ACC_PRIVATE, ACC_STATIC, ACC_SYNTHETIC
+    Code:
+      stack=2, locals=2, args_size=1
+         0: aload_0
+         1: invokevirtual #75                 // Method java/lang/String.toUpperCase:()Ljava/lang/String;
+         4: astore_1
+         5: new           #30                 // class java/lang/StringBuilder
+         8: dup
+         9: invokespecial #32                 // Method java/lang/StringBuilder."<init>":()V
+        12: aload_1
+        13: invokevirtual #35                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+        16: ldc           #78                 // String !
+        18: invokevirtual #35                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+        21: invokevirtual #42                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+        24: areturn
+      LineNumberTable:
+        line 21: 0
+        line 22: 5
+
+  private static java.lang.Integer lambda$lambdaExample$0(java.lang.String);
+    descriptor: (Ljava/lang/String;)Ljava/lang/Integer;
+    flags: ACC_PRIVATE, ACC_STATIC, ACC_SYNTHETIC
+    Code:
+      stack=1, locals=1, args_size=1
+         0: aload_0
+         1: invokevirtual #80                 // Method java/lang/String.length:()I
+         4: invokestatic  #61                 // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+         7: areturn
+      LineNumberTable:
+        line 13: 0
+}
+SourceFile: "LambdaExample.java"
+BootstrapMethods:
+  0: #114 invokestatic java/lang/invoke/LambdaMetafactory.metafactory:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;
+    Method arguments:
+      #100 (Ljava/lang/Object;)Ljava/lang/Object;
+      #101 invokestatic java/bytecode/LambdaExample.lambda$lambdaExample$0:(Ljava/lang/String;)Ljava/lang/Integer;
+      #104 (Ljava/lang/String;)Ljava/lang/Integer;
+  1: #114 invokestatic java/lang/invoke/LambdaMetafactory.metafactory:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;
+    Method arguments:
+      #100 (Ljava/lang/Object;)Ljava/lang/Object;
+      #105 invokestatic java/bytecode/LambdaExample.lambda$lambdaMultiLineExample$0:(Ljava/lang/String;)Ljava/lang/String;
+      #108 (Ljava/lang/String;)Ljava/lang/String;
+  2: #114 invokestatic java/lang/invoke/LambdaMetafactory.metafactory:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;
+    Method arguments:
+      #109 (Ljava/lang/Object;)Z
+      #110 invokestatic java/bytecode/LambdaExample.lambda$lambdaPredicateExample$0:(Ljava/lang/Integer;)Z
+      #113 (Ljava/lang/Integer;)Z
+InnerClasses:
+     public static final #126= #122 of #124; //Lookup=class java/lang/invoke/MethodHandles$Lookup of class java/lang/invoke/MethodHandles

@@ -734,9 +734,9 @@ class DocSiteBuilder:
 
 
 def get_project_root() -> Path:
-    """获取项目根目录（scripts 的父目录）"""
+    """获取项目根目录（python 的父目录）"""
     script_path = Path(__file__).resolve()
-    # 脚本在 scripts/build_site.py，项目根目录是 scripts 的父目录
+    # 脚本在 python/build_site.py，项目根目录是 python 的父目录
     return script_path.parent.parent
 
 

@@ -1,0 +1,132 @@
+Classfile /D:/zcp/github/yggdrasil/java/bytecode/BaseClass.class
+  Last modified 2025-12-3; size 797 bytes
+  MD5 checksum 144b140c68d34182b35bf2f11f5a0716
+  Compiled from "BaseClass.java"
+public class java.bytecode.BaseClass
+  minor version: 0
+  major version: 52
+  flags: ACC_PUBLIC, ACC_SUPER
+Constant pool:
+   #1 = Methodref          #2.#3          // java/lang/Object."<init>":()V
+   #2 = Class              #4             // java/lang/Object
+   #3 = NameAndType        #5:#6          // "<init>":()V
+   #4 = Utf8               java/lang/Object
+   #5 = Utf8               <init>
+   #6 = Utf8               ()V
+   #7 = String             #8             // BaseClass
+   #8 = Utf8               BaseClass
+   #9 = Fieldref           #10.#11        // java/bytecode/BaseClass.baseField:Ljava/lang/String;
+  #10 = Class              #12            // java/bytecode/BaseClass
+  #11 = NameAndType        #13:#14        // baseField:Ljava/lang/String;
+  #12 = Utf8               java/bytecode/BaseClass
+  #13 = Utf8               baseField
+  #14 = Utf8               Ljava/lang/String;
+  #15 = Fieldref           #16.#17        // java/lang/System.out:Ljava/io/PrintStream;
+  #16 = Class              #18            // java/lang/System
+  #17 = NameAndType        #19:#20        // out:Ljava/io/PrintStream;
+  #18 = Utf8               java/lang/System
+  #19 = Utf8               out
+  #20 = Utf8               Ljava/io/PrintStream;
+  #21 = String             #22            // BaseClass constructor
+  #22 = Utf8               BaseClass constructor
+  #23 = Methodref          #24.#25        // java/io/PrintStream.println:(Ljava/lang/String;)V
+  #24 = Class              #26            // java/io/PrintStream
+  #25 = NameAndType        #27:#28        // println:(Ljava/lang/String;)V
+  #26 = Utf8               java/io/PrintStream
+  #27 = Utf8               println
+  #28 = Utf8               (Ljava/lang/String;)V
+  #29 = String             #30            // BaseClass.baseMethod()
+  #30 = Utf8               BaseClass.baseMethod()
+  #31 = String             #32            // BaseClass.protectedMethod()
+  #32 = Utf8               BaseClass.protectedMethod()
+  #33 = Utf8               Code
+  #34 = Utf8               LineNumberTable
+  #35 = Utf8               baseMethod
+  #36 = Utf8               protectedMethod
+  #37 = Utf8               getBaseField
+  #38 = Utf8               ()Ljava/lang/String;
+  #39 = Utf8               SourceFile
+  #40 = Utf8               BaseClass.java
+{
+  protected java.lang.String baseField;
+    descriptor: Ljava/lang/String;
+    flags: ACC_PROTECTED
+
+  public java.bytecode.BaseClass();
+    descriptor: ()V
+    flags: ACC_PUBLIC
+    Code:
+      stack=2, locals=1, args_size=1
+         0: aload_0
+         1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+         4: aload_0
+         5: ldc           #7                  // String BaseClass
+         7: putfield      #9                  // Field baseField:Ljava/lang/String;
+        10: getstatic     #15                 // Field java/lang/System.out:Ljava/io/PrintStream;
+        13: ldc           #21                 // String BaseClass constructor
+        15: invokevirtual #23                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+        18: return
+      LineNumberTable:
+        line 9: 0
+        line 7: 4
+        line 10: 10
+        line 11: 18
+
+  public java.bytecode.BaseClass(java.lang.String);
+    descriptor: (Ljava/lang/String;)V
+    flags: ACC_PUBLIC
+    Code:
+      stack=2, locals=2, args_size=2
+         0: aload_0
+         1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+         4: aload_0
+         5: ldc           #7                  // String BaseClass
+         7: putfield      #9                  // Field baseField:Ljava/lang/String;
+        10: aload_0
+        11: aload_1
+        12: putfield      #9                  // Field baseField:Ljava/lang/String;
+        15: return
+      LineNumberTable:
+        line 13: 0
+        line 7: 4
+        line 14: 10
+        line 15: 15
+
+  public void baseMethod();
+    descriptor: ()V
+    flags: ACC_PUBLIC
+    Code:
+      stack=2, locals=1, args_size=1
+         0: getstatic     #15                 // Field java/lang/System.out:Ljava/io/PrintStream;
+         3: ldc           #29                 // String BaseClass.baseMethod()
+         5: invokevirtual #23                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+         8: return
+      LineNumberTable:
+        line 18: 0
+        line 19: 8
+
+  protected void protectedMethod();
+    descriptor: ()V
+    flags: ACC_PROTECTED
+    Code:
+      stack=2, locals=1, args_size=1
+         0: getstatic     #15                 // Field java/lang/System.out:Ljava/io/PrintStream;
+         3: ldc           #31                 // String BaseClass.protectedMethod()
+         5: invokevirtual #23                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+         8: return
+      LineNumberTable:
+        line 22: 0
+        line 23: 8
+
+  public java.lang.String getBaseField();
+    descriptor: ()Ljava/lang/String;
+    flags: ACC_PUBLIC
+    Code:
+      stack=1, locals=1, args_size=1
+         0: aload_0
+         1: getfield      #9                  // Field baseField:Ljava/lang/String;
+         4: areturn
+      LineNumberTable:
+        line 26: 0
+}
+SourceFile: "BaseClass.java"
