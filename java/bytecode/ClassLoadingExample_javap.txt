@@ -1,0 +1,270 @@
+Classfile /D:/zcp/github/yggdrasil/java/bytecode/ClassLoadingExample.class
+  Last modified 2025-12-4; size 1612 bytes
+  MD5 checksum 437aad277ebf3437a3acbd5802f2467c
+  Compiled from "ClassLoadingExample.java"
+public class java.bytecode.ClassLoadingExample
+  minor version: 0
+  major version: 52
+  flags: ACC_PUBLIC, ACC_SUPER
+Constant pool:
+   #1 = Methodref          #2.#3          // java/lang/Object."<init>":()V
+   #2 = Class              #4             // java/lang/Object
+   #3 = NameAndType        #5:#6          // "<init>":()V
+   #4 = Utf8               java/lang/Object
+   #5 = Utf8               <init>
+   #6 = Utf8               ()V
+   #7 = Fieldref           #8.#9          // java/bytecode/ClassLoadingExample.instanceInt:I
+   #8 = Class              #10            // java/bytecode/ClassLoadingExample
+   #9 = NameAndType        #11:#12        // instanceInt:I
+  #10 = Utf8               java/bytecode/ClassLoadingExample
+  #11 = Utf8               instanceInt
+  #12 = Utf8               I
+  #13 = Fieldref           #14.#15        // java/lang/System.out:Ljava/io/PrintStream;
+  #14 = Class              #16            // java/lang/System
+  #15 = NameAndType        #17:#18        // out:Ljava/io/PrintStream;
+  #16 = Utf8               java/lang/System
+  #17 = Utf8               out
+  #18 = Utf8               Ljava/io/PrintStream;
+  #19 = String             #20            // 构造方法执行
+  #20 = Utf8               构造方法执行
+  #21 = Methodref          #22.#23        // java/io/PrintStream.println:(Ljava/lang/String;)V
+  #22 = Class              #24            // java/io/PrintStream
+  #23 = NameAndType        #25:#26        // println:(Ljava/lang/String;)V
+  #24 = Utf8               java/io/PrintStream
+  #25 = Utf8               println
+  #26 = Utf8               (Ljava/lang/String;)V
+  #27 = Class              #28            // java/lang/StringBuilder
+  #28 = Utf8               java/lang/StringBuilder
+  #29 = Methodref          #27.#3         // java/lang/StringBuilder."<init>":()V
+  #30 = String             #31            // 实例方法执行，staticInt =
+  #31 = Utf8               实例方法执行，staticInt =
+  #32 = Methodref          #27.#33        // java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  #33 = NameAndType        #34:#35        // append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  #34 = Utf8               append
+  #35 = Utf8               (Ljava/lang/String;)Ljava/lang/StringBuilder;
+  #36 = Fieldref           #8.#37         // java/bytecode/ClassLoadingExample.staticInt:I
+  #37 = NameAndType        #38:#12        // staticInt:I
+  #38 = Utf8               staticInt
+  #39 = Methodref          #27.#40        // java/lang/StringBuilder.append:(I)Ljava/lang/StringBuilder;
+  #40 = NameAndType        #34:#41        // append:(I)Ljava/lang/StringBuilder;
+  #41 = Utf8               (I)Ljava/lang/StringBuilder;
+  #42 = Methodref          #27.#43        // java/lang/StringBuilder.toString:()Ljava/lang/String;
+  #43 = NameAndType        #44:#45        // toString:()Ljava/lang/String;
+  #44 = Utf8               toString
+  #45 = Utf8               ()Ljava/lang/String;
+  #46 = String             #47            // 静态方法执行，staticInt =
+  #47 = Utf8               静态方法执行，staticInt =
+  #48 = Fieldref           #8.#49         // java/bytecode/ClassLoadingExample.STATIC_FINAL_VAR:Ljava/lang/String;
+  #49 = NameAndType        #50:#51        // STATIC_FINAL_VAR:Ljava/lang/String;
+  #50 = Utf8               STATIC_FINAL_VAR
+  #51 = Utf8               Ljava/lang/String;
+  #52 = String             #53            // Hello
+  #53 = Utf8               Hello
+  #54 = Fieldref           #8.#55         // java/bytecode/ClassLoadingExample.staticString:Ljava/lang/String;
+  #55 = NameAndType        #56:#51        // staticString:Ljava/lang/String;
+  #56 = Utf8               staticString
+  #57 = Fieldref           #8.#58         // java/bytecode/ClassLoadingExample.staticArray:[I
+  #58 = NameAndType        #59:#60        // staticArray:[I
+  #59 = Utf8               staticArray
+  #60 = Utf8               [I
+  #61 = String             #62            // 第一个静态代码块执行
+  #62 = Utf8               第一个静态代码块执行
+  #63 = Long               100l
+  #65 = Fieldref           #8.#66         // java/bytecode/ClassLoadingExample.staticLong:J
+  #66 = NameAndType        #67:#68        // staticLong:J
+  #67 = Utf8               staticLong
+  #68 = Utf8               J
+  #69 = String             #70            // 第二个静态代码块执行
+  #70 = Utf8               第二个静态代码块执行
+  #71 = String             #72            // Initialized in static block
+  #72 = Utf8               Initialized in static block
+  #73 = String             #74            // 第三个静态代码块执行
+  #74 = Utf8               第三个静态代码块执行
+  #75 = String             #76            // World
+  #76 = Utf8               World
+  #77 = Utf8               STATIC_FINAL_CONSTANT
+  #78 = Utf8               ConstantValue
+  #79 = Integer            100
+  #80 = Utf8               Code
+  #81 = Utf8               LineNumberTable
+  #82 = Utf8               instanceMethod
+  #83 = Utf8               staticMethod
+  #84 = Utf8               getStaticInt
+  #85 = Utf8               ()I
+  #86 = Utf8               getStaticFinalVar
+  #87 = Utf8               <clinit>
+  #88 = Utf8               SourceFile
+  #89 = Utf8               ClassLoadingExample.java
+{
+  private static int staticInt;
+    descriptor: I
+    flags: ACC_PRIVATE, ACC_STATIC
+
+  private static long staticLong;
+    descriptor: J
+    flags: ACC_PRIVATE, ACC_STATIC
+
+  private static java.lang.String staticString;
+    descriptor: Ljava/lang/String;
+    flags: ACC_PRIVATE, ACC_STATIC
+
+  public static final int STATIC_FINAL_CONSTANT;
+    descriptor: I
+    flags: ACC_PUBLIC, ACC_STATIC, ACC_FINAL
+    ConstantValue: int 100
+
+  private static final java.lang.String STATIC_FINAL_VAR;
+    descriptor: Ljava/lang/String;
+    flags: ACC_PRIVATE, ACC_STATIC, ACC_FINAL
+
+  private static int[] staticArray;
+    descriptor: [I
+    flags: ACC_PRIVATE, ACC_STATIC
+
+  private int instanceInt;
+    descriptor: I
+    flags: ACC_PRIVATE
+
+  public java.bytecode.ClassLoadingExample();
+    descriptor: ()V
+    flags: ACC_PUBLIC
+    Code:
+      stack=2, locals=1, args_size=1
+         0: aload_0
+         1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+         4: aload_0
+         5: bipush        50
+         7: putfield      #7                  // Field instanceInt:I
+        10: getstatic     #13                 // Field java/lang/System.out:Ljava/io/PrintStream;
+        13: ldc           #19                 // String 构造方法执行
+        15: invokevirtual #21                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+        18: aload_0
+        19: bipush        100
+        21: putfield      #7                  // Field instanceInt:I
+        24: return
+      LineNumberTable:
+        line 51: 0
+        line 48: 4
+        line 52: 10
+        line 53: 18
+        line 54: 24
+
+  public void instanceMethod();
+    descriptor: ()V
+    flags: ACC_PUBLIC
+    Code:
+      stack=3, locals=1, args_size=1
+         0: getstatic     #13                 // Field java/lang/System.out:Ljava/io/PrintStream;
+         3: new           #27                 // class java/lang/StringBuilder
+         6: dup
+         7: invokespecial #29                 // Method java/lang/StringBuilder."<init>":()V
+        10: ldc           #30                 // String 实例方法执行，staticInt =
+        12: invokevirtual #32                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+        15: getstatic     #36                 // Field staticInt:I
+        18: invokevirtual #39                 // Method java/lang/StringBuilder.append:(I)Ljava/lang/StringBuilder;
+        21: invokevirtual #42                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+        24: invokevirtual #21                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+        27: return
+      LineNumberTable:
+        line 58: 0
+        line 59: 27
+
+  public static void staticMethod();
+    descriptor: ()V
+    flags: ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=3, locals=0, args_size=0
+         0: getstatic     #13                 // Field java/lang/System.out:Ljava/io/PrintStream;
+         3: new           #27                 // class java/lang/StringBuilder
+         6: dup
+         7: invokespecial #29                 // Method java/lang/StringBuilder."<init>":()V
+        10: ldc           #46                 // String 静态方法执行，staticInt =
+        12: invokevirtual #32                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+        15: getstatic     #36                 // Field staticInt:I
+        18: invokevirtual #39                 // Method java/lang/StringBuilder.append:(I)Ljava/lang/StringBuilder;
+        21: invokevirtual #42                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+        24: invokevirtual #21                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+        27: return
+      LineNumberTable:
+        line 63: 0
+        line 64: 27
+
+  public static int getStaticInt();
+    descriptor: ()I
+    flags: ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=1, locals=0, args_size=0
+         0: getstatic     #36                 // Field staticInt:I
+         3: ireturn
+      LineNumberTable:
+        line 68: 0
+
+  public static java.lang.String getStaticFinalVar();
+    descriptor: ()Ljava/lang/String;
+    flags: ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=1, locals=0, args_size=0
+         0: getstatic     #48                 // Field STATIC_FINAL_VAR:Ljava/lang/String;
+         3: areturn
+      LineNumberTable:
+        line 72: 0
+
+  static {};
+    descriptor: ()V
+    flags: ACC_STATIC
+    Code:
+      stack=4, locals=0, args_size=0
+         0: bipush        10
+         2: putstatic     #36                 // Field staticInt:I
+         5: ldc           #52                 // String Hello
+         7: putstatic     #54                 // Field staticString:Ljava/lang/String;
+        10: iconst_3
+        11: newarray       int
+        13: dup
+        14: iconst_0
+        15: iconst_1
+        16: iastore
+        17: dup
+        18: iconst_1
+        19: iconst_2
+        20: iastore
+        21: dup
+        22: iconst_2
+        23: iconst_3
+        24: iastore
+        25: putstatic     #57                 // Field staticArray:[I
+        28: getstatic     #13                 // Field java/lang/System.out:Ljava/io/PrintStream;
+        31: ldc           #61                 // String 第一个静态代码块执行
+        33: invokevirtual #21                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+        36: bipush        20
+        38: putstatic     #36                 // Field staticInt:I
+        41: ldc2_w        #63                 // long 100l
+        44: putstatic     #65                 // Field staticLong:J
+        47: getstatic     #13                 // Field java/lang/System.out:Ljava/io/PrintStream;
+        50: ldc           #69                 // String 第二个静态代码块执行
+        52: invokevirtual #21                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+        55: ldc           #71                 // String Initialized in static block
+        57: putstatic     #48                 // Field STATIC_FINAL_VAR:Ljava/lang/String;
+        60: bipush        30
+        62: putstatic     #36                 // Field staticInt:I
+        65: getstatic     #13                 // Field java/lang/System.out:Ljava/io/PrintStream;
+        68: ldc           #73                 // String 第三个静态代码块执行
+        70: invokevirtual #21                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+        73: ldc           #75                 // String World
+        75: putstatic     #54                 // Field staticString:Ljava/lang/String;
+        78: return
+      LineNumberTable:
+        line 10: 0
+        line 16: 5
+        line 25: 10
+        line 29: 28
+        line 30: 36
+        line 31: 41
+        line 36: 47
+        line 37: 55
+        line 38: 60
+        line 43: 65
+        line 44: 73
+        line 45: 78
+}
+SourceFile: "ClassLoadingExample.java"

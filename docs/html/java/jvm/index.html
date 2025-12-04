@@ -411,10 +411,34 @@
 <li class="nav-item">
 <div class="nav-link">
 <span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/jvm/bytecode/字节码分析-类加载机制.html" class="nav-link-text" data-path="html/java/jvm/bytecode/字节码分析-类加载机制.html">字节码分析 类加载机制</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
 <a href="../../../html/java/jvm/bytecode/字节码分析-继承.html" class="nav-link-text" data-path="html/java/jvm/bytecode/字节码分析-继承.html">字节码分析 继承</a>
 </div>
 </li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/jvm/bytecode/字节码增强技术.html" class="nav-link-text" data-path="html/java/jvm/bytecode/字节码增强技术.html">字节码增强技术</a>
+</div>
+</li>
 </ul>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/jvm/java类加载机制.html" class="nav-link-text" data-path="html/java/jvm/java类加载机制.html">Java类加载机制</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/jvm/垃圾回收机制.html" class="nav-link-text" data-path="html/java/jvm/垃圾回收机制.html">垃圾回收机制</a>
+</div>
 </li>
 </ul>
 </li>
@@ -539,8 +563,47 @@
     <div class="main-content">
         <div class="content-body">
             <h1 id="jvm">jvm</h1>
+<ul>
+<li>编译</li>
+<li>字节码</li>
+<li>jvm内存模型<ul>
+<li>类加载</li>
+<li>运行时数据区<ul>
+<li>方法区</li>
+<li>堆</li>
+<li>虚拟机栈</li>
+<li>本地方法栈</li>
+</ul>
+</li>
+<li>执行引擎</li>
+<li>本地方法</li>
+</ul>
+</li>
+<li>垃圾收集<ul>
+<li>垃圾收集算法</li>
+<li>垃圾收集器</li>
+</ul>
+</li>
+</ul>
+<h2 id="_1">编译</h2>
+<p>.java文件编译为.class的字节码文件</p>
+<div class="hljs"><pre><span></span><code><span class="n">hello</span><span class="p">.</span><span class="n">java</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="err">编译</span><span class="w"> </span><span class="o">---&gt;</span><span class="w"> </span><span class="n">hello</span><span class="p">.</span><span class="n">class</span><span class="w"> </span>
+</code></pre></div>
+<h2 id="_2">类加载</h2>
+<h3 id="_3">加载</h3>
+<p>读取hello.class文件，类元信息加载到jvm方法区</p>
+<h3 id="-">链接 - 验证</h3>
+<p>校验字节码合法性（如格式、安全规则）</p>
+<h3 id="-_1">链接 - 准备</h3>
+<p>为静态变量分配内存（方法区），设置默认值（如 0、false）</p>
+<h3 id="-_2">链接 - 解析</h3>
+<p>将符号引用（如类名、方法名）转为直接引用（内存地址）</p>
+<h3 id="_4">初始化</h3>
+<p>执行静态代码块、静态变量显式初始化（赋具体值）</p>
+<h2 id="_5">类执行</h2>
+<p>执行引擎执行将方法区的代码放到栈上执行，并且通过堆管理对象</p>
+<p>类加载后，其元信息（含字节码）存于方法区；执行引擎读取方法区的字节码，通过 “虚拟机栈” 创建栈帧来执行方法；对象实例及成员变量存于堆，通过栈中的引用访问堆对象</p>
 <p><img alt="java_runtime.png" src="java_runtime.png"/></p>
-<h2 id="jvm-model">JVM Model</h2>
 <p><img alt="jvm_model.png" src="jvm_model.png"/>!</p>
 <h2 id="jdk-jre-jvm">JDK, JRE, JVM</h2>
 <p><img alt="jdk_jre_jvm.png" src="jdk_jre_jvm.png"/></p>

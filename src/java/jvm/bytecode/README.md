@@ -85,7 +85,15 @@ SourceFile: "Test.java"
 
 ---
 
-### 示例2：方法示例（MethodExample）
+### 示例2：类加载机制示例（ClassLoadingExample）
+
+演示类加载阶段的静态变量和静态代码块机制，重点研究`<clinit>`方法的生成和执行顺序。
+
+**详细分析**：[字节码分析-类加载机制.md](字节码分析-类加载机制.md)
+
+---
+
+### 示例3：方法示例（MethodExample）
 
 演示构造方法、实例方法、静态方法、方法重载的字节码实现。
 
@@ -93,7 +101,7 @@ SourceFile: "Test.java"
 
 ---
 
-### 示例3：继承示例（InheritanceExample）
+### 示例4：继承示例（InheritanceExample）
 
 演示继承、方法重写、super调用的底层机制。
 
@@ -101,7 +109,7 @@ SourceFile: "Test.java"
 
 ---
 
-### 示例4：控制流示例（ControlFlowExample）
+### 示例5：控制流示例（ControlFlowExample）
 
 演示if-else、switch、for循环、while循环、增强for循环的字节码转换。
 
@@ -109,7 +117,7 @@ SourceFile: "Test.java"
 
 ---
 
-### 示例5：异常处理示例（ExceptionExample）
+### 示例6：异常处理示例（ExceptionExample）
 
 演示try-catch-finally、throws声明的异常表机制。
 
@@ -117,7 +125,7 @@ SourceFile: "Test.java"
 
 ---
 
-### 示例6：Lambda表达式示例（LambdaExample）
+### 示例7：Lambda表达式示例（LambdaExample）
 
 演示Java 8 Lambda表达式的invokedynamic实现。
 
@@ -125,7 +133,7 @@ SourceFile: "Test.java"
 
 ---
 
-### 示例7：方法引用示例（MethodReferenceExample）
+### 示例8：方法引用示例（MethodReferenceExample）
 
 演示Java 8方法引用的invokedynamic实现。
 
@@ -133,7 +141,7 @@ SourceFile: "Test.java"
 
 ---
 
-### 示例8：泛型示例（GenericExample）
+### 示例9：泛型示例（GenericExample）
 
 演示泛型类、泛型方法的类型擦除和Signature属性。
 
@@ -141,7 +149,7 @@ SourceFile: "Test.java"
 
 ---
 
-### 示例9：内部类示例（InnerClassExample）
+### 示例10：内部类示例（InnerClassExample）
 
 演示成员内部类、静态内部类的字节码表示和合成方法。
 
@@ -149,7 +157,7 @@ SourceFile: "Test.java"
 
 ---
 
-### 示例10：同步示例（SynchronizedExample）
+### 示例11：同步示例（SynchronizedExample）
 
 演示synchronized方法和同步代码块的实现机制。
 
@@ -157,7 +165,7 @@ SourceFile: "Test.java"
 
 ---
 
-### 示例11：可变参数示例（VarargsExample）
+### 示例12：可变参数示例（VarargsExample）
 
 演示可变参数方法的ACC_VARARGS标志和数组参数转换。
 
@@ -190,18 +198,21 @@ SourceFile: "Test.java"
 | `lookupswitch` | switch语句（稀疏case） |
 | `monitorenter` | 获取监视器锁 |
 | `monitorexit` | 释放监视器锁 |
+| `putstatic` | 设置静态字段 |
+| `newarray` | 创建数组 |
 
 ## 总结
 
 通过这些拆分的示例，我们可以系统地学习：
 
 1. **字段表**：各种类型的字段在字节码中的表示方式
-2. **方法表**：构造方法、实例方法、静态方法、方法重载的字节码实现
-3. **继承和多态**：super调用、方法重写的底层机制
-4. **控制流**：if-else、switch、循环结构的字节码转换
-5. **异常处理**：try-catch-finally的异常表机制
-6. **Java 8特性**：Lambda表达式和方法引用的invokedynamic实现
-7. **高级特性**：泛型、内部类、同步、可变参数的字节码表示
+2. **类加载机制**：静态变量和静态代码块的`<clinit>`方法
+3. **方法表**：构造方法、实例方法、静态方法、方法重载的字节码实现
+4. **继承和多态**：super调用、方法重写的底层机制
+5. **控制流**：if-else、switch、循环结构的字节码转换
+6. **异常处理**：try-catch-finally的异常表机制
+7. **Java 8特性**：Lambda表达式和方法引用的invokedynamic实现
+8. **高级特性**：泛型、内部类、同步、可变参数的字节码表示
 
 理解字节码结构有助于：
 - 深入理解Java虚拟机的工作原理

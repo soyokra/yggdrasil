@@ -411,10 +411,34 @@
 <li class="nav-item">
 <div class="nav-link">
 <span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/jvm/bytecode/字节码分析-类加载机制.html" class="nav-link-text" data-path="html/java/jvm/bytecode/字节码分析-类加载机制.html">字节码分析 类加载机制</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
 <a href="../../../../html/java/jvm/bytecode/字节码分析-继承.html" class="nav-link-text" data-path="html/java/jvm/bytecode/字节码分析-继承.html">字节码分析 继承</a>
 </div>
 </li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/jvm/bytecode/字节码增强技术.html" class="nav-link-text" data-path="html/java/jvm/bytecode/字节码增强技术.html">字节码增强技术</a>
+</div>
+</li>
 </ul>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/jvm/java类加载机制.html" class="nav-link-text" data-path="html/java/jvm/java类加载机制.html">Java类加载机制</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/jvm/垃圾回收机制.html" class="nav-link-text" data-path="html/java/jvm/垃圾回收机制.html">垃圾回收机制</a>
+</div>
 </li>
 </ul>
 </li>
@@ -606,43 +630,47 @@
 <p>演示各种类型的字段定义：静态字段、实例字段、基本类型、对象类型、数组、final字段等。</p>
 <p><strong>详细分析</strong>：<a href="字节码分析-字段.html">字节码分析-字段.md</a></p>
 <hr/>
-<h3 id="2methodexample">示例2：方法示例（MethodExample）</h3>
+<h3 id="2classloadingexample">示例2：类加载机制示例（ClassLoadingExample）</h3>
+<p>演示类加载阶段的静态变量和静态代码块机制，重点研究<code>&lt;clinit&gt;</code>方法的生成和执行顺序。</p>
+<p><strong>详细分析</strong>：<a href="字节码分析-类加载机制.html">字节码分析-类加载机制.md</a></p>
+<hr/>
+<h3 id="3methodexample">示例3：方法示例（MethodExample）</h3>
 <p>演示构造方法、实例方法、静态方法、方法重载的字节码实现。</p>
 <p><strong>详细分析</strong>：<a href="字节码分析-方法.html">字节码分析-方法.md</a></p>
 <hr/>
-<h3 id="3inheritanceexample">示例3：继承示例（InheritanceExample）</h3>
+<h3 id="4inheritanceexample">示例4：继承示例（InheritanceExample）</h3>
 <p>演示继承、方法重写、super调用的底层机制。</p>
 <p><strong>详细分析</strong>：<a href="字节码分析-继承.html">字节码分析-继承.md</a></p>
 <hr/>
-<h3 id="4controlflowexample">示例4：控制流示例（ControlFlowExample）</h3>
+<h3 id="5controlflowexample">示例5：控制流示例（ControlFlowExample）</h3>
 <p>演示if-else、switch、for循环、while循环、增强for循环的字节码转换。</p>
 <p><strong>详细分析</strong>：<a href="字节码分析-控制流.html">字节码分析-控制流.md</a></p>
 <hr/>
-<h3 id="5exceptionexample">示例5：异常处理示例（ExceptionExample）</h3>
+<h3 id="6exceptionexample">示例6：异常处理示例（ExceptionExample）</h3>
 <p>演示try-catch-finally、throws声明的异常表机制。</p>
 <p><strong>详细分析</strong>：<a href="字节码分析-异常处理.html">字节码分析-异常处理.md</a></p>
 <hr/>
-<h3 id="6lambdalambdaexample">示例6：Lambda表达式示例（LambdaExample）</h3>
+<h3 id="7lambdalambdaexample">示例7：Lambda表达式示例（LambdaExample）</h3>
 <p>演示Java 8 Lambda表达式的invokedynamic实现。</p>
 <p><strong>详细分析</strong>：<a href="字节码分析-Lambda表达式.html">字节码分析-Lambda表达式.md</a></p>
 <hr/>
-<h3 id="7methodreferenceexample">示例7：方法引用示例（MethodReferenceExample）</h3>
+<h3 id="8methodreferenceexample">示例8：方法引用示例（MethodReferenceExample）</h3>
 <p>演示Java 8方法引用的invokedynamic实现。</p>
 <p><strong>详细分析</strong>：<a href="字节码分析-方法引用.html">字节码分析-方法引用.md</a></p>
 <hr/>
-<h3 id="8genericexample">示例8：泛型示例（GenericExample）</h3>
+<h3 id="9genericexample">示例9：泛型示例（GenericExample）</h3>
 <p>演示泛型类、泛型方法的类型擦除和Signature属性。</p>
 <p><strong>详细分析</strong>：<a href="字节码分析-泛型.html">字节码分析-泛型.md</a></p>
 <hr/>
-<h3 id="9innerclassexample">示例9：内部类示例（InnerClassExample）</h3>
+<h3 id="10innerclassexample">示例10：内部类示例（InnerClassExample）</h3>
 <p>演示成员内部类、静态内部类的字节码表示和合成方法。</p>
 <p><strong>详细分析</strong>：<a href="字节码分析-内部类.html">字节码分析-内部类.md</a></p>
 <hr/>
-<h3 id="10synchronizedexample">示例10：同步示例（SynchronizedExample）</h3>
+<h3 id="11synchronizedexample">示例11：同步示例（SynchronizedExample）</h3>
 <p>演示synchronized方法和同步代码块的实现机制。</p>
 <p><strong>详细分析</strong>：<a href="字节码分析-同步.html">字节码分析-同步.md</a></p>
 <hr/>
-<h3 id="11varargsexample">示例11：可变参数示例（VarargsExample）</h3>
+<h3 id="12varargsexample">示例12：可变参数示例（VarargsExample）</h3>
 <p>演示可变参数方法的ACC_VARARGS标志和数组参数转换。</p>
 <p><strong>详细分析</strong>：<a href="字节码分析-可变参数.html">字节码分析-可变参数.md</a></p>
 <hr/>
@@ -739,12 +767,21 @@
 <td><code>monitorexit</code></td>
 <td>释放监视器锁</td>
 </tr>
+<tr>
+<td><code>putstatic</code></td>
+<td>设置静态字段</td>
+</tr>
+<tr>
+<td><code>newarray</code></td>
+<td>创建数组</td>
+</tr>
 </tbody>
 </table>
 <h2 id="_6">总结</h2>
 <p>通过这些拆分的示例，我们可以系统地学习：</p>
 <ol>
 <li><strong>字段表</strong>：各种类型的字段在字节码中的表示方式</li>
+<li><strong>类加载机制</strong>：静态变量和静态代码块的<code>&lt;clinit&gt;</code>方法</li>
 <li><strong>方法表</strong>：构造方法、实例方法、静态方法、方法重载的字节码实现</li>
 <li><strong>继承和多态</strong>：super调用、方法重写的底层机制</li>
 <li><strong>控制流</strong>：if-else、switch、循环结构的字节码转换</li>
