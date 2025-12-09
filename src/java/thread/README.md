@@ -1,9 +1,12 @@
 # thread
 
-## 基础技术
+## 核心技术关系图
 ![thread_tree](thread_tree.png)
 
-## 核心索引
+
+## 技术索引
+
+### 核心索引
 - 线程基础
   - Thread
   - CAS
@@ -52,7 +55,7 @@
   - AtomicBoolean
   - AtomicReference
 
-## 全面索引
+### 全面索引
 - 线程基础
   - 线程概念
     - 进程

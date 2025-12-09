@@ -279,8 +279,8 @@ class DocSiteBuilder:
     
     def _get_display_name(self, name: str) -> str:
         """获取显示名称"""
-        # 移除常见的后缀
-        return name.replace('_', ' ').replace('-', ' ').title()
+        # 保持文件名原样
+        return name
     
     def _convert_all_markdown(self):
         """转换所有 Markdown 文件"""
