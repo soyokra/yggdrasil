@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ConfigurationClassParser.parse - Technology</title>
+    <link rel="stylesheet" href="../../../assets/style.css">
+    <link rel="stylesheet" href="../../../assets/github.min.css">
+    <script src="../../../assets/highlight.min.js"></script>
+    <script src="../../../assets/python.min.js"></script>
+    <script src="../../../assets/java.min.js"></script>
+    <script src="../../../assets/javascript.min.js"></script>
+    <script src="../../../assets/xml.min.js"></script>
+    <script src="../../../assets/css.min.js"></script>
+    <script src="../../../assets/bash.min.js"></script>
+    <script src="../../../assets/sql.min.js"></script>
+</head>
+
+<body>
+    <!-- 顶部导航栏 -->
+    <div class="top-navbar">
+        <div class="site-title">Technology</div>
+    </div>
+
+    <!-- 侧边导航栏 -->
+    <div class="sidebar">
+        <ul class="nav-tree">
+            <li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../html/java/index.html" class="nav-link-text" data-path="html/java/index.html">java</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../html/java/Java并发编程/index.html" class="nav-link-text" data-path="html/java/Java并发编程/index.html">Java并发编程</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java并发编程/Java内存模型(JMM).html" class="nav-link-text" data-path="html/java/Java并发编程/Java内存模型(JMM).html">Java内存模型(JMM)</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java并发编程/线程(Thread).html" class="nav-link-text" data-path="html/java/Java并发编程/线程(Thread).html">线程(Thread)</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../html/java/Java虚拟机模型(JVM)/index.html" class="nav-link-text" data-path="html/java/Java虚拟机模型(JVM)/index.html">Java虚拟机模型(JVM)</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型(JVM)/java类加载机制.html" class="nav-link-text" data-path="html/java/Java虚拟机模型(JVM)/java类加载机制.html">java类加载机制</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型(JVM)/垃圾回收机制.html" class="nav-link-text" data-path="html/java/Java虚拟机模型(JVM)/垃圾回收机制.html">垃圾回收机制</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../html/java/Java虚拟机模型(JVM)/字节码分析/index.html" class="nav-link-text" data-path="html/java/Java虚拟机模型(JVM)/字节码分析/index.html">字节码分析</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-Lambda表达式.html" class="nav-link-text" data-path="html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-Lambda表达式.html">字节码分析-Lambda表达式</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-内部类.html" class="nav-link-text" data-path="html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-内部类.html">字节码分析-内部类</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-可变参数.html" class="nav-link-text" data-path="html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-可变参数.html">字节码分析-可变参数</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-同步.html" class="nav-link-text" data-path="html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-同步.html">字节码分析-同步</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-字段.html" class="nav-link-text" data-path="html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-字段.html">字节码分析-字段</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-异常处理.html" class="nav-link-text" data-path="html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-异常处理.html">字节码分析-异常处理</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-控制流.html" class="nav-link-text" data-path="html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-控制流.html">字节码分析-控制流</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-方法.html" class="nav-link-text" data-path="html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-方法.html">字节码分析-方法</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-方法引用.html" class="nav-link-text" data-path="html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-方法引用.html">字节码分析-方法引用</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-泛型.html" class="nav-link-text" data-path="html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-泛型.html">字节码分析-泛型</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-类加载机制.html" class="nav-link-text" data-path="html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-类加载机制.html">字节码分析-类加载机制</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-继承.html" class="nav-link-text" data-path="html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-继承.html">字节码分析-继承</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型(JVM)/字节码分析/字节码增强技术.html" class="nav-link-text" data-path="html/java/Java虚拟机模型(JVM)/字节码分析/字节码增强技术.html">字节码增强技术</a>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children active">
+<span class="nav-link-icon expanded" data-toggle="collapse"></span>
+<a href="../../../html/spring/index.html" class="nav-link-text" data-path="html/spring/index.html">spring</a>
+</div>
+<ul class="nav-children expanded">
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../html/spring/spring-framework/index.html" class="nav-link-text" data-path="html/spring/spring-framework/index.html">spring-framework</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-framework/BeanLifecycle.html" class="nav-link-text" data-path="html/spring/spring-framework/BeanLifecycle.html">BeanLifecycle</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../html/spring/spring-mysql/index.html" class="nav-link-text" data-path="html/spring/spring-mysql/index.html">spring-mysql</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../html/spring/spring-mysql/mybatis/index.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis/index.html">mybatis</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-mysql/mybatis/Mapper源码分析.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis/Mapper源码分析.html">Mapper源码分析</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../html/spring/spring-mysql/mybatis-plus/index.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis-plus/index.html">mybatis-plus</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-mysql/mybatis-plus/DataSource源码分析.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis-plus/DataSource源码分析.html">DataSource源码分析</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-mysql/mybatis-plus/Mapper源码分析.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis-plus/Mapper源码分析.html">Mapper源码分析</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-mysql/mybatis-plus/SQL执行源码分析.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis-plus/SQL执行源码分析.html">SQL执行源码分析</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-mysql/mybatis-plus/SQL模板注册源码分析.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis-plus/SQL模板注册源码分析.html">SQL模板注册源码分析</a>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children active">
+<span class="nav-link-icon expanded" data-toggle="collapse"></span>
+<a href="../../../html/spring/spring启动源码分析/index.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/index.html">spring启动源码分析</a>
+</div>
+<ul class="nav-children expanded">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/AbstractApplicationContext.cancelRefresh.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.cancelRefresh.html">AbstractApplicationContext.cancelRefresh</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/AbstractApplicationContext.destroyBeans.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.destroyBeans.html">AbstractApplicationContext.destroyBeans</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/AbstractApplicationContext.finishBeanFactoryInitialization.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.finishBeanFactoryInitialization.html">AbstractApplicationContext.finishBeanFactoryInitialization</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/AbstractApplicationContext.finishRefresh.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.finishRefresh.html">AbstractApplicationContext.finishRefresh</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/AbstractApplicationContext.initApplicationEventMulticaster.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.initApplicationEventMulticaster.html">AbstractApplicationContext.initApplicationEventMulticaster</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/AbstractApplicationContext.initMessageSource.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.initMessageSource.html">AbstractApplicationContext.initMessageSource</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/AbstractApplicationContext.invokeBeanFactoryPostProcessors.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.invokeBeanFactoryPostProcessors.html">AbstractApplicationContext.invokeBeanFactoryPostProcessors</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/AbstractApplicationContext.obtainFreshBeanFactory.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.obtainFreshBeanFactory.html">AbstractApplicationContext.obtainFreshBeanFactory</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/AbstractApplicationContext.onRefresh.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.onRefresh.html">AbstractApplicationContext.onRefresh</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/AbstractApplicationContext.postProcessBeanFactory.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.postProcessBeanFactory.html">AbstractApplicationContext.postProcessBeanFactory</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/AbstractApplicationContext.prepareBeanFactory.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.prepareBeanFactory.html">AbstractApplicationContext.prepareBeanFactory</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/AbstractApplicationContext.prepareRefresh.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.prepareRefresh.html">AbstractApplicationContext.prepareRefresh</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/AbstractApplicationContext.registerBeanPostProcessors.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.registerBeanPostProcessors.html">AbstractApplicationContext.registerBeanPostProcessors</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/AbstractApplicationContext.registerListeners.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.registerListeners.html">AbstractApplicationContext.registerListeners</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/AbstractApplicationContext.resetCommonCaches.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.resetCommonCaches.html">AbstractApplicationContext.resetCommonCaches</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/Application.createApplicationContext.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/Application.createApplicationContext.html">Application.createApplicationContext</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/Application.refreshContext.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/Application.refreshContext.html">Application.refreshContext</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/Application.run.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/Application.run.html">Application.run</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/AutoConfigurationImportSelector.getAutoConfigurationEntry.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AutoConfigurationImportSelector.getAutoConfigurationEntry.html">AutoConfigurationImportSelector.getAutoConfigurationEntry</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/ClassPathMapperScanner.scan.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/ClassPathMapperScanner.scan.html">ClassPathMapperScanner.scan</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link active">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/ConfigurationClassParser.parse.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/ConfigurationClassParser.parse.html">ConfigurationClassParser.parse</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/ConfigurationClassPostProcessor.processConfigBeanDefinitions.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/ConfigurationClassPostProcessor.processConfigBeanDefinitions.html">ConfigurationClassPostProcessor.processConfigBeanDefinitions</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/MapperScannerConfigurer.postProcessBeanDefinitionRegistry.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/MapperScannerConfigurer.postProcessBeanDefinitionRegistry.html">MapperScannerConfigurer.postProcessBeanDefinitionRegistry</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/ServletWebServerApplicationContext.onRefresh.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/ServletWebServerApplicationContext.onRefresh.html">ServletWebServerApplicationContext.onRefresh</a>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../html/cloud/index.html" class="nav-link-text" data-path="html/cloud/index.html">cloud</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/cloud/docker/index.html" class="nav-link-text" data-path="html/cloud/docker/index.html">docker</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/cloud/k8s/index.html" class="nav-link-text" data-path="html/cloud/k8s/index.html">k8s</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../html/others/index.html" class="nav-link-text" data-path="html/others/index.html">others</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/others/algorithm/index.html" class="nav-link-text" data-path="html/others/algorithm/index.html">algorithm</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/others/clickhouse/index.html" class="nav-link-text" data-path="html/others/clickhouse/index.html">clickhouse</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/others/data-structure/index.html" class="nav-link-text" data-path="html/others/data-structure/index.html">data-structure</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/others/design-pattern/index.html" class="nav-link-text" data-path="html/others/design-pattern/index.html">design-pattern</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/others/diagram/index.html" class="nav-link-text" data-path="html/others/diagram/index.html">diagram</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/others/elasticsearch/index.html" class="nav-link-text" data-path="html/others/elasticsearch/index.html">elasticsearch</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/others/kakfa/index.html" class="nav-link-text" data-path="html/others/kakfa/index.html">kakfa</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/others/mongodb/index.html" class="nav-link-text" data-path="html/others/mongodb/index.html">mongodb</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/others/prometheus/index.html" class="nav-link-text" data-path="html/others/prometheus/index.html">prometheus</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/others/rabbitmq/index.html" class="nav-link-text" data-path="html/others/rabbitmq/index.html">rabbitmq</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/others/redis/index.html" class="nav-link-text" data-path="html/others/redis/index.html">redis</a>
+</div>
+</li>
+</ul>
+</li>
+        </ul>
+    </div>
+
+    <!-- 主内容区 -->
+    <div class="main-content">
+        <div class="content-body">
+            <div class="hljs"><pre><span></span><code><span class="kd">class</span> <span class="nc">ConfigurationClassParser</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">parse</span><span class="p">(</span><span class="n">Set</span><span class="o">&lt;</span><span class="n">BeanDefinitionHolder</span><span class="o">&gt;</span><span class="w"> </span><span class="n">configCandidates</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">BeanDefinitionHolder</span><span class="w"> </span><span class="n">holder</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">configCandidates</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">BeanDefinition</span><span class="w"> </span><span class="n">bd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">holder</span><span class="p">.</span><span class="na">getBeanDefinition</span><span class="p">();</span>
+<span class="w">            </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">bd</span><span class="w"> </span><span class="k">instanceof</span><span class="w"> </span><span class="n">AnnotatedBeanDefinition</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="c1">// 1.1 进入这里</span>
+<span class="w">                    </span><span class="n">parse</span><span class="p">(((</span><span class="n">AnnotatedBeanDefinition</span><span class="p">)</span><span class="w"> </span><span class="n">bd</span><span class="p">).</span><span class="na">getMetadata</span><span class="p">(),</span><span class="w"> </span><span class="n">holder</span><span class="p">.</span><span class="na">getBeanName</span><span class="p">());</span>
+<span class="w">                </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">bd</span><span class="w"> </span><span class="k">instanceof</span><span class="w"> </span><span class="n">AbstractBeanDefinition</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="p">((</span><span class="n">AbstractBeanDefinition</span><span class="p">)</span><span class="w"> </span><span class="n">bd</span><span class="p">).</span><span class="na">hasBeanClass</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="n">parse</span><span class="p">(((</span><span class="n">AbstractBeanDefinition</span><span class="p">)</span><span class="w"> </span><span class="n">bd</span><span class="p">).</span><span class="na">getBeanClass</span><span class="p">(),</span><span class="w"> </span><span class="n">holder</span><span class="p">.</span><span class="na">getBeanName</span><span class="p">());</span>
+<span class="w">                </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="n">parse</span><span class="p">(</span><span class="n">bd</span><span class="p">.</span><span class="na">getBeanClassName</span><span class="p">(),</span><span class="w"> </span><span class="n">holder</span><span class="p">.</span><span class="na">getBeanName</span><span class="p">());</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">BeanDefinitionStoreException</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">throw</span><span class="w"> </span><span class="n">ex</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Throwable</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">BeanDefinitionStoreException</span><span class="p">(</span>
+<span class="w">                        </span><span class="s">"Failed to parse configuration class ["</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">bd</span><span class="p">.</span><span class="na">getBeanClassName</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">"]"</span><span class="p">,</span><span class="w"> </span><span class="n">ex</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="c1">// 2.1 进这里</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">deferredImportSelectorHandler</span><span class="p">.</span><span class="na">process</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">protected</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">parse</span><span class="p">(</span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">className</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">beanName</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">IOException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Assert</span><span class="p">.</span><span class="na">notNull</span><span class="p">(</span><span class="n">className</span><span class="p">,</span><span class="w"> </span><span class="s">"No bean class name for configuration class bean definition"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">MetadataReader</span><span class="w"> </span><span class="n">reader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">metadataReaderFactory</span><span class="p">.</span><span class="na">getMetadataReader</span><span class="p">(</span><span class="n">className</span><span class="p">);</span>
+<span class="w">        </span><span class="n">processConfigurationClass</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">ConfigurationClass</span><span class="p">(</span><span class="n">reader</span><span class="p">,</span><span class="w"> </span><span class="n">beanName</span><span class="p">),</span><span class="w"> </span><span class="n">DEFAULT_EXCLUSION_FILTER</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">protected</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">parse</span><span class="p">(</span><span class="n">Class</span><span class="o">&lt;?&gt;</span><span class="w"> </span><span class="n">clazz</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">beanName</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">IOException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">processConfigurationClass</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">ConfigurationClass</span><span class="p">(</span><span class="n">clazz</span><span class="p">,</span><span class="w"> </span><span class="n">beanName</span><span class="p">),</span><span class="w"> </span><span class="n">DEFAULT_EXCLUSION_FILTER</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+
+<span class="w">    </span><span class="kd">protected</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">parse</span><span class="p">(</span><span class="n">AnnotationMetadata</span><span class="w"> </span><span class="n">metadata</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">beanName</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">IOException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// 1.2 进入这里</span>
+<span class="w">        </span><span class="n">processConfigurationClass</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">ConfigurationClass</span><span class="p">(</span><span class="n">metadata</span><span class="p">,</span><span class="w"> </span><span class="n">beanName</span><span class="p">),</span><span class="w"> </span><span class="n">DEFAULT_EXCLUSION_FILTER</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">protected</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">processConfigurationClass</span><span class="p">(</span><span class="n">ConfigurationClass</span><span class="w"> </span><span class="n">configClass</span><span class="p">,</span><span class="w"> </span><span class="n">Predicate</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">filter</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">IOException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">conditionEvaluator</span><span class="p">.</span><span class="na">shouldSkip</span><span class="p">(</span><span class="n">configClass</span><span class="p">.</span><span class="na">getMetadata</span><span class="p">(),</span><span class="w"> </span><span class="n">ConfigurationPhase</span><span class="p">.</span><span class="na">PARSE_CONFIGURATION</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="n">ConfigurationClass</span><span class="w"> </span><span class="n">existingClass</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">configurationClasses</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="n">configClass</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">existingClass</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">configClass</span><span class="p">.</span><span class="na">isImported</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">existingClass</span><span class="p">.</span><span class="na">isImported</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="n">existingClass</span><span class="p">.</span><span class="na">mergeImportedBy</span><span class="p">(</span><span class="n">configClass</span><span class="p">);</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">                </span><span class="c1">// Otherwise ignore new imported config class; existing non-imported class overrides it.</span>
+<span class="w">                </span><span class="k">return</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// Explicit bean definition found, probably replacing an import.</span>
+<span class="w">                </span><span class="c1">// Let's remove the old one and go with the new one.</span>
+<span class="w">                </span><span class="k">this</span><span class="p">.</span><span class="na">configurationClasses</span><span class="p">.</span><span class="na">remove</span><span class="p">(</span><span class="n">configClass</span><span class="p">);</span>
+<span class="w">                </span><span class="k">this</span><span class="p">.</span><span class="na">knownSuperclasses</span><span class="p">.</span><span class="na">values</span><span class="p">().</span><span class="na">removeIf</span><span class="p">(</span><span class="n">configClass</span><span class="p">::</span><span class="n">equals</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="c1">// Recursively process the configuration class and its superclass hierarchy.</span>
+<span class="w">        </span><span class="n">SourceClass</span><span class="w"> </span><span class="n">sourceClass</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">asSourceClass</span><span class="p">(</span><span class="n">configClass</span><span class="p">,</span><span class="w"> </span><span class="n">filter</span><span class="p">);</span>
+<span class="w">        </span><span class="k">do</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// 1.3 进这里</span>
+<span class="w">            </span><span class="n">sourceClass</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">doProcessConfigurationClass</span><span class="p">(</span><span class="n">configClass</span><span class="p">,</span><span class="w"> </span><span class="n">sourceClass</span><span class="p">,</span><span class="w"> </span><span class="n">filter</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">sourceClass</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">);</span>
+
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">configurationClasses</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="n">configClass</span><span class="p">,</span><span class="w"> </span><span class="n">configClass</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+
+<span class="w">    </span><span class="nd">@Nullable</span>
+<span class="w">    </span><span class="kd">protected</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">SourceClass</span><span class="w"> </span><span class="nf">doProcessConfigurationClass</span><span class="p">(</span>
+<span class="w">            </span><span class="n">ConfigurationClass</span><span class="w"> </span><span class="n">configClass</span><span class="p">,</span><span class="w"> </span><span class="n">SourceClass</span><span class="w"> </span><span class="n">sourceClass</span><span class="p">,</span><span class="w"> </span><span class="n">Predicate</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">filter</span><span class="p">)</span>
+<span class="w">            </span><span class="kd">throws</span><span class="w"> </span><span class="n">IOException</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">configClass</span><span class="p">.</span><span class="na">getMetadata</span><span class="p">().</span><span class="na">isAnnotated</span><span class="p">(</span><span class="n">Component</span><span class="p">.</span><span class="na">class</span><span class="p">.</span><span class="na">getName</span><span class="p">()))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// Recursively process any member (nested) classes first</span>
+<span class="w">            </span><span class="n">processMemberClasses</span><span class="p">(</span><span class="n">configClass</span><span class="p">,</span><span class="w"> </span><span class="n">sourceClass</span><span class="p">,</span><span class="w"> </span><span class="n">filter</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="c1">// Process any @PropertySource annotations</span>
+<span class="w">        </span><span class="c1">// 处理PropertySource注解，导入配置文件？</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">AnnotationAttributes</span><span class="w"> </span><span class="n">propertySource</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">AnnotationConfigUtils</span><span class="p">.</span><span class="na">attributesForRepeatable</span><span class="p">(</span>
+<span class="w">                </span><span class="n">sourceClass</span><span class="p">.</span><span class="na">getMetadata</span><span class="p">(),</span><span class="w"> </span><span class="n">PropertySources</span><span class="p">.</span><span class="na">class</span><span class="p">,</span>
+<span class="w">                </span><span class="n">org</span><span class="p">.</span><span class="na">springframework</span><span class="p">.</span><span class="na">context</span><span class="p">.</span><span class="na">annotation</span><span class="p">.</span><span class="na">PropertySource</span><span class="p">.</span><span class="na">class</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">environment</span><span class="w"> </span><span class="k">instanceof</span><span class="w"> </span><span class="n">ConfigurableEnvironment</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">processPropertySource</span><span class="p">(</span><span class="n">propertySource</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">logger</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">"Ignoring @PropertySource annotation on ["</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sourceClass</span><span class="p">.</span><span class="na">getMetadata</span><span class="p">().</span><span class="na">getClassName</span><span class="p">()</span><span class="w"> </span><span class="o">+</span>
+<span class="w">                        </span><span class="s">"]. Reason: Environment must implement ConfigurableEnvironment"</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="c1">// 处理 @Component + @ComponentScan 注册为bean</span>
+<span class="w">        </span><span class="c1">// Process any @ComponentScan annotations</span>
+<span class="w">        </span><span class="n">Set</span><span class="o">&lt;</span><span class="n">AnnotationAttributes</span><span class="o">&gt;</span><span class="w"> </span><span class="n">componentScans</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">AnnotationConfigUtils</span><span class="p">.</span><span class="na">attributesForRepeatable</span><span class="p">(</span>
+<span class="w">                </span><span class="n">sourceClass</span><span class="p">.</span><span class="na">getMetadata</span><span class="p">(),</span><span class="w"> </span><span class="n">ComponentScans</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"> </span><span class="n">ComponentScan</span><span class="p">.</span><span class="na">class</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">componentScans</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;&amp;</span>
+<span class="w">                </span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="na">conditionEvaluator</span><span class="p">.</span><span class="na">shouldSkip</span><span class="p">(</span><span class="n">sourceClass</span><span class="p">.</span><span class="na">getMetadata</span><span class="p">(),</span><span class="w"> </span><span class="n">ConfigurationPhase</span><span class="p">.</span><span class="na">REGISTER_BEAN</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">AnnotationAttributes</span><span class="w"> </span><span class="n">componentScan</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">componentScans</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// The config class is annotated with @ComponentScan -&gt; perform the scan immediately</span>
+<span class="w">                </span><span class="c1">// 扫描默认SpringApplication的BasePackage路径下所有注解了@Conpoment的类</span>
+<span class="w">                </span><span class="c1">// ClassPathBeanDefinitionScanner 扫描注册为bean</span>
+<span class="w">                </span><span class="n">Set</span><span class="o">&lt;</span><span class="n">BeanDefinitionHolder</span><span class="o">&gt;</span><span class="w"> </span><span class="n">scannedBeanDefinitions</span><span class="w"> </span><span class="o">=</span>
+<span class="w">                        </span><span class="k">this</span><span class="p">.</span><span class="na">componentScanParser</span><span class="p">.</span><span class="na">parse</span><span class="p">(</span><span class="n">componentScan</span><span class="p">,</span><span class="w"> </span><span class="n">sourceClass</span><span class="p">.</span><span class="na">getMetadata</span><span class="p">().</span><span class="na">getClassName</span><span class="p">());</span>
+<span class="w">                </span><span class="c1">// Check the set of scanned definitions for any further config classes and parse recursively if needed</span>
+<span class="w">                </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">BeanDefinitionHolder</span><span class="w"> </span><span class="n">holder</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">scannedBeanDefinitions</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="n">BeanDefinition</span><span class="w"> </span><span class="n">bdCand</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">holder</span><span class="p">.</span><span class="na">getBeanDefinition</span><span class="p">().</span><span class="na">getOriginatingBeanDefinition</span><span class="p">();</span>
+<span class="w">                    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">bdCand</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                        </span><span class="n">bdCand</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">holder</span><span class="p">.</span><span class="na">getBeanDefinition</span><span class="p">();</span>
+<span class="w">                    </span><span class="p">}</span>
+<span class="w">                    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ConfigurationClassUtils</span><span class="p">.</span><span class="na">checkConfigurationClassCandidate</span><span class="p">(</span><span class="n">bdCand</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">metadataReaderFactory</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                        </span><span class="c1">// 属于@Configuration注解的类，递归执行</span>
+<span class="w">                        </span><span class="n">parse</span><span class="p">(</span><span class="n">bdCand</span><span class="p">.</span><span class="na">getBeanClassName</span><span class="p">(),</span><span class="w"> </span><span class="n">holder</span><span class="p">.</span><span class="na">getBeanName</span><span class="p">());</span>
+<span class="w">                    </span><span class="p">}</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="c1">// Process any @Import annotations</span>
+<span class="w">        </span><span class="c1">// 处理包含 @Import  ImportSelector接口 ImportBeanDefinitionRegistrar接口</span>
+<span class="w">        </span><span class="n">processImports</span><span class="p">(</span><span class="n">configClass</span><span class="p">,</span><span class="w"> </span><span class="n">sourceClass</span><span class="p">,</span><span class="w"> </span><span class="n">getImports</span><span class="p">(</span><span class="n">sourceClass</span><span class="p">),</span><span class="w"> </span><span class="n">filter</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Process any @ImportResource annotations</span>
+<span class="w">        </span><span class="n">AnnotationAttributes</span><span class="w"> </span><span class="n">importResource</span><span class="w"> </span><span class="o">=</span>
+<span class="w">                </span><span class="n">AnnotationConfigUtils</span><span class="p">.</span><span class="na">attributesFor</span><span class="p">(</span><span class="n">sourceClass</span><span class="p">.</span><span class="na">getMetadata</span><span class="p">(),</span><span class="w"> </span><span class="n">ImportResource</span><span class="p">.</span><span class="na">class</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">importResource</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">resources</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">importResource</span><span class="p">.</span><span class="na">getStringArray</span><span class="p">(</span><span class="s">"locations"</span><span class="p">);</span>
+<span class="w">            </span><span class="n">Class</span><span class="o">&lt;?</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">BeanDefinitionReader</span><span class="o">&gt;</span><span class="w"> </span><span class="n">readerClass</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">importResource</span><span class="p">.</span><span class="na">getClass</span><span class="p">(</span><span class="s">"reader"</span><span class="p">);</span>
+<span class="w">            </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">resource</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">resources</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">String</span><span class="w"> </span><span class="n">resolvedResource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">environment</span><span class="p">.</span><span class="na">resolveRequiredPlaceholders</span><span class="p">(</span><span class="n">resource</span><span class="p">);</span>
+<span class="w">                </span><span class="n">configClass</span><span class="p">.</span><span class="na">addImportedResource</span><span class="p">(</span><span class="n">resolvedResource</span><span class="p">,</span><span class="w"> </span><span class="n">readerClass</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="c1">// Process individual @Bean methods</span>
+<span class="w">        </span><span class="c1">// </span>
+<span class="w">        </span><span class="n">Set</span><span class="o">&lt;</span><span class="n">MethodMetadata</span><span class="o">&gt;</span><span class="w"> </span><span class="n">beanMethods</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">retrieveBeanMethodMetadata</span><span class="p">(</span><span class="n">sourceClass</span><span class="p">);</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">MethodMetadata</span><span class="w"> </span><span class="n">methodMetadata</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">beanMethods</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">configClass</span><span class="p">.</span><span class="na">addBeanMethod</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">BeanMethod</span><span class="p">(</span><span class="n">methodMetadata</span><span class="p">,</span><span class="w"> </span><span class="n">configClass</span><span class="p">));</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="c1">// Process default methods on interfaces</span>
+<span class="w">        </span><span class="n">processInterfaces</span><span class="p">(</span><span class="n">configClass</span><span class="p">,</span><span class="w"> </span><span class="n">sourceClass</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Process superclass, if any</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">sourceClass</span><span class="p">.</span><span class="na">getMetadata</span><span class="p">().</span><span class="na">hasSuperClass</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">String</span><span class="w"> </span><span class="n">superclass</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sourceClass</span><span class="p">.</span><span class="na">getMetadata</span><span class="p">().</span><span class="na">getSuperClassName</span><span class="p">();</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">superclass</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">superclass</span><span class="p">.</span><span class="na">startsWith</span><span class="p">(</span><span class="s">"java"</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;&amp;</span>
+<span class="w">                    </span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="na">knownSuperclasses</span><span class="p">.</span><span class="na">containsKey</span><span class="p">(</span><span class="n">superclass</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">this</span><span class="p">.</span><span class="na">knownSuperclasses</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="n">superclass</span><span class="p">,</span><span class="w"> </span><span class="n">configClass</span><span class="p">);</span>
+<span class="w">                </span><span class="c1">// Superclass found, return its annotation metadata and recurse</span>
+<span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="n">sourceClass</span><span class="p">.</span><span class="na">getSuperClass</span><span class="p">();</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="c1">// No superclass -&gt; processing is complete</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">processImports</span><span class="p">(</span><span class="n">ConfigurationClass</span><span class="w"> </span><span class="n">configClass</span><span class="p">,</span><span class="w"> </span><span class="n">SourceClass</span><span class="w"> </span><span class="n">currentSourceClass</span><span class="p">,</span>
+<span class="w">                                </span><span class="n">Collection</span><span class="o">&lt;</span><span class="n">SourceClass</span><span class="o">&gt;</span><span class="w"> </span><span class="n">importCandidates</span><span class="p">,</span><span class="w"> </span><span class="n">Predicate</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">exclusionFilter</span><span class="p">,</span>
+<span class="w">                                </span><span class="kt">boolean</span><span class="w"> </span><span class="n">checkForCircularImports</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">importCandidates</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">checkForCircularImports</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">isChainedImportOnStack</span><span class="p">(</span><span class="n">configClass</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="na">problemReporter</span><span class="p">.</span><span class="na">error</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">CircularImportProblem</span><span class="p">(</span><span class="n">configClass</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">importStack</span><span class="p">));</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="na">importStack</span><span class="p">.</span><span class="na">push</span><span class="p">(</span><span class="n">configClass</span><span class="p">);</span>
+<span class="w">            </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">SourceClass</span><span class="w"> </span><span class="n">candidate</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">importCandidates</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">candidate</span><span class="p">.</span><span class="na">isAssignable</span><span class="p">(</span><span class="n">ImportSelector</span><span class="p">.</span><span class="na">class</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                        </span><span class="c1">// Candidate class is an ImportSelector -&gt; delegate to it to determine imports</span>
+<span class="w">                        </span><span class="n">Class</span><span class="o">&lt;?&gt;</span><span class="w"> </span><span class="n">candidateClass</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">candidate</span><span class="p">.</span><span class="na">loadClass</span><span class="p">();</span>
+<span class="w">                        </span><span class="n">ImportSelector</span><span class="w"> </span><span class="n">selector</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ParserStrategyUtils</span><span class="p">.</span><span class="na">instantiateClass</span><span class="p">(</span><span class="n">candidateClass</span><span class="p">,</span><span class="w"> </span><span class="n">ImportSelector</span><span class="p">.</span><span class="na">class</span><span class="p">,</span>
+<span class="w">                                </span><span class="k">this</span><span class="p">.</span><span class="na">environment</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">resourceLoader</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">registry</span><span class="p">);</span>
+<span class="w">                        </span><span class="n">Predicate</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">selectorFilter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">selector</span><span class="p">.</span><span class="na">getExclusionFilter</span><span class="p">();</span>
+<span class="w">                        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">selectorFilter</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                            </span><span class="n">exclusionFilter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">exclusionFilter</span><span class="p">.</span><span class="na">or</span><span class="p">(</span><span class="n">selectorFilter</span><span class="p">);</span>
+<span class="w">                        </span><span class="p">}</span>
+<span class="w">                        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">selector</span><span class="w"> </span><span class="k">instanceof</span><span class="w"> </span><span class="n">DeferredImportSelector</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                            </span><span class="k">this</span><span class="p">.</span><span class="na">deferredImportSelectorHandler</span><span class="p">.</span><span class="na">handle</span><span class="p">(</span><span class="n">configClass</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">DeferredImportSelector</span><span class="p">)</span><span class="w"> </span><span class="n">selector</span><span class="p">);</span>
+<span class="w">                        </span><span class="p">}</span>
+<span class="w">                        </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                            </span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">importClassNames</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">selector</span><span class="p">.</span><span class="na">selectImports</span><span class="p">(</span><span class="n">currentSourceClass</span><span class="p">.</span><span class="na">getMetadata</span><span class="p">());</span>
+<span class="w">                            </span><span class="n">Collection</span><span class="o">&lt;</span><span class="n">SourceClass</span><span class="o">&gt;</span><span class="w"> </span><span class="n">importSourceClasses</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">asSourceClasses</span><span class="p">(</span><span class="n">importClassNames</span><span class="p">,</span><span class="w"> </span><span class="n">exclusionFilter</span><span class="p">);</span>
+<span class="w">                            </span><span class="n">processImports</span><span class="p">(</span><span class="n">configClass</span><span class="p">,</span><span class="w"> </span><span class="n">currentSourceClass</span><span class="p">,</span><span class="w"> </span><span class="n">importSourceClasses</span><span class="p">,</span><span class="w"> </span><span class="n">exclusionFilter</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">);</span>
+<span class="w">                        </span><span class="p">}</span>
+<span class="w">                    </span><span class="p">}</span>
+<span class="w">                    </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">candidate</span><span class="p">.</span><span class="na">isAssignable</span><span class="p">(</span><span class="n">ImportBeanDefinitionRegistrar</span><span class="p">.</span><span class="na">class</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                        </span><span class="c1">// Candidate class is an ImportBeanDefinitionRegistrar -&gt;</span>
+<span class="w">                        </span><span class="c1">// delegate to it to register additional bean definitions</span>
+<span class="w">                        </span><span class="n">Class</span><span class="o">&lt;?&gt;</span><span class="w"> </span><span class="n">candidateClass</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">candidate</span><span class="p">.</span><span class="na">loadClass</span><span class="p">();</span>
+<span class="w">                        </span><span class="n">ImportBeanDefinitionRegistrar</span><span class="w"> </span><span class="n">registrar</span><span class="w"> </span><span class="o">=</span>
+<span class="w">                                </span><span class="n">ParserStrategyUtils</span><span class="p">.</span><span class="na">instantiateClass</span><span class="p">(</span><span class="n">candidateClass</span><span class="p">,</span><span class="w"> </span><span class="n">ImportBeanDefinitionRegistrar</span><span class="p">.</span><span class="na">class</span><span class="p">,</span>
+<span class="w">                                        </span><span class="k">this</span><span class="p">.</span><span class="na">environment</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">resourceLoader</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">registry</span><span class="p">);</span>
+<span class="w">                        </span><span class="n">configClass</span><span class="p">.</span><span class="na">addImportBeanDefinitionRegistrar</span><span class="p">(</span><span class="n">registrar</span><span class="p">,</span><span class="w"> </span><span class="n">currentSourceClass</span><span class="p">.</span><span class="na">getMetadata</span><span class="p">());</span>
+<span class="w">                    </span><span class="p">}</span>
+<span class="w">                    </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                        </span><span class="c1">// Candidate class not an ImportSelector or ImportBeanDefinitionRegistrar -&gt;</span>
+<span class="w">                        </span><span class="c1">// process it as an @Configuration class</span>
+<span class="w">                        </span><span class="k">this</span><span class="p">.</span><span class="na">importStack</span><span class="p">.</span><span class="na">registerImport</span><span class="p">(</span>
+<span class="w">                                </span><span class="n">currentSourceClass</span><span class="p">.</span><span class="na">getMetadata</span><span class="p">(),</span><span class="w"> </span><span class="n">candidate</span><span class="p">.</span><span class="na">getMetadata</span><span class="p">().</span><span class="na">getClassName</span><span class="p">());</span>
+<span class="w">                        </span><span class="n">processConfigurationClass</span><span class="p">(</span><span class="n">candidate</span><span class="p">.</span><span class="na">asConfigClass</span><span class="p">(</span><span class="n">configClass</span><span class="p">),</span><span class="w"> </span><span class="n">exclusionFilter</span><span class="p">);</span>
+<span class="w">                    </span><span class="p">}</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">BeanDefinitionStoreException</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">throw</span><span class="w"> </span><span class="n">ex</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Throwable</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">BeanDefinitionStoreException</span><span class="p">(</span>
+<span class="w">                        </span><span class="s">"Failed to process import candidates for configuration class ["</span><span class="w"> </span><span class="o">+</span>
+<span class="w">                                </span><span class="n">configClass</span><span class="p">.</span><span class="na">getMetadata</span><span class="p">().</span><span class="na">getClassName</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">"]"</span><span class="p">,</span><span class="w"> </span><span class="n">ex</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">finally</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">this</span><span class="p">.</span><span class="na">importStack</span><span class="p">.</span><span class="na">pop</span><span class="p">();</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">class</span> <span class="nc">DeferredImportSelectorHandler</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">        </span><span class="nd">@Nullable</span>
+<span class="w">        </span><span class="kd">private</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">DeferredImportSelectorHolder</span><span class="o">&gt;</span><span class="w"> </span><span class="n">deferredImportSelectors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ArrayList</span><span class="o">&lt;&gt;</span><span class="p">();</span>
+
+<span class="w">        </span><span class="cm">/**</span>
+<span class="cm">         * Handle the specified {@link DeferredImportSelector}. If deferred import</span>
+<span class="cm">         * selectors are being collected, this registers this instance to the list. If</span>
+<span class="cm">         * they are being processed, the {@link DeferredImportSelector} is also processed</span>
+<span class="cm">         * immediately according to its {@link DeferredImportSelector.Group}.</span>
+<span class="cm">         * @param configClass the source configuration class</span>
+<span class="cm">         * @param importSelector the selector to handle</span>
+<span class="cm">         */</span>
+<span class="w">        </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">handle</span><span class="p">(</span><span class="n">ConfigurationClass</span><span class="w"> </span><span class="n">configClass</span><span class="p">,</span><span class="w"> </span><span class="n">DeferredImportSelector</span><span class="w"> </span><span class="n">importSelector</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">DeferredImportSelectorHolder</span><span class="w"> </span><span class="n">holder</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">DeferredImportSelectorHolder</span><span class="p">(</span><span class="n">configClass</span><span class="p">,</span><span class="w"> </span><span class="n">importSelector</span><span class="p">);</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">deferredImportSelectors</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">DeferredImportSelectorGroupingHandler</span><span class="w"> </span><span class="n">handler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">DeferredImportSelectorGroupingHandler</span><span class="p">();</span>
+<span class="w">                </span><span class="n">handler</span><span class="p">.</span><span class="na">register</span><span class="p">(</span><span class="n">holder</span><span class="p">);</span>
+<span class="w">                </span><span class="n">handler</span><span class="p">.</span><span class="na">processGroupImports</span><span class="p">();</span>
+<span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">this</span><span class="p">.</span><span class="na">deferredImportSelectors</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="n">holder</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">process</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// 2.2 进这里</span>
+<span class="w">            </span><span class="n">List</span><span class="o">&lt;</span><span class="n">DeferredImportSelectorHolder</span><span class="o">&gt;</span><span class="w"> </span><span class="n">deferredImports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">deferredImportSelectors</span><span class="p">;</span>
+<span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="na">deferredImportSelectors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
+<span class="w">            </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">deferredImports</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="n">DeferredImportSelectorGroupingHandler</span><span class="w"> </span><span class="n">handler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">DeferredImportSelectorGroupingHandler</span><span class="p">();</span>
+<span class="w">                    </span><span class="n">deferredImports</span><span class="p">.</span><span class="na">sort</span><span class="p">(</span><span class="n">DEFERRED_IMPORT_COMPARATOR</span><span class="p">);</span>
+<span class="w">                    </span><span class="n">deferredImports</span><span class="p">.</span><span class="na">forEach</span><span class="p">(</span><span class="n">handler</span><span class="p">::</span><span class="n">register</span><span class="p">);</span>
+<span class="w">                    </span><span class="n">handler</span><span class="p">.</span><span class="na">processGroupImports</span><span class="p">();</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="k">finally</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">this</span><span class="p">.</span><span class="na">deferredImportSelectors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ArrayList</span><span class="o">&lt;&gt;</span><span class="p">();</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+
+<span class="p">}</span>
+</code></pre></div>
+<p>通过 ClassPathBeanDefinitionScanner执行</p>
+<div class="hljs"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ClassPathBeanDefinitionScanner</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">ClassPathScanningCandidateComponentProvider</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">protected</span><span class="w"> </span><span class="n">Set</span><span class="o">&lt;</span><span class="n">BeanDefinitionHolder</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">doScan</span><span class="p">(</span><span class="n">String</span><span class="p">...</span><span class="w"> </span><span class="n">basePackages</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Assert</span><span class="p">.</span><span class="na">notEmpty</span><span class="p">(</span><span class="n">basePackages</span><span class="p">,</span><span class="w"> </span><span class="s">"At least one base package must be specified"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Set</span><span class="o">&lt;</span><span class="n">BeanDefinitionHolder</span><span class="o">&gt;</span><span class="w"> </span><span class="n">beanDefinitions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">LinkedHashSet</span><span class="o">&lt;&gt;</span><span class="p">();</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">basePackage</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">basePackages</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Set</span><span class="o">&lt;</span><span class="n">BeanDefinition</span><span class="o">&gt;</span><span class="w"> </span><span class="n">candidates</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">findCandidateComponents</span><span class="p">(</span><span class="n">basePackage</span><span class="p">);</span>
+<span class="w">            </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">BeanDefinition</span><span class="w"> </span><span class="n">candidate</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">candidates</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">ScopeMetadata</span><span class="w"> </span><span class="n">scopeMetadata</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">scopeMetadataResolver</span><span class="p">.</span><span class="na">resolveScopeMetadata</span><span class="p">(</span><span class="n">candidate</span><span class="p">);</span>
+<span class="w">                </span><span class="n">candidate</span><span class="p">.</span><span class="na">setScope</span><span class="p">(</span><span class="n">scopeMetadata</span><span class="p">.</span><span class="na">getScopeName</span><span class="p">());</span>
+<span class="w">                </span><span class="n">String</span><span class="w"> </span><span class="n">beanName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">beanNameGenerator</span><span class="p">.</span><span class="na">generateBeanName</span><span class="p">(</span><span class="n">candidate</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">registry</span><span class="p">);</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">candidate</span><span class="w"> </span><span class="k">instanceof</span><span class="w"> </span><span class="n">AbstractBeanDefinition</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="n">postProcessBeanDefinition</span><span class="p">((</span><span class="n">AbstractBeanDefinition</span><span class="p">)</span><span class="w"> </span><span class="n">candidate</span><span class="p">,</span><span class="w"> </span><span class="n">beanName</span><span class="p">);</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">candidate</span><span class="w"> </span><span class="k">instanceof</span><span class="w"> </span><span class="n">AnnotatedBeanDefinition</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="n">AnnotationConfigUtils</span><span class="p">.</span><span class="na">processCommonDefinitionAnnotations</span><span class="p">((</span><span class="n">AnnotatedBeanDefinition</span><span class="p">)</span><span class="w"> </span><span class="n">candidate</span><span class="p">);</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">checkCandidate</span><span class="p">(</span><span class="n">beanName</span><span class="p">,</span><span class="w"> </span><span class="n">candidate</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="n">BeanDefinitionHolder</span><span class="w"> </span><span class="n">definitionHolder</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">BeanDefinitionHolder</span><span class="p">(</span><span class="n">candidate</span><span class="p">,</span><span class="w"> </span><span class="n">beanName</span><span class="p">);</span>
+<span class="w">                    </span><span class="n">definitionHolder</span><span class="w"> </span><span class="o">=</span>
+<span class="w">                            </span><span class="n">AnnotationConfigUtils</span><span class="p">.</span><span class="na">applyScopedProxyMode</span><span class="p">(</span><span class="n">scopeMetadata</span><span class="p">,</span><span class="w"> </span><span class="n">definitionHolder</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">registry</span><span class="p">);</span>
+<span class="w">                    </span><span class="n">beanDefinitions</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="n">definitionHolder</span><span class="p">);</span>
+<span class="w">                    </span><span class="n">registerBeanDefinition</span><span class="p">(</span><span class="n">definitionHolder</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">registry</span><span class="p">);</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">beanDefinitions</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>调用栈</p>
+<div class="hljs"><pre><span></span><code>doScan:273, ClassPathBeanDefinitionScanner (org.springframework.context.annotation)
+parse:132, ComponentScanAnnotationParser (org.springframework.context.annotation)
+doProcessConfigurationClass:296, ConfigurationClassParser (org.springframework.context.annotation)
+processConfigurationClass:250, ConfigurationClassParser (org.springframework.context.annotation)
+parse:207, ConfigurationClassParser (org.springframework.context.annotation)
+parse:175, ConfigurationClassParser (org.springframework.context.annotation)
+processConfigBeanDefinitions:320, ConfigurationClassPostProcessor (org.springframework.context.annotation)
+postProcessBeanDefinitionRegistry:237, ConfigurationClassPostProcessor (org.springframework.context.annotation)
+invokeBeanDefinitionRegistryPostProcessors:280, PostProcessorRegistrationDelegate (org.springframework.context.support)
+invokeBeanFactoryPostProcessors:96, PostProcessorRegistrationDelegate (org.springframework.context.support)
+invokeBeanFactoryPostProcessors:707, AbstractApplicationContext (org.springframework.context.support)
+refresh:533, AbstractApplicationContext (org.springframework.context.support)
+refresh:143, ServletWebServerApplicationContext (org.springframework.boot.web.servlet.context)
+refresh:755, SpringApplication (org.springframework.boot)
+refresh:747, SpringApplication (org.springframework.boot)
+refreshContext:402, SpringApplication (org.springframework.boot)
+run:312, SpringApplication (org.springframework.boot)
+main:35, StartApplication (com.zuzuche.widget.start)
+</code></pre></div>
+<p>parse @Configuration(sprivalApplication) -&gt;<br/>
+          scan =&gt;  @Component<br/>
+                  =&gt; parse @Configuration</p>
+<p>doProcessConfigurationClass：<br/>
+    processPropertySource<br/>
+    componentScanParser.parse<br/>
+    processImports<br/>
+    @Bean</p>
+        </div>
+    </div>
+
+    <script src="../../../assets/script.js"></script>
+    <script>
+        // 初始化代码高亮
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
+        });
+    </script>
+</body>
+
+</html>

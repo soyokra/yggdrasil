@@ -13,7 +13,4 @@
 - 云原生
   - k8s
   - docker
-- 中间件
-  - mysql
-  - redis
-  - kafka/rabbitmq
+

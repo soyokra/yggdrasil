@@ -83,7 +83,3 @@ BeanDefinition是一个接口，实际上可能有多种BeanDefinition类：
 3. 处理ConfigurationClass注册BeanDefinition
 
 执行过程中有递归法，会扫描出100多个ConfigurationClass对象
-
-
-## Bean
-![Bean初始化阶段](src/bean_lifecycle_002.png)
