@@ -381,7 +381,19 @@
 <li class="nav-item">
 <div class="nav-link">
 <span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/refresh-sequence-diagram.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/refresh-sequence-diagram.html">refresh-sequence-diagram</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
 <a href="../../../html/spring/spring启动源码分析/ServletWebServerApplicationContext.onRefresh.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/ServletWebServerApplicationContext.onRefresh.html">ServletWebServerApplicationContext.onRefresh</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/spring-boot-startup-flow.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/spring-boot-startup-flow.html">spring-boot-startup-flow</a>
 </div>
 </li>
 </ul>
@@ -488,13 +500,71 @@
     <!-- 主内容区 -->
     <div class="main-content">
         <div class="content-body">
-            <h2 id="_1">说明</h2>
-<p>配置类处理器<br/>
-- 处理@Component注解类，注册为BeanDefinition<br/>
-- 处理@Configuration注解类，注册为BeanDefinition<br/>
-- 处理@Import注解类<br/>
-- 处理实现ImportSelector接口方式的类，执行注册BeanDefinition的方法<br/>
-    - SpringBoot的自动装配AutoConfigurationImportSelector使用的是ImportSelector接口方式</p>
+            <h2 id="_1">简述</h2>
+<p>配置类后置处理器，负责解析配置类并注册BeanDefinition。</p>
+<p>这是invokeBeanFactoryPostProcessors阶段最重要的处理器，SpringBoot的自动配置也是在这里执行的。</p>
+<h2 id="beandefinition">BeanDefinition注册流程图</h2>
+<div class="hljs"><pre><span></span><code><span class="n">flowchart</span><span class="w"> </span><span class="n">TD</span>
+<span class="w">    </span><span class="k">Start</span><span class="o">[</span><span class="n">postProcessBeanDefinitionRegistry</span><span class="o">]</span><span class="w"> </span><span class="c1">--&gt; GetCandidates[获取配置类候选]</span>
+<span class="w">    </span><span class="n">GetCandidates</span><span class="w"> </span><span class="c1">--&gt; Check{是否有@Configuration&lt;br/&gt;或@Component?}</span>
+<span class="w">    </span><span class="k">Check</span><span class="w"> </span><span class="c1">--&gt;|是| AddCandidate[添加到configCandidates]</span>
+<span class="w">    </span><span class="k">Check</span><span class="w"> </span><span class="c1">--&gt;|否| Skip[跳过]</span>
+
+<span class="w">    </span><span class="n">AddCandidate</span><span class="w"> </span><span class="c1">--&gt; Sort[按@Order排序]</span>
+<span class="w">    </span><span class="n">Sort</span><span class="w"> </span><span class="c1">--&gt; CreateParser[创建ConfigurationClassParser]</span>
+<span class="w">    </span><span class="n">CreateParser</span><span class="w"> </span><span class="c1">--&gt; Parse[parser.parse解析配置类]</span>
+
+<span class="w">    </span><span class="nf">Parse</span><span class="w"> </span><span class="c1">--&gt; ProcessComponent[@Component处理]</span>
+<span class="w">    </span><span class="n">ProcessComponent</span><span class="w"> </span><span class="c1">--&gt; ProcessProperty[@PropertySource处理]</span>
+<span class="w">    </span><span class="n">ProcessProperty</span><span class="w"> </span><span class="c1">--&gt; ProcessComponentScan[@ComponentScan处理]</span>
+
+<span class="w">    </span><span class="n">ProcessComponentScan</span><span class="w"> </span><span class="c1">--&gt; Scan[ClassPathBeanDefinitionScanner&lt;br/&gt;扫描包路径]</span>
+<span class="w">    </span><span class="n">Scan</span><span class="w"> </span><span class="c1">--&gt; FindComponent[查找@Component类]</span>
+<span class="w">    </span><span class="n">FindComponent</span><span class="w"> </span><span class="c1">--&gt; RegisterComp[注册为BeanDefinition]</span>
+
+<span class="w">    </span><span class="n">RegisterComp</span><span class="w"> </span><span class="c1">--&gt; ProcessImport[@Import处理]</span>
+<span class="w">    </span><span class="n">ProcessImport</span><span class="w"> </span><span class="c1">--&gt; CheckImport{Import类型?}</span>
+
+<span class="w">    </span><span class="n">CheckImport</span><span class="w"> </span><span class="c1">--&gt;|ImportSelector| ProcessSelector[执行selectImports]</span>
+<span class="w">    </span><span class="n">CheckImport</span><span class="w"> </span><span class="c1">--&gt;|DeferredImportSelector| DeferredQueue[加入延迟队列]</span>
+<span class="w">    </span><span class="n">CheckImport</span><span class="w"> </span><span class="c1">--&gt;|ImportBeanDefinitionRegistrar| SaveRegistrar[保存Registrar]</span>
+<span class="w">    </span><span class="n">CheckImport</span><span class="w"> </span><span class="c1">--&gt;|普通类| ParseAsConfig[当作配置类递归解析]</span>
+
+<span class="w">    </span><span class="n">ProcessSelector</span><span class="w"> </span><span class="c1">--&gt; ProcessImportResource[@ImportResource处理]</span>
+<span class="w">    </span><span class="n">DeferredQueue</span><span class="w"> </span><span class="c1">--&gt; ProcessDeferredImport[延迟处理&lt;br/&gt;AutoConfiguration在这里]</span>
+<span class="w">    </span><span class="n">SaveRegistrar</span><span class="w"> </span><span class="c1">--&gt; ProcessImportResource</span>
+<span class="w">    </span><span class="n">ParseAsConfig</span><span class="w"> </span><span class="c1">--&gt; ProcessImportResource</span>
+
+<span class="w">    </span><span class="n">ProcessDeferredImport</span><span class="w"> </span><span class="c1">--&gt; AutoConfig[AutoConfigurationImportSelector]</span>
+<span class="w">    </span><span class="n">AutoConfig</span><span class="w"> </span><span class="c1">--&gt; LoadFactory[加载META-INF/spring.factories]</span>
+<span class="w">    </span><span class="n">LoadFactory</span><span class="w"> </span><span class="c1">--&gt; FilterAuto[条件过滤@Conditional]</span>
+<span class="w">    </span><span class="n">FilterAuto</span><span class="w"> </span><span class="c1">--&gt; RegisterAuto[注册自动配置类]</span>
+
+<span class="w">    </span><span class="n">RegisterAuto</span><span class="w"> </span><span class="c1">--&gt; ProcessImportResource</span>
+<span class="w">    </span><span class="n">ProcessImportResource</span><span class="w"> </span><span class="c1">--&gt; ProcessBean[@Bean方法处理]</span>
+<span class="w">    </span><span class="n">ProcessBean</span><span class="w"> </span><span class="c1">--&gt; SaveBeanMethod[保存为BeanMethod]</span>
+
+<span class="w">    </span><span class="n">SaveBeanMethod</span><span class="w"> </span><span class="c1">--&gt; LoadBeanDef[loadBeanDefinitions]</span>
+<span class="w">    </span><span class="n">LoadBeanDef</span><span class="w"> </span><span class="c1">--&gt; ReadConfig[读取ConfigurationClass]</span>
+<span class="w">    </span><span class="n">ReadConfig</span><span class="w"> </span><span class="c1">--&gt; RegBean[注册@Bean方法为BeanDefinition]</span>
+<span class="w">    </span><span class="n">RegBean</span><span class="w"> </span><span class="c1">--&gt; RegImportReg[执行ImportBeanDefinitionRegistrar]</span>
+<span class="w">    </span><span class="n">RegImportReg</span><span class="w"> </span><span class="c1">--&gt; RegResource[处理@ImportResource]</span>
+<span class="w">    </span><span class="n">RegResource</span><span class="w"> </span><span class="c1">--&gt; End[BeanDefinition注册完成]</span>
+
+<span class="w">    </span><span class="n">style</span><span class="w"> </span><span class="n">Scan</span><span class="w"> </span><span class="nl">fill</span><span class="p">:</span><span class="n">#e1f5ff</span>
+<span class="w">    </span><span class="n">style</span><span class="w"> </span><span class="n">AutoConfig</span><span class="w"> </span><span class="nl">fill</span><span class="p">:</span><span class="n">#ffe1e1</span>
+<span class="w">    </span><span class="n">style</span><span class="w"> </span><span class="n">RegBean</span><span class="w"> </span><span class="nl">fill</span><span class="p">:</span><span class="n">#e1ffe1</span>
+</code></pre></div>
+<h2 id="_2">配置类</h2>
+<ul>
+<li>处理@Component注解类，注册为BeanDefinition</li>
+<li>处理@Configuration注解类，注册为BeanDefinition</li>
+<li>处理@Import注解类</li>
+<li>处理实现ImportSelector接口方式的类，执行注册BeanDefinition的方法<ul>
+<li>SpringBoot的自动装配AutoConfigurationImportSelector使用的是ImportSelector接口方式</li>
+</ul>
+</li>
+</ul>
 <blockquote>
 <p>configCandidates实际上就是SprivalApplication</p>
 </blockquote>
@@ -609,7 +679,7 @@
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
-<h2 id="_2"></h2>
+<h2 id="_3"></h2>
 <p>执行 AutoConfigurationImportSelector 类的地方</p>
 <div class="hljs"><pre><span></span><code>getAutoConfigurationEntry:122, AutoConfigurationImportSelector (org.springframework.boot.autoconfigure)
  :434, AutoConfigurationImportSelector$AutoConfigurationGroup (org.springframework.boot.autoconfigure)

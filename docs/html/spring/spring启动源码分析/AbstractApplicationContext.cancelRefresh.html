@@ -381,7 +381,19 @@
 <li class="nav-item">
 <div class="nav-link">
 <span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/refresh-sequence-diagram.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/refresh-sequence-diagram.html">refresh-sequence-diagram</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
 <a href="../../../html/spring/spring启动源码分析/ServletWebServerApplicationContext.onRefresh.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/ServletWebServerApplicationContext.onRefresh.html">ServletWebServerApplicationContext.onRefresh</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/spring-boot-startup-flow.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/spring-boot-startup-flow.html">spring-boot-startup-flow</a>
 </div>
 </li>
 </ul>
@@ -488,7 +500,317 @@
     <!-- 主内容区 -->
     <div class="main-content">
         <div class="content-body">
-            
+            <h2 id="_1">简述</h2>
+<p>取消refresh操作，重置容器的激活状态。</p>
+<p>当refresh()过程中发生异常时，会调用此方法来标记刷新失败，重置容器状态。</p>
+<h2 id="_2">核心流程</h2>
+<ol>
+<li>重置容器的active标志为false</li>
+<li>记录异常信息</li>
+</ol>
+<h2 id="_3">源码分析</h2>
+<div class="hljs"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">abstract</span><span class="w"> </span><span class="kd">class</span> <span class="nc">AbstractApplicationContext</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">DefaultResourceLoader</span>
+<span class="w">        </span><span class="kd">implements</span><span class="w"> </span><span class="n">ConfigurableApplicationContext</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="cm">/** 容器是否激活的标志 */</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">AtomicBoolean</span><span class="w"> </span><span class="n">active</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">AtomicBoolean</span><span class="p">();</span>
+
+<span class="w">    </span><span class="cm">/** 容器是否关闭的标志 */</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">AtomicBoolean</span><span class="w"> </span><span class="n">closed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">AtomicBoolean</span><span class="p">();</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">refresh</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">BeansException</span><span class="p">,</span><span class="w"> </span><span class="n">IllegalStateException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">startupShutdownMonitor</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// ... 准备刷新</span>
+
+<span class="w">            </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// ... 各种初始化步骤</span>
+
+<span class="w">                </span><span class="c1">// finishBeanFactoryInitialization(beanFactory);</span>
+<span class="w">                </span><span class="c1">// finishRefresh();</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">BeansException</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">logger</span><span class="p">.</span><span class="na">isWarnEnabled</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="n">logger</span><span class="p">.</span><span class="na">warn</span><span class="p">(</span><span class="s">"Exception encountered during context initialization - "</span><span class="w"> </span><span class="o">+</span>
+<span class="w">                            </span><span class="s">"cancelling refresh attempt: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ex</span><span class="p">);</span>
+<span class="w">                </span><span class="p">}</span>
+
+<span class="w">                </span><span class="c1">// 销毁已经创建的单例Bean</span>
+<span class="w">                </span><span class="n">destroyBeans</span><span class="p">();</span>
+
+<span class="w">                </span><span class="c1">// 重置'active'标志，标记刷新失败</span>
+<span class="w">                </span><span class="n">cancelRefresh</span><span class="p">(</span><span class="n">ex</span><span class="p">);</span>
+
+<span class="w">                </span><span class="c1">// 向调用者传播异常</span>
+<span class="w">                </span><span class="k">throw</span><span class="w"> </span><span class="n">ex</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">finally</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// 重置Spring核心的内省缓存</span>
+<span class="w">                </span><span class="n">resetCommonCaches</span><span class="p">();</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="cm">/**</span>
+<span class="cm">     * 取消此Context的刷新尝试，在抛出异常后重置active标志</span>
+<span class="cm">     */</span>
+<span class="w">    </span><span class="kd">protected</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">cancelRefresh</span><span class="p">(</span><span class="n">BeansException</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">active</span><span class="p">.</span><span class="na">set</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="_4">状态标志说明</h2>
+<p>AbstractApplicationContext维护了两个重要的状态标志：</p>
+<table>
+<thead>
+<tr>
+<th>标志</th>
+<th>类型</th>
+<th>含义</th>
+<th>设置时机</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>active</td>
+<td>AtomicBoolean</td>
+<td>容器是否处于激活状态</td>
+<td>prepareRefresh时设为true，cancelRefresh/doClose时设为false</td>
+</tr>
+<tr>
+<td>closed</td>
+<td>AtomicBoolean</td>
+<td>容器是否已关闭</td>
+<td>prepareRefresh时设为false，doClose时设为true</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_5">状态转换</h2>
+<p>容器的状态转换流程：</p>
+<div class="hljs"><pre><span></span><code><span class="err">初始状态</span><span class="o">:</span><span class="w"> </span><span class="n">active</span><span class="o">=</span><span class="kc">false</span><span class="o">,</span><span class="w"> </span><span class="n">closed</span><span class="o">=</span><span class="kc">false</span>
+<span class="w">    </span><span class="err">↓</span>
+<span class="n">prepareRefresh</span><span class="o">():</span><span class="w"> </span><span class="n">active</span><span class="o">=</span><span class="kc">true</span><span class="o">,</span><span class="w"> </span><span class="n">closed</span><span class="o">=</span><span class="kc">false</span>
+<span class="w">    </span><span class="err">↓</span>
+<span class="w">    </span><span class="err">├─→</span><span class="w"> </span><span class="err">成功</span><span class="o">:</span><span class="w"> </span><span class="n">active</span><span class="o">=</span><span class="kc">true</span><span class="o">,</span><span class="w"> </span><span class="n">closed</span><span class="o">=</span><span class="kc">false</span><span class="w"> </span><span class="o">(</span><span class="err">运行中</span><span class="o">)</span>
+<span class="w">    </span><span class="err">│</span><span class="w">       </span><span class="err">↓</span>
+<span class="w">    </span><span class="err">│</span><span class="w">   </span><span class="n">close</span><span class="o">():</span><span class="w"> </span><span class="n">active</span><span class="o">=</span><span class="kc">false</span><span class="o">,</span><span class="w"> </span><span class="n">closed</span><span class="o">=</span><span class="kc">true</span>
+<span class="w">    </span><span class="err">│</span>
+<span class="w">    </span><span class="err">└─→</span><span class="w"> </span><span class="err">失败</span><span class="o">:</span><span class="w"> </span>
+<span class="w">          </span><span class="err">├─→</span><span class="w"> </span><span class="n">destroyBeans</span><span class="o">():</span><span class="w"> </span><span class="err">清理已创建的</span><span class="n">Bean</span>
+<span class="w">          </span><span class="err">├─→</span><span class="w"> </span><span class="n">cancelRefresh</span><span class="o">():</span><span class="w"> </span><span class="n">active</span><span class="o">=</span><span class="kc">false</span><span class="o">,</span><span class="w"> </span><span class="n">closed</span><span class="o">=</span><span class="kc">false</span>
+<span class="w">          </span><span class="err">└─→</span><span class="w"> </span><span class="k">throw</span><span class="w"> </span><span class="n">exception</span>
+</code></pre></div>
+<h2 id="_6">完整的异常处理流程</h2>
+<div class="hljs"><pre><span></span><code><span class="nd">@Override</span>
+<span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">refresh</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">BeansException</span><span class="p">,</span><span class="w"> </span><span class="n">IllegalStateException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">startupShutdownMonitor</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// 1. 准备刷新，设置 active=true, closed=false</span>
+<span class="w">        </span><span class="n">prepareRefresh</span><span class="p">();</span>
+
+<span class="w">        </span><span class="n">ConfigurableListableBeanFactory</span><span class="w"> </span><span class="n">beanFactory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">obtainFreshBeanFactory</span><span class="p">();</span>
+<span class="w">        </span><span class="n">prepareBeanFactory</span><span class="p">(</span><span class="n">beanFactory</span><span class="p">);</span>
+
+<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">postProcessBeanFactory</span><span class="p">(</span><span class="n">beanFactory</span><span class="p">);</span>
+
+<span class="w">            </span><span class="c1">// 假设在这里抛出异常</span>
+<span class="w">            </span><span class="n">invokeBeanFactoryPostProcessors</span><span class="p">(</span><span class="n">beanFactory</span><span class="p">);</span>
+<span class="w">            </span><span class="n">registerBeanPostProcessors</span><span class="p">(</span><span class="n">beanFactory</span><span class="p">);</span>
+<span class="w">            </span><span class="n">initMessageSource</span><span class="p">();</span>
+<span class="w">            </span><span class="n">initApplicationEventMulticaster</span><span class="p">();</span>
+<span class="w">            </span><span class="n">onRefresh</span><span class="p">();</span>
+<span class="w">            </span><span class="n">registerListeners</span><span class="p">();</span>
+
+<span class="w">            </span><span class="c1">// 或者在Bean实例化时抛出异常</span>
+<span class="w">            </span><span class="n">finishBeanFactoryInitialization</span><span class="p">(</span><span class="n">beanFactory</span><span class="p">);</span>
+<span class="w">            </span><span class="n">finishRefresh</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">BeansException</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">logger</span><span class="p">.</span><span class="na">isWarnEnabled</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">logger</span><span class="p">.</span><span class="na">warn</span><span class="p">(</span><span class="s">"Exception encountered during context initialization - "</span><span class="w"> </span><span class="o">+</span>
+<span class="w">                        </span><span class="s">"cancelling refresh attempt: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ex</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+
+<span class="w">            </span><span class="c1">// 2. 销毁已创建的Bean，避免资源泄漏</span>
+<span class="w">            </span><span class="n">destroyBeans</span><span class="p">();</span>
+
+<span class="w">            </span><span class="c1">// 3. 重置active标志为false</span>
+<span class="w">            </span><span class="n">cancelRefresh</span><span class="p">(</span><span class="n">ex</span><span class="p">);</span>
+
+<span class="w">            </span><span class="c1">// 4. 向上抛出异常</span>
+<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="n">ex</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">finally</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// 5. 清理缓存</span>
+<span class="w">            </span><span class="n">resetCommonCaches</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="_7">异常类型</h2>
+<p>refresh过程中可能抛出的异常：</p>
+<h3 id="1-beancreationexception">1. BeanCreationException</h3>
+<p>Bean创建失败：</p>
+<div class="hljs"><pre><span></span><code><span class="nd">@Component</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ProblematicBean</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nd">@Autowired</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">NonExistentBean</span><span class="w"> </span><span class="n">dependency</span><span class="p">;</span><span class="w">  </span><span class="c1">// 找不到依赖</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="2-beandefinitionstoreexception">2. BeanDefinitionStoreException</h3>
+<p>Bean定义解析失败：</p>
+<div class="hljs"><pre><span></span><code><span class="nd">@Configuration</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">InvalidConfig</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nd">@Bean</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Object</span><span class="w"> </span><span class="nf">invalid</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">RuntimeException</span><span class="p">(</span><span class="s">"Cannot create bean"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="3-nosuchbeandefinitionexception">3. NoSuchBeanDefinitionException</h3>
+<p>找不到必需的Bean：</p>
+<div class="hljs"><pre><span></span><code><span class="nd">@Component</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MyService</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nd">@Autowired</span>
+<span class="w">    </span><span class="nd">@Qualifier</span><span class="p">(</span><span class="s">"notExists"</span><span class="p">)</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">DataSource</span><span class="w"> </span><span class="n">dataSource</span><span class="p">;</span><span class="w">  </span><span class="c1">// Bean不存在</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="4-beancurrentlyincreationexception">4. BeanCurrentlyInCreationException</h3>
+<p>循环依赖（构造函数注入）：</p>
+<div class="hljs"><pre><span></span><code><span class="nd">@Component</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">BeanA</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">BeanA</span><span class="p">(</span><span class="n">BeanB</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<span class="p">}</span>
+
+<span class="nd">@Component</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">BeanB</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">BeanB</span><span class="p">(</span><span class="n">BeanA</span><span class="w"> </span><span class="n">a</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span><span class="w">  </span><span class="c1">// 无法解决的循环依赖</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="cancelrefresh">为什么需要cancelRefresh？</h2>
+<h3 id="1">1. 标记状态</h3>
+<p>明确标记容器初始化失败，防止后续误用。</p>
+<h3 id="2">2. 一致性</h3>
+<p>保证容器状态的一致性：<br/>
+- 如果refresh成功：active=true<br/>
+- 如果refresh失败：active=false</p>
+<h3 id="3">3. 可重试性</h3>
+<p>某些场景下，可以在捕获异常后重新尝试refresh：</p>
+<div class="hljs"><pre><span></span><code><span class="n">ConfigurableApplicationContext</span><span class="w"> </span><span class="n">context</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">AnnotationConfigApplicationContext</span><span class="p">();</span>
+<span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">context</span><span class="p">.</span><span class="na">refresh</span><span class="p">();</span>
+<span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">BeansException</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// cancelRefresh已被调用，active=false</span>
+<span class="w">    </span><span class="n">logger</span><span class="p">.</span><span class="na">error</span><span class="p">(</span><span class="s">"First refresh failed"</span><span class="p">,</span><span class="w"> </span><span class="n">ex</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// 修复问题后可以重试</span>
+<span class="w">    </span><span class="c1">// 注意：GenericApplicationContext只允许refresh一次</span>
+<span class="w">    </span><span class="c1">// 但AbstractRefreshableApplicationContext可以多次refresh</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="doclose">与doClose的区别</h2>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>调用时机</th>
+<th>操作</th>
+<th>最终状态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cancelRefresh()</td>
+<td>refresh失败</td>
+<td>只设置active=false</td>
+<td>active=false, closed=false</td>
+</tr>
+<tr>
+<td>doClose()</td>
+<td>正常关闭</td>
+<td>停止Lifecycle、销毁Bean、设置标志</td>
+<td>active=false, closed=true</td>
+</tr>
+</tbody>
+</table>
+<p>cancelRefresh只是标记初始化失败，而doClose是完整的关闭流程。</p>
+<h2 id="_8">相关检查方法</h2>
+<div class="hljs"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">abstract</span><span class="w"> </span><span class="kd">class</span> <span class="nc">AbstractApplicationContext</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">isActive</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">active</span><span class="p">.</span><span class="na">get</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="cm">/**</span>
+<span class="cm">     * 断言此Context的BeanFactory当前是激活的</span>
+<span class="cm">     */</span>
+<span class="w">    </span><span class="kd">protected</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">assertBeanFactoryActive</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="na">active</span><span class="p">.</span><span class="na">get</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">closed</span><span class="p">.</span><span class="na">get</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">IllegalStateException</span><span class="p">(</span><span class="n">getDisplayName</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">" has been closed already"</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">IllegalStateException</span><span class="p">(</span><span class="n">getDisplayName</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">" has not been refreshed yet"</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>这些方法用于在执行操作前检查容器状态：</p>
+<div class="hljs"><pre><span></span><code><span class="nd">@Override</span>
+<span class="kd">public</span><span class="w"> </span><span class="n">Object</span><span class="w"> </span><span class="nf">getBean</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">BeansException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">assertBeanFactoryActive</span><span class="p">();</span><span class="w">  </span><span class="c1">// 检查容器是否激活</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">getBeanFactory</span><span class="p">().</span><span class="na">getBean</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="_9">最佳实践</h2>
+<h3 id="1_1">1. 捕获并记录异常</h3>
+<div class="hljs"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Application</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">ConfigurableApplicationContext</span><span class="w"> </span><span class="n">context</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
+<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">context</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SpringApplication</span><span class="p">.</span><span class="na">run</span><span class="p">(</span><span class="n">Application</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Exception</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// refresh失败，cancelRefresh已被调用</span>
+<span class="w">            </span><span class="n">log</span><span class="p">.</span><span class="na">error</span><span class="p">(</span><span class="s">"Application failed to start"</span><span class="p">,</span><span class="w"> </span><span class="n">ex</span><span class="p">);</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="2_1">2. 确保资源清理</h3>
+<div class="hljs"><pre><span></span><code><span class="n">ConfigurableApplicationContext</span><span class="w"> </span><span class="n">context</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">AnnotationConfigApplicationContext</span><span class="p">();</span>
+<span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">context</span><span class="p">.</span><span class="na">register</span><span class="p">(</span><span class="n">AppConfig</span><span class="p">.</span><span class="na">class</span><span class="p">);</span>
+<span class="w">    </span><span class="n">context</span><span class="p">.</span><span class="na">refresh</span><span class="p">();</span>
+
+<span class="w">    </span><span class="c1">// 使用context</span>
+<span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">BeansException</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// cancelRefresh已自动调用</span>
+<span class="w">    </span><span class="n">log</span><span class="p">.</span><span class="na">error</span><span class="p">(</span><span class="s">"Failed to initialize"</span><span class="p">,</span><span class="w"> </span><span class="n">ex</span><span class="p">);</span>
+<span class="p">}</span><span class="w"> </span><span class="k">finally</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// 如果有部分资源需要额外清理</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">context</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">context</span><span class="p">.</span><span class="na">isActive</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// 自定义清理逻辑</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="_10">参考调用栈</h2>
+<div class="hljs"><pre><span></span><code>cancelRefresh:589, AbstractApplicationContext (org.springframework.context.support)
+refresh:557, AbstractApplicationContext (org.springframework.context.support)
+refresh:143, ServletWebServerApplicationContext (org.springframework.boot.web.servlet.context)
+refresh:755, SpringApplication (org.springframework.boot)
+refreshContext:402, SpringApplication (org.springframework.boot)
+run:312, SpringApplication (org.springframework.boot)
+</code></pre></div>
+<h2 id="_11">相关链接</h2>
+<ul>
+<li><a href="AbstractApplicationContext.destroyBeans.html">AbstractApplicationContext.destroyBeans</a></li>
+<li><a href="AbstractApplicationContext.prepareRefresh.html">AbstractApplicationContext.prepareRefresh</a></li>
+<li><a href="Application.refreshContext.html">AbstractApplicationContext.refreshContext</a></li>
+</ul>
         </div>
     </div>
 

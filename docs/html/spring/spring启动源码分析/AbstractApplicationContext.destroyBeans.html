@@ -381,7 +381,19 @@
 <li class="nav-item">
 <div class="nav-link">
 <span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/refresh-sequence-diagram.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/refresh-sequence-diagram.html">refresh-sequence-diagram</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
 <a href="../../../html/spring/spring启动源码分析/ServletWebServerApplicationContext.onRefresh.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/ServletWebServerApplicationContext.onRefresh.html">ServletWebServerApplicationContext.onRefresh</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/spring-boot-startup-flow.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/spring-boot-startup-flow.html">spring-boot-startup-flow</a>
 </div>
 </li>
 </ul>
@@ -488,7 +500,434 @@
     <!-- 主内容区 -->
     <div class="main-content">
         <div class="content-body">
-            
+            <h2 id="_1">简述</h2>
+<p>销毁容器中的所有单例Bean，释放资源。</p>
+<p>这个方法在以下情况下被调用：<br/>
+1. refresh()过程中发生异常，需要清理已创建的Bean<br/>
+2. 容器正常关闭时（close()方法）</p>
+<h2 id="_2">核心流程</h2>
+<ol>
+<li>调用BeanFactory的destroySingletons()方法</li>
+<li>执行所有单例Bean的销毁回调</li>
+<li>释放Bean占用的资源</li>
+</ol>
+<h2 id="_3">源码分析</h2>
+<p>AbstractApplicationContext中的调用：</p>
+<div class="hljs"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">abstract</span><span class="w"> </span><span class="kd">class</span> <span class="nc">AbstractApplicationContext</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">DefaultResourceLoader</span>
+<span class="w">        </span><span class="kd">implements</span><span class="w"> </span><span class="n">ConfigurableApplicationContext</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">refresh</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">BeansException</span><span class="p">,</span><span class="w"> </span><span class="n">IllegalStateException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">startupShutdownMonitor</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// ... 前面的步骤</span>
+
+<span class="w">            </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// ... 各种初始化步骤</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">BeansException</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">logger</span><span class="p">.</span><span class="na">isWarnEnabled</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="n">logger</span><span class="p">.</span><span class="na">warn</span><span class="p">(</span><span class="s">"Exception encountered during context initialization - "</span><span class="w"> </span><span class="o">+</span>
+<span class="w">                            </span><span class="s">"cancelling refresh attempt: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ex</span><span class="p">);</span>
+<span class="w">                </span><span class="p">}</span>
+
+<span class="w">                </span><span class="c1">// 销毁已经创建的单例Bean，避免资源悬挂</span>
+<span class="w">                </span><span class="n">destroyBeans</span><span class="p">();</span>
+
+<span class="w">                </span><span class="c1">// 重置'active'标志</span>
+<span class="w">                </span><span class="n">cancelRefresh</span><span class="p">(</span><span class="n">ex</span><span class="p">);</span>
+
+<span class="w">                </span><span class="k">throw</span><span class="w"> </span><span class="n">ex</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">finally</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// ... 清理缓存</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">protected</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">destroyBeans</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">getBeanFactory</span><span class="p">().</span><span class="na">destroySingletons</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">close</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">startupShutdownMonitor</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">doClose</span><span class="p">();</span>
+<span class="w">            </span><span class="c1">// 如果注册了shutdown hook，移除它</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">shutdownHook</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="n">Runtime</span><span class="p">.</span><span class="na">getRuntime</span><span class="p">().</span><span class="na">removeShutdownHook</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">shutdownHook</span><span class="p">);</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">                </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">IllegalStateException</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="c1">// 忽略：虚拟机已经在关闭</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">protected</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">doClose</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">active</span><span class="p">.</span><span class="na">get</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">closed</span><span class="p">.</span><span class="na">compareAndSet</span><span class="p">(</span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">logger</span><span class="p">.</span><span class="na">isDebugEnabled</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">logger</span><span class="p">.</span><span class="na">debug</span><span class="p">(</span><span class="s">"Closing "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="k">this</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+
+<span class="w">            </span><span class="n">LiveBeansView</span><span class="p">.</span><span class="na">unregisterApplicationContext</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+
+<span class="w">            </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// 发布关闭事件</span>
+<span class="w">                </span><span class="n">publishEvent</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">ContextClosedEvent</span><span class="p">(</span><span class="k">this</span><span class="p">));</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Throwable</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">logger</span><span class="p">.</span><span class="na">warn</span><span class="p">(</span><span class="s">"Exception thrown from ApplicationListener handling ContextClosedEvent"</span><span class="p">,</span><span class="w"> </span><span class="n">ex</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+
+<span class="w">            </span><span class="c1">// 停止所有Lifecycle Bean</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">lifecycleProcessor</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="k">this</span><span class="p">.</span><span class="na">lifecycleProcessor</span><span class="p">.</span><span class="na">onClose</span><span class="p">();</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">                </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Throwable</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="n">logger</span><span class="p">.</span><span class="na">warn</span><span class="p">(</span><span class="s">"Exception thrown from LifecycleProcessor on context close"</span><span class="p">,</span><span class="w"> </span><span class="n">ex</span><span class="p">);</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">}</span>
+
+<span class="w">            </span><span class="c1">// 销毁所有单例Bean</span>
+<span class="w">            </span><span class="n">destroyBeans</span><span class="p">();</span>
+
+<span class="w">            </span><span class="c1">// 关闭BeanFactory</span>
+<span class="w">            </span><span class="n">closeBeanFactory</span><span class="p">();</span>
+
+<span class="w">            </span><span class="c1">// 子类可以做额外的清理</span>
+<span class="w">            </span><span class="n">onClose</span><span class="p">();</span>
+
+<span class="w">            </span><span class="c1">// 重置激活状态</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">earlyApplicationListeners</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">this</span><span class="p">.</span><span class="na">applicationListeners</span><span class="p">.</span><span class="na">clear</span><span class="p">();</span>
+<span class="w">                </span><span class="k">this</span><span class="p">.</span><span class="na">applicationListeners</span><span class="p">.</span><span class="na">addAll</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">earlyApplicationListeners</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+
+<span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="na">active</span><span class="p">.</span><span class="na">set</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="defaultlistablebeanfactory">DefaultListableBeanFactory的实现</h2>
+<div class="hljs"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">DefaultListableBeanFactory</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">AbstractAutowireCapableBeanFactory</span>
+<span class="w">        </span><span class="kd">implements</span><span class="w"> </span><span class="n">ConfigurableListableBeanFactory</span><span class="p">,</span><span class="w"> </span><span class="n">BeanDefinitionRegistry</span><span class="p">,</span><span class="w"> </span><span class="n">Serializable</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">destroySingletons</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">super</span><span class="p">.</span><span class="na">destroySingletons</span><span class="p">();</span>
+<span class="w">        </span><span class="c1">// 清理按类型缓存的Bean名称</span>
+<span class="w">        </span><span class="n">updateManualSingletonNames</span><span class="p">(</span><span class="n">Set</span><span class="p">::</span><span class="n">clear</span><span class="p">,</span><span class="w"> </span><span class="n">set</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="o">!</span><span class="n">set</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">());</span>
+<span class="w">        </span><span class="n">clearByTypeCache</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>DefaultSingletonBeanRegistry中的具体实现：</p>
+<div class="hljs"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">DefaultSingletonBeanRegistry</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">SimpleAliasRegistry</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">SingletonBeanRegistry</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="cm">/** 一次性Bean实例集合：bean name -&gt; DisposableBean */</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span><span class="w"> </span><span class="n">Object</span><span class="o">&gt;</span><span class="w"> </span><span class="n">disposableBeans</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">LinkedHashMap</span><span class="o">&lt;&gt;</span><span class="p">();</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">destroySingletons</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">logger</span><span class="p">.</span><span class="na">isTraceEnabled</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">logger</span><span class="p">.</span><span class="na">trace</span><span class="p">(</span><span class="s">"Destroying singletons in "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="k">this</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="c1">// 设置销毁标志</span>
+<span class="w">        </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">singletonObjects</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="na">singletonsCurrentlyInDestruction</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">disposableBeanNames</span><span class="p">;</span>
+<span class="w">        </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">disposableBeans</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">disposableBeanNames</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">StringUtils</span><span class="p">.</span><span class="na">toStringArray</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">disposableBeans</span><span class="p">.</span><span class="na">keySet</span><span class="p">());</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="c1">// 按照依赖关系逆序销毁</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">disposableBeanNames</span><span class="p">.</span><span class="na">length</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">--</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">destroySingleton</span><span class="p">(</span><span class="n">disposableBeanNames</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="c1">// 清理各种缓存</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">containedBeanMap</span><span class="p">.</span><span class="na">clear</span><span class="p">();</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">dependentBeanMap</span><span class="p">.</span><span class="na">clear</span><span class="p">();</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">dependenciesForBeanMap</span><span class="p">.</span><span class="na">clear</span><span class="p">();</span>
+
+<span class="w">        </span><span class="n">clearSingletonCache</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">destroySingleton</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">beanName</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// 移除已注册的单例Bean</span>
+<span class="w">        </span><span class="n">removeSingleton</span><span class="p">(</span><span class="n">beanName</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// 销毁对应的DisposableBean实例</span>
+<span class="w">        </span><span class="n">DisposableBean</span><span class="w"> </span><span class="n">disposableBean</span><span class="p">;</span>
+<span class="w">        </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">disposableBeans</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">disposableBean</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">DisposableBean</span><span class="p">)</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">disposableBeans</span><span class="p">.</span><span class="na">remove</span><span class="p">(</span><span class="n">beanName</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">destroyBean</span><span class="p">(</span><span class="n">beanName</span><span class="p">,</span><span class="w"> </span><span class="n">disposableBean</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">protected</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">destroyBean</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">beanName</span><span class="p">,</span><span class="w"> </span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">DisposableBean</span><span class="w"> </span><span class="n">bean</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// 首先触发依赖于当前Bean的其他Bean的销毁</span>
+<span class="w">        </span><span class="n">Set</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">dependencies</span><span class="p">;</span>
+<span class="w">        </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">dependentBeanMap</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">dependencies</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">dependentBeanMap</span><span class="p">.</span><span class="na">remove</span><span class="p">(</span><span class="n">beanName</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">dependencies</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">dependentBeanName</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">dependencies</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">destroySingleton</span><span class="p">(</span><span class="n">dependentBeanName</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="c1">// 执行Bean自身的销毁逻辑</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">bean</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">bean</span><span class="p">.</span><span class="na">destroy</span><span class="p">();</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Throwable</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">logger</span><span class="p">.</span><span class="na">warn</span><span class="p">(</span><span class="s">"Destruction of bean with name '"</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">beanName</span><span class="w"> </span><span class="o">+</span><span class="w"> </span>
+<span class="w">                          </span><span class="s">"' threw an exception"</span><span class="p">,</span><span class="w"> </span><span class="n">ex</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="c1">// 触发包含的Bean的销毁（例如内部Bean）</span>
+<span class="w">        </span><span class="n">Set</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">containedBeans</span><span class="p">;</span>
+<span class="w">        </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">containedBeanMap</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">containedBeans</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">containedBeanMap</span><span class="p">.</span><span class="na">remove</span><span class="p">(</span><span class="n">beanName</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">containedBeans</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">containedBeanName</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">containedBeans</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">destroySingleton</span><span class="p">(</span><span class="n">containedBeanName</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="c1">// 从其他Bean的依赖列表中移除当前Bean</span>
+<span class="w">        </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">dependentBeanMap</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">Iterator</span><span class="o">&lt;</span><span class="n">Map</span><span class="p">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span><span class="w"> </span><span class="n">Set</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+<span class="w">                    </span><span class="k">this</span><span class="p">.</span><span class="na">dependentBeanMap</span><span class="p">.</span><span class="na">entrySet</span><span class="p">().</span><span class="na">iterator</span><span class="p">();</span><span class="w"> </span><span class="n">it</span><span class="p">.</span><span class="na">hasNext</span><span class="p">();)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">Map</span><span class="p">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span><span class="w"> </span><span class="n">Set</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">entry</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">it</span><span class="p">.</span><span class="na">next</span><span class="p">();</span>
+<span class="w">                </span><span class="n">Set</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">dependenciesToClean</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">entry</span><span class="p">.</span><span class="na">getValue</span><span class="p">();</span>
+<span class="w">                </span><span class="n">dependenciesToClean</span><span class="p">.</span><span class="na">remove</span><span class="p">(</span><span class="n">beanName</span><span class="p">);</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">dependenciesToClean</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="n">it</span><span class="p">.</span><span class="na">remove</span><span class="p">();</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="c1">// 从依赖关系映射中移除当前Bean</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">dependenciesForBeanMap</span><span class="p">.</span><span class="na">remove</span><span class="p">(</span><span class="n">beanName</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">protected</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">removeSingleton</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">beanName</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">singletonObjects</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="na">singletonObjects</span><span class="p">.</span><span class="na">remove</span><span class="p">(</span><span class="n">beanName</span><span class="p">);</span>
+<span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="na">singletonFactories</span><span class="p">.</span><span class="na">remove</span><span class="p">(</span><span class="n">beanName</span><span class="p">);</span>
+<span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="na">earlySingletonObjects</span><span class="p">.</span><span class="na">remove</span><span class="p">(</span><span class="n">beanName</span><span class="p">);</span>
+<span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="na">registeredSingletons</span><span class="p">.</span><span class="na">remove</span><span class="p">(</span><span class="n">beanName</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">protected</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">clearSingletonCache</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">singletonObjects</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="na">singletonObjects</span><span class="p">.</span><span class="na">clear</span><span class="p">();</span>
+<span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="na">singletonFactories</span><span class="p">.</span><span class="na">clear</span><span class="p">();</span>
+<span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="na">earlySingletonObjects</span><span class="p">.</span><span class="na">clear</span><span class="p">();</span>
+<span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="na">registeredSingletons</span><span class="p">.</span><span class="na">clear</span><span class="p">();</span>
+<span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="na">singletonsCurrentlyInDestruction</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="bean">Bean的销毁回调</h2>
+<p>Bean可以通过多种方式定义销毁回调：</p>
+<h3 id="1-disposablebean">1. 实现DisposableBean接口</h3>
+<div class="hljs"><pre><span></span><code><span class="nd">@Component</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MyBean</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">DisposableBean</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">destroy</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"MyBean is being destroyed"</span><span class="p">);</span>
+<span class="w">        </span><span class="c1">// 清理资源</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="2-predestroy">2. 使用@PreDestroy注解</h3>
+<div class="hljs"><pre><span></span><code><span class="nd">@Component</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MyBean</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="nd">@PreDestroy</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">cleanup</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Cleanup before destroy"</span><span class="p">);</span>
+<span class="w">        </span><span class="c1">// 清理资源</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="3-destroy-method">3. 自定义destroy-method</h3>
+<div class="hljs"><pre><span></span><code><span class="nd">@Bean</span><span class="p">(</span><span class="n">destroyMethod</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"close"</span><span class="p">)</span>
+<span class="kd">public</span><span class="w"> </span><span class="n">DataSource</span><span class="w"> </span><span class="nf">dataSource</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// DataSource的close方法会在销毁时调用</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">HikariDataSource</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="4-autocloseable">4. 实现AutoCloseable</h3>
+<div class="hljs"><pre><span></span><code><span class="nd">@Component</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MyResource</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">AutoCloseable</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">close</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Closing resource"</span><span class="p">);</span>
+<span class="w">        </span><span class="c1">// 自动调用</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="_4">销毁顺序</h2>
+<p>Bean的销毁顺序与创建顺序相反：<br/>
+1. 最后创建的Bean最先销毁<br/>
+2. 如果Bean A依赖Bean B，则A会在B之前销毁<br/>
+3. 这样保证了依赖关系的正确性</p>
+<p>示例：</p>
+<div class="hljs"><pre><span></span><code><span class="err">创建顺序：</span><span class="n">A</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">C</span><span class="w"> </span><span class="p">(</span><span class="n">C依赖B</span><span class="p">,</span><span class="w"> </span><span class="n">B依赖A</span><span class="p">)</span>
+<span class="err">销毁顺序：</span><span class="n">C</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">A</span>
+</code></pre></div>
+<h2 id="_5">销毁过程中的异常处理</h2>
+<div class="hljs"><pre><span></span><code><span class="kd">protected</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">destroyBean</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">beanName</span><span class="p">,</span><span class="w"> </span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">DisposableBean</span><span class="w"> </span><span class="n">bean</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// ...</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">bean</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">bean</span><span class="p">.</span><span class="na">destroy</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Throwable</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// 记录警告，但不抛出异常</span>
+<span class="w">            </span><span class="c1">// 这样一个Bean的销毁失败不会影响其他Bean</span>
+<span class="w">            </span><span class="n">logger</span><span class="p">.</span><span class="na">warn</span><span class="p">(</span><span class="s">"Destruction of bean with name '"</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">beanName</span><span class="w"> </span><span class="o">+</span><span class="w"> </span>
+<span class="w">                      </span><span class="s">"' threw an exception"</span><span class="p">,</span><span class="w"> </span><span class="n">ex</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// ...</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>销毁过程中的异常不会传播，只会记录日志，这样：<br/>
+- 一个Bean的销毁失败不会影响其他Bean<br/>
+- 容器可以尽可能多地清理资源<br/>
+- 避免部分清理导致的资源泄漏</p>
+<h2 id="destroybeans">何时调用destroyBeans？</h2>
+<h3 id="1-refresh">1. refresh异常时</h3>
+<div class="hljs"><pre><span></span><code><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// finishBeanFactoryInitialization等步骤</span>
+<span class="w">    </span><span class="c1">// 如果这里抛出异常...</span>
+<span class="p">}</span>
+<span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">BeansException</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// ...会在这里销毁已创建的Bean</span>
+<span class="w">    </span><span class="n">destroyBeans</span><span class="p">();</span>
+<span class="w">    </span><span class="n">cancelRefresh</span><span class="p">(</span><span class="n">ex</span><span class="p">);</span>
+<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="n">ex</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="2">2. 容器关闭时</h3>
+<div class="hljs"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">close</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">startupShutdownMonitor</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">doClose</span><span class="p">();</span>
+<span class="w">        </span><span class="c1">// ...</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">protected</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">doClose</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// ...</span>
+
+<span class="w">    </span><span class="c1">// 停止Lifecycle Bean</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">lifecycleProcessor</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">lifecycleProcessor</span><span class="p">.</span><span class="na">onClose</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// 销毁所有Bean</span>
+<span class="w">    </span><span class="n">destroyBeans</span><span class="p">();</span>
+
+<span class="w">    </span><span class="c1">// ...</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="3-shutdown-hook">3. Shutdown Hook</h3>
+<p>SpringBoot会注册一个shutdown hook，在JVM关闭时自动关闭容器：</p>
+<div class="hljs"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">SpringApplication</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">refreshContext</span><span class="p">(</span><span class="n">ConfigurableApplicationContext</span><span class="w"> </span><span class="n">context</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">refresh</span><span class="p">(</span><span class="n">context</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">registerShutdownHook</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// 注册shutdown hook</span>
+<span class="w">            </span><span class="n">context</span><span class="p">.</span><span class="na">registerShutdownHook</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">public</span><span class="w"> </span><span class="kd">abstract</span><span class="w"> </span><span class="kd">class</span> <span class="nc">AbstractApplicationContext</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">registerShutdownHook</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">shutdownHook</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="na">shutdownHook</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Thread</span><span class="p">(()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="n">startupShutdownMonitor</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="n">doClose</span><span class="p">();</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">});</span>
+<span class="w">            </span><span class="n">Runtime</span><span class="p">.</span><span class="na">getRuntime</span><span class="p">().</span><span class="na">addShutdownHook</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">shutdownHook</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="_6">典型的资源清理</h2>
+<p>在destroy回调中常见的清理操作：</p>
+<div class="hljs"><pre><span></span><code><span class="nd">@Component</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ResourceManager</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">DisposableBean</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">ExecutorService</span><span class="w"> </span><span class="n">executorService</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">DataSource</span><span class="w"> </span><span class="n">dataSource</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Connection</span><span class="w"> </span><span class="n">connection</span><span class="p">;</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">destroy</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// 关闭线程池</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">executorService</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">executorService</span><span class="p">.</span><span class="na">shutdown</span><span class="p">();</span>
+<span class="w">            </span><span class="n">executorService</span><span class="p">.</span><span class="na">awaitTermination</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span><span class="w"> </span><span class="n">TimeUnit</span><span class="p">.</span><span class="na">SECONDS</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="c1">// 关闭数据库连接</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">connection</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">connection</span><span class="p">.</span><span class="na">isClosed</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">connection</span><span class="p">.</span><span class="na">close</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="c1">// 关闭数据源</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">dataSource</span><span class="w"> </span><span class="k">instanceof</span><span class="w"> </span><span class="n">AutoCloseable</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="p">((</span><span class="n">AutoCloseable</span><span class="p">)</span><span class="w"> </span><span class="n">dataSource</span><span class="p">).</span><span class="na">close</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="c1">// 清理临时文件</span>
+<span class="w">        </span><span class="c1">// 释放锁</span>
+<span class="w">        </span><span class="c1">// 注销监听器</span>
+<span class="w">        </span><span class="c1">// 等等</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="_7">参考调用栈</h2>
+<p>异常销毁：</p>
+<div class="hljs"><pre><span></span><code>destroyBeans:1059, AbstractApplicationContext (org.springframework.context.support)
+refresh:555, AbstractApplicationContext (org.springframework.context.support)
+refresh:143, ServletWebServerApplicationContext (org.springframework.boot.web.servlet.context)
+refresh:755, SpringApplication (org.springframework.boot)
+refreshContext:402, SpringApplication (org.springframework.boot)
+run:312, SpringApplication (org.springframework.boot)
+</code></pre></div>
+<p>正常关闭：</p>
+<div class="hljs"><pre><span></span><code>destroyBeans:1059, AbstractApplicationContext (org.springframework.context.support)
+doClose:1033, AbstractApplicationContext (org.springframework.context.support)
+close:987, AbstractApplicationContext (org.springframework.context.support)
+</code></pre></div>
+<h2 id="_8">相关链接</h2>
+<ul>
+<li><a href="AbstractApplicationContext.cancelRefresh.html">AbstractApplicationContext.cancelRefresh</a></li>
+<li><a href="AbstractApplicationContext.finishBeanFactoryInitialization.html">AbstractApplicationContext.finishBeanFactoryInitialization</a></li>
+</ul>
         </div>
     </div>
 

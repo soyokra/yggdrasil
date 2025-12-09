@@ -1,5 +1,64 @@
-## 说明
-配置类处理器
+## 简述
+配置类后置处理器，负责解析配置类并注册BeanDefinition。
+
+这是invokeBeanFactoryPostProcessors阶段最重要的处理器，SpringBoot的自动配置也是在这里执行的。
+
+## BeanDefinition注册流程图
+
+```mermaid
+flowchart TD
+    Start[postProcessBeanDefinitionRegistry] --> GetCandidates[获取配置类候选]
+    GetCandidates --> Check{是否有@Configuration<br/>或@Component?}
+    Check -->|是| AddCandidate[添加到configCandidates]
+    Check -->|否| Skip[跳过]
+    
+    AddCandidate --> Sort[按@Order排序]
+    Sort --> CreateParser[创建ConfigurationClassParser]
+    CreateParser --> Parse[parser.parse解析配置类]
+    
+    Parse --> ProcessComponent[@Component处理]
+    ProcessComponent --> ProcessProperty[@PropertySource处理]
+    ProcessProperty --> ProcessComponentScan[@ComponentScan处理]
+    
+    ProcessComponentScan --> Scan[ClassPathBeanDefinitionScanner<br/>扫描包路径]
+    Scan --> FindComponent[查找@Component类]
+    FindComponent --> RegisterComp[注册为BeanDefinition]
+    
+    RegisterComp --> ProcessImport[@Import处理]
+    ProcessImport --> CheckImport{Import类型?}
+    
+    CheckImport -->|ImportSelector| ProcessSelector[执行selectImports]
+    CheckImport -->|DeferredImportSelector| DeferredQueue[加入延迟队列]
+    CheckImport -->|ImportBeanDefinitionRegistrar| SaveRegistrar[保存Registrar]
+    CheckImport -->|普通类| ParseAsConfig[当作配置类递归解析]
+    
+    ProcessSelector --> ProcessImportResource[@ImportResource处理]
+    DeferredQueue --> ProcessDeferredImport[延迟处理<br/>AutoConfiguration在这里]
+    SaveRegistrar --> ProcessImportResource
+    ParseAsConfig --> ProcessImportResource
+    
+    ProcessDeferredImport --> AutoConfig[AutoConfigurationImportSelector]
+    AutoConfig --> LoadFactory[加载META-INF/spring.factories]
+    LoadFactory --> FilterAuto[条件过滤@Conditional]
+    FilterAuto --> RegisterAuto[注册自动配置类]
+    
+    RegisterAuto --> ProcessImportResource
+    ProcessImportResource --> ProcessBean[@Bean方法处理]
+    ProcessBean --> SaveBeanMethod[保存为BeanMethod]
+    
+    SaveBeanMethod --> LoadBeanDef[loadBeanDefinitions]
+    LoadBeanDef --> ReadConfig[读取ConfigurationClass]
+    ReadConfig --> RegBean[注册@Bean方法为BeanDefinition]
+    RegBean --> RegImportReg[执行ImportBeanDefinitionRegistrar]
+    RegImportReg --> RegResource[处理@ImportResource]
+    RegResource --> End[BeanDefinition注册完成]
+    
+    style Scan fill:#e1f5ff
+    style AutoConfig fill:#ffe1e1
+    style RegBean fill:#e1ffe1
+```
+
+## 配置类
 - 处理@Component注解类，注册为BeanDefinition
 - 处理@Configuration注解类，注册为BeanDefinition
 - 处理@Import注解类

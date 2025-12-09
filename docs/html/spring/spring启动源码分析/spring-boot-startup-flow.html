@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ClassPathMapperScanner.scan - Technology</title>
+    <title>spring-boot-startup-flow - Technology</title>
     <link rel="stylesheet" href="../../../assets/style.css">
     <link rel="stylesheet" href="../../../assets/github.min.css">
     <script src="../../../assets/highlight.min.js"></script>
@@ -355,7 +355,7 @@
 </div>
 </li>
 <li class="nav-item">
-<div class="nav-link active">
+<div class="nav-link">
 <span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
 <a href="../../../html/spring/spring启动源码分析/ClassPathMapperScanner.scan.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/ClassPathMapperScanner.scan.html">ClassPathMapperScanner.scan</a>
 </div>
@@ -391,7 +391,7 @@
 </div>
 </li>
 <li class="nav-item">
-<div class="nav-link">
+<div class="nav-link active">
 <span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
 <a href="../../../html/spring/spring启动源码分析/spring-boot-startup-flow.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/spring-boot-startup-flow.html">spring-boot-startup-flow</a>
 </div>
@@ -500,64 +500,243 @@
     <!-- 主内容区 -->
     <div class="main-content">
         <div class="content-body">
-            <div class="hljs"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ClassPathBeanDefinitionScanner</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">ClassPathScanningCandidateComponentProvider</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">scan</span><span class="p">(</span><span class="n">String</span><span class="p">...</span><span class="w"> </span><span class="n">basePackages</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">beanCountAtScanStart</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">registry</span><span class="p">.</span><span class="na">getBeanDefinitionCount</span><span class="p">();</span>
+            <h1 id="spring-boot">Spring Boot 启动流程图</h1>
+<h2 id="_1">整体启动流程</h2>
+<div class="hljs"><pre><span></span><code><span class="n">flowchart</span><span class="w"> </span><span class="n">TD</span>
+<span class="w">    </span><span class="k">Start</span><span class="o">[</span><span class="n">main方法</span><span class="o">]</span><span class="w"> </span><span class="c1">--&gt; CreateApp[创建SpringApplication]</span>
+<span class="w">    </span><span class="n">CreateApp</span><span class="w"> </span><span class="c1">--&gt; DeduceType[推断应用类型&lt;br/&gt;SERVLET/REACTIVE/NONE]</span>
+<span class="w">    </span><span class="n">DeduceType</span><span class="w"> </span><span class="c1">--&gt; LoadInitializers[加载ApplicationContextInitializer]</span>
+<span class="w">    </span><span class="n">LoadInitializers</span><span class="w"> </span><span class="c1">--&gt; LoadListeners[加载ApplicationListener]</span>
+<span class="w">    </span><span class="n">LoadListeners</span><span class="w"> </span><span class="c1">--&gt; DeduceMain[推断主类]</span>
 
-<span class="w">        </span><span class="n">doScan</span><span class="p">(</span><span class="n">basePackages</span><span class="p">);</span>
+<span class="w">    </span><span class="n">DeduceMain</span><span class="w"> </span><span class="c1">--&gt; Run[调用run方法]</span>
 
-<span class="w">        </span><span class="c1">// Register annotation config processors, if necessary.</span>
-<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">includeAnnotationConfig</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">AnnotationConfigUtils</span><span class="p">.</span><span class="na">registerAnnotationConfigProcessors</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">registry</span><span class="p">);</span>
-<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="n">Run</span><span class="w"> </span><span class="c1">--&gt; StartTimer[启动计时器]</span>
+<span class="w">    </span><span class="n">StartTimer</span><span class="w"> </span><span class="c1">--&gt; ConfigHeadless[配置Headless属性]</span>
+<span class="w">    </span><span class="n">ConfigHeadless</span><span class="w"> </span><span class="c1">--&gt; GetRunListeners[获取SpringApplicationRunListeners]</span>
+<span class="w">    </span><span class="n">GetRunListeners</span><span class="w"> </span><span class="c1">--&gt; Starting[发布ApplicationStartingEvent]</span>
 
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">registry</span><span class="p">.</span><span class="na">getBeanDefinitionCount</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">beanCountAtScanStart</span><span class="p">);</span>
-<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">Starting</span><span class="w"> </span><span class="c1">--&gt; PrepareEnv[准备Environment]</span>
+<span class="w">    </span><span class="n">PrepareEnv</span><span class="w"> </span><span class="c1">--&gt; EnvPrepared[发布EnvironmentPreparedEvent]</span>
+<span class="w">    </span><span class="n">EnvPrepared</span><span class="w"> </span><span class="c1">--&gt; PrintBanner[打印Banner]</span>
 
-<span class="w">    </span><span class="kd">protected</span><span class="w"> </span><span class="n">Set</span><span class="o">&lt;</span><span class="n">BeanDefinitionHolder</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">doScan</span><span class="p">(</span><span class="n">String</span><span class="p">...</span><span class="w"> </span><span class="n">basePackages</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">Assert</span><span class="p">.</span><span class="na">notEmpty</span><span class="p">(</span><span class="n">basePackages</span><span class="p">,</span><span class="w"> </span><span class="s">"At least one base package must be specified"</span><span class="p">);</span>
-<span class="w">        </span><span class="n">Set</span><span class="o">&lt;</span><span class="n">BeanDefinitionHolder</span><span class="o">&gt;</span><span class="w"> </span><span class="n">beanDefinitions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">LinkedHashSet</span><span class="o">&lt;&gt;</span><span class="p">();</span>
-<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">basePackage</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">basePackages</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">Set</span><span class="o">&lt;</span><span class="n">BeanDefinition</span><span class="o">&gt;</span><span class="w"> </span><span class="n">candidates</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">findCandidateComponents</span><span class="p">(</span><span class="n">basePackage</span><span class="p">);</span>
-<span class="w">            </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">BeanDefinition</span><span class="w"> </span><span class="n">candidate</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">candidates</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                </span><span class="n">ScopeMetadata</span><span class="w"> </span><span class="n">scopeMetadata</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">scopeMetadataResolver</span><span class="p">.</span><span class="na">resolveScopeMetadata</span><span class="p">(</span><span class="n">candidate</span><span class="p">);</span>
-<span class="w">                </span><span class="n">candidate</span><span class="p">.</span><span class="na">setScope</span><span class="p">(</span><span class="n">scopeMetadata</span><span class="p">.</span><span class="na">getScopeName</span><span class="p">());</span>
-<span class="w">                </span><span class="n">String</span><span class="w"> </span><span class="n">beanName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">beanNameGenerator</span><span class="p">.</span><span class="na">generateBeanName</span><span class="p">(</span><span class="n">candidate</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">registry</span><span class="p">);</span>
-<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">candidate</span><span class="w"> </span><span class="k">instanceof</span><span class="w"> </span><span class="n">AbstractBeanDefinition</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                    </span><span class="n">postProcessBeanDefinition</span><span class="p">((</span><span class="n">AbstractBeanDefinition</span><span class="p">)</span><span class="w"> </span><span class="n">candidate</span><span class="p">,</span><span class="w"> </span><span class="n">beanName</span><span class="p">);</span>
-<span class="w">                </span><span class="p">}</span>
-<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">candidate</span><span class="w"> </span><span class="k">instanceof</span><span class="w"> </span><span class="n">AnnotatedBeanDefinition</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                    </span><span class="n">AnnotationConfigUtils</span><span class="p">.</span><span class="na">processCommonDefinitionAnnotations</span><span class="p">((</span><span class="n">AnnotatedBeanDefinition</span><span class="p">)</span><span class="w"> </span><span class="n">candidate</span><span class="p">);</span>
-<span class="w">                </span><span class="p">}</span>
-<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">checkCandidate</span><span class="p">(</span><span class="n">beanName</span><span class="p">,</span><span class="w"> </span><span class="n">candidate</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                    </span><span class="n">BeanDefinitionHolder</span><span class="w"> </span><span class="n">definitionHolder</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">BeanDefinitionHolder</span><span class="p">(</span><span class="n">candidate</span><span class="p">,</span><span class="w"> </span><span class="n">beanName</span><span class="p">);</span>
-<span class="w">                    </span><span class="n">definitionHolder</span><span class="w"> </span><span class="o">=</span>
-<span class="w">                            </span><span class="n">AnnotationConfigUtils</span><span class="p">.</span><span class="na">applyScopedProxyMode</span><span class="p">(</span><span class="n">scopeMetadata</span><span class="p">,</span><span class="w"> </span><span class="n">definitionHolder</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">registry</span><span class="p">);</span>
-<span class="w">                    </span><span class="n">beanDefinitions</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="n">definitionHolder</span><span class="p">);</span>
-<span class="w">                    </span><span class="n">registerBeanDefinition</span><span class="p">(</span><span class="n">definitionHolder</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">registry</span><span class="p">);</span>
-<span class="w">                </span><span class="p">}</span>
-<span class="w">            </span><span class="p">}</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">beanDefinitions</span><span class="p">;</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
+<span class="w">    </span><span class="n">PrintBanner</span><span class="w"> </span><span class="c1">--&gt; CreateContext[创建ApplicationContext]</span>
+<span class="w">    </span><span class="n">CreateContext</span><span class="w"> </span><span class="c1">--&gt; PrepareContext[准备Context]</span>
+<span class="w">    </span><span class="n">PrepareContext</span><span class="w"> </span><span class="c1">--&gt; ContextPrepared[发布ContextInitializedEvent]</span>
+<span class="w">    </span><span class="n">ContextPrepared</span><span class="w"> </span><span class="c1">--&gt; LoadSources[加载Bean源&lt;br/&gt;注册主类为BeanDefinition]</span>
+<span class="w">    </span><span class="n">LoadSources</span><span class="w"> </span><span class="c1">--&gt; ContextLoaded[发布ApplicationPreparedEvent]</span>
+
+<span class="w">    </span><span class="n">ContextLoaded</span><span class="w"> </span><span class="c1">--&gt; RefreshContext[刷新Context&lt;br/&gt;13个步骤]</span>
+<span class="w">    </span><span class="n">RefreshContext</span><span class="w"> </span><span class="c1">--&gt; AfterRefresh[afterRefresh&lt;br/&gt;空方法,子类扩展]</span>
+<span class="w">    </span><span class="n">AfterRefresh</span><span class="w"> </span><span class="c1">--&gt; StopTimer[停止计时器]</span>
+<span class="w">    </span><span class="n">StopTimer</span><span class="w"> </span><span class="c1">--&gt; Started[发布ApplicationStartedEvent]</span>
+
+<span class="w">    </span><span class="n">Started</span><span class="w"> </span><span class="c1">--&gt; CallRunners[调用ApplicationRunner&lt;br/&gt;和CommandLineRunner]</span>
+<span class="w">    </span><span class="n">CallRunners</span><span class="w"> </span><span class="c1">--&gt; Running[发布ApplicationReadyEvent]</span>
+<span class="w">    </span><span class="n">Running</span><span class="w"> </span><span class="c1">--&gt; End[应用就绪,可接受请求]</span>
+
+<span class="w">    </span><span class="n">style</span><span class="w"> </span><span class="n">CreateContext</span><span class="w"> </span><span class="nl">fill</span><span class="p">:</span><span class="n">#e1f5ff</span>
+<span class="w">    </span><span class="n">style</span><span class="w"> </span><span class="n">RefreshContext</span><span class="w"> </span><span class="nl">fill</span><span class="p">:</span><span class="n">#ffe1e1</span>
+<span class="w">    </span><span class="n">style</span><span class="w"> </span><span class="k">End</span><span class="w"> </span><span class="nl">fill</span><span class="p">:</span><span class="n">#e1ffe1</span>
 </code></pre></div>
-<div class="hljs"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ClassPathMapperScanner</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">ClassPathBeanDefinitionScanner</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nd">@Override</span>
-<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Set</span><span class="o">&lt;</span><span class="n">BeanDefinitionHolder</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">doScan</span><span class="p">(</span><span class="n">String</span><span class="p">...</span><span class="w"> </span><span class="n">basePackages</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">Set</span><span class="o">&lt;</span><span class="n">BeanDefinitionHolder</span><span class="o">&gt;</span><span class="w"> </span><span class="n">beanDefinitions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">super</span><span class="p">.</span><span class="na">doScan</span><span class="p">(</span><span class="n">basePackages</span><span class="p">);</span>
+<h2 id="springapplication">SpringApplication构造过程</h2>
+<div class="hljs"><pre><span></span><code><span class="n">flowchart</span><span class="w"> </span><span class="n">LR</span>
+<span class="w">    </span><span class="n">Start</span><span class="p">[</span><span class="n">new</span><span class="w"> </span><span class="n">SpringApplication</span><span class="p">]</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">SetSources</span><span class="p">[</span><span class="n">设置primarySources</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span><span class="n">主配置类</span><span class="p">]</span>
+<span class="w">    </span><span class="n">SetSources</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">DeduceType</span><span class="p">[</span><span class="n">推断应用类型</span><span class="p">]</span>
+<span class="w">    </span><span class="n">DeduceType</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">CheckServlet</span><span class="p">{</span><span class="n">检查Servlet类</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span><span class="n">是否存在</span><span class="o">?</span><span class="p">}</span>
+<span class="w">    </span><span class="n">CheckServlet</span><span class="w"> </span><span class="o">--&gt;|</span><span class="n">是</span><span class="o">|</span><span class="w"> </span><span class="n">Servlet</span><span class="p">[</span><span class="n">SERVLET类型</span><span class="p">]</span>
+<span class="w">    </span><span class="n">CheckServlet</span><span class="w"> </span><span class="o">--&gt;|</span><span class="n">否</span><span class="o">|</span><span class="w"> </span><span class="n">CheckReactive</span><span class="p">{</span><span class="n">检查Reactive类</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span><span class="n">是否存在</span><span class="o">?</span><span class="p">}</span>
+<span class="w">    </span><span class="n">CheckReactive</span><span class="w"> </span><span class="o">--&gt;|</span><span class="n">是</span><span class="o">|</span><span class="w"> </span><span class="n">Reactive</span><span class="p">[</span><span class="n">REACTIVE类型</span><span class="p">]</span>
+<span class="w">    </span><span class="n">CheckReactive</span><span class="w"> </span><span class="o">--&gt;|</span><span class="n">否</span><span class="o">|</span><span class="w"> </span><span class="n">None</span><span class="p">[</span><span class="n">NONE类型</span><span class="p">]</span>
 
-<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">beanDefinitions</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">LOGGER</span><span class="p">.</span><span class="na">warn</span><span class="p">(()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="s">"No MyBatis mapper was found in '"</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Arrays</span><span class="p">.</span><span class="na">toString</span><span class="p">(</span><span class="n">basePackages</span><span class="p">)</span>
-<span class="w">                    </span><span class="o">+</span><span class="w"> </span><span class="s">"' package. Please check your configuration."</span><span class="p">);</span>
-<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">processBeanDefinitions</span><span class="p">(</span><span class="n">beanDefinitions</span><span class="p">);</span>
-<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="n">Servlet</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">LoadInit</span><span class="p">[</span><span class="n">加载初始化器</span><span class="p">]</span>
+<span class="w">    </span><span class="n">Reactive</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">LoadInit</span>
+<span class="w">    </span><span class="n">None</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">LoadInit</span>
 
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">beanDefinitions</span><span class="p">;</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
+<span class="w">    </span><span class="n">LoadInit</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">ScanInit</span><span class="p">[</span><span class="n">扫描META</span><span class="o">-</span><span class="n">INF</span><span class="o">/</span><span class="n">spring</span><span class="p">.</span><span class="n">factories</span><span class="p">]</span>
+<span class="w">    </span><span class="n">ScanInit</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">CreateInit</span><span class="p">[</span><span class="n">实例化ApplicationContextInitializer</span><span class="p">]</span>
+<span class="w">    </span><span class="n">CreateInit</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">LoadListener</span><span class="p">[</span><span class="n">加载监听器</span><span class="p">]</span>
+<span class="w">    </span><span class="n">LoadListener</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">ScanListener</span><span class="p">[</span><span class="n">扫描META</span><span class="o">-</span><span class="n">INF</span><span class="o">/</span><span class="n">spring</span><span class="p">.</span><span class="n">factories</span><span class="p">]</span>
+<span class="w">    </span><span class="n">ScanListener</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">CreateListener</span><span class="p">[</span><span class="n">实例化ApplicationListener</span><span class="p">]</span>
+<span class="w">    </span><span class="n">CreateListener</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">DeduceMain</span><span class="p">[</span><span class="n">推断主类</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span><span class="n">查找main方法</span><span class="p">]</span>
+<span class="w">    </span><span class="n">DeduceMain</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">End</span><span class="p">[</span><span class="n">构造完成</span><span class="p">]</span>
 </code></pre></div>
+<h2 id="environment">Environment准备过程</h2>
+<div class="hljs"><pre><span></span><code><span class="n">flowchart</span><span class="w"> </span><span class="n">TD</span>
+<span class="w">    </span><span class="k">Start</span><span class="o">[</span><span class="n">prepareEnvironment</span><span class="o">]</span><span class="w"> </span><span class="c1">--&gt; GetOrCreate[获取或创建Environment]</span>
+<span class="w">    </span><span class="n">GetOrCreate</span><span class="w"> </span><span class="c1">--&gt; ConfigEnv[配置Environment]</span>
+<span class="w">    </span><span class="n">ConfigEnv</span><span class="w"> </span><span class="c1">--&gt; AddCommandLine[添加命令行参数PropertySource]</span>
+<span class="w">    </span><span class="n">AddCommandLine</span><span class="w"> </span><span class="c1">--&gt; Attach[附加ConfigurationPropertySources]</span>
+
+<span class="w">    </span><span class="n">Attach</span><span class="w"> </span><span class="c1">--&gt; Publish[发布EnvironmentPreparedEvent]</span>
+<span class="w">    </span><span class="n">Publish</span><span class="w"> </span><span class="c1">--&gt; Listener1[ConfigFileApplicationListener监听]</span>
+<span class="w">    </span><span class="n">Listener1</span><span class="w"> </span><span class="c1">--&gt; LoadProps[加载application.properties/yml]</span>
+<span class="w">    </span><span class="n">LoadProps</span><span class="w"> </span><span class="c1">--&gt; LoadProfile[加载profile配置文件]</span>
+<span class="w">    </span><span class="n">LoadProfile</span><span class="w"> </span><span class="c1">--&gt; BindEnv[绑定Environment到SpringApplication]</span>
+<span class="w">    </span><span class="n">BindEnv</span><span class="w"> </span><span class="c1">--&gt; End[Environment准备完成]</span>
+
+<span class="w">    </span><span class="n">style</span><span class="w"> </span><span class="n">LoadProps</span><span class="w"> </span><span class="nl">fill</span><span class="p">:</span><span class="n">#e1f5ff</span>
+<span class="w">    </span><span class="n">style</span><span class="w"> </span><span class="n">LoadProfile</span><span class="w"> </span><span class="nl">fill</span><span class="p">:</span><span class="n">#e1f5ff</span>
+</code></pre></div>
+<h2 id="context">Context创建和准备</h2>
+<div class="hljs"><pre><span></span><code><span class="n">flowchart</span><span class="w"> </span><span class="n">TD</span>
+<span class="w">    </span><span class="k">Start</span><span class="o">[</span><span class="n">createApplicationContext</span><span class="o">]</span><span class="w"> </span><span class="c1">--&gt; CheckType{应用类型?}</span>
+<span class="w">    </span><span class="n">CheckType</span><span class="w"> </span><span class="c1">--&gt;|SERVLET| CreateServlet[创建AnnotationConfig&lt;br/&gt;ServletWebServerApplicationContext]</span>
+<span class="w">    </span><span class="n">CheckType</span><span class="w"> </span><span class="c1">--&gt;|REACTIVE| CreateReactive[创建AnnotationConfig&lt;br/&gt;ReactiveWebServerApplicationContext]</span>
+<span class="w">    </span><span class="n">CheckType</span><span class="w"> </span><span class="c1">--&gt;|NONE| CreateDefault[创建AnnotationConfig&lt;br/&gt;ApplicationContext]</span>
+
+<span class="w">    </span><span class="n">CreateServlet</span><span class="w"> </span><span class="c1">--&gt; ContextCreated[Context实例已创建]</span>
+<span class="w">    </span><span class="n">CreateReactive</span><span class="w"> </span><span class="c1">--&gt; ContextCreated</span>
+<span class="w">    </span><span class="n">CreateDefault</span><span class="w"> </span><span class="c1">--&gt; ContextCreated</span>
+
+<span class="w">    </span><span class="n">ContextCreated</span><span class="w"> </span><span class="c1">--&gt; SetEnv[设置Environment]</span>
+<span class="w">    </span><span class="n">SetEnv</span><span class="w"> </span><span class="c1">--&gt; PostProcess[后处理Context&lt;br/&gt;设置BeanNameGenerator等]</span>
+<span class="w">    </span><span class="n">PostProcess</span><span class="w"> </span><span class="c1">--&gt; ApplyInit[应用ApplicationContextInitializer]</span>
+<span class="w">    </span><span class="n">ApplyInit</span><span class="w"> </span><span class="c1">--&gt; Prepared[发布ContextPreparedEvent]</span>
+
+<span class="w">    </span><span class="n">Prepared</span><span class="w"> </span><span class="c1">--&gt; RegSingleton[注册特殊单例Bean&lt;br/&gt;springApplicationArguments&lt;br/&gt;springBootBanner]</span>
+<span class="w">    </span><span class="n">RegSingleton</span><span class="w"> </span><span class="c1">--&gt; LoadDef[加载BeanDefinition&lt;br/&gt;注册主类]</span>
+<span class="w">    </span><span class="n">LoadDef</span><span class="w"> </span><span class="c1">--&gt; Loaded[发布ApplicationPreparedEvent]</span>
+<span class="w">    </span><span class="n">Loaded</span><span class="w"> </span><span class="c1">--&gt; Ready[Context准备完成,等待refresh]</span>
+
+<span class="w">    </span><span class="n">style</span><span class="w"> </span><span class="n">CreateServlet</span><span class="w"> </span><span class="nl">fill</span><span class="p">:</span><span class="n">#ffe1e1</span>
+<span class="w">    </span><span class="n">style</span><span class="w"> </span><span class="n">LoadDef</span><span class="w"> </span><span class="nl">fill</span><span class="p">:</span><span class="n">#e1f5ff</span>
+</code></pre></div>
+<h2 id="refresh13">Refresh过程（13步）</h2>
+<div class="hljs"><pre><span></span><code><span class="n">flowchart</span><span class="w"> </span><span class="n">TD</span>
+<span class="w">    </span><span class="k">Start</span><span class="o">[</span><span class="n">refreshContext</span><span class="o">]</span><span class="w"> </span><span class="c1">--&gt; Step1[1. prepareRefresh&lt;br/&gt;准备刷新]</span>
+<span class="w">    </span><span class="n">Step1</span><span class="w"> </span><span class="c1">--&gt; Step2[2. obtainFreshBeanFactory&lt;br/&gt;获取BeanFactory]</span>
+<span class="w">    </span><span class="n">Step2</span><span class="w"> </span><span class="c1">--&gt; Step3[3. prepareBeanFactory&lt;br/&gt;配置BeanFactory]</span>
+<span class="w">    </span><span class="n">Step3</span><span class="w"> </span><span class="c1">--&gt; Step4[4. postProcessBeanFactory&lt;br/&gt;子类扩展点]</span>
+
+<span class="w">    </span><span class="n">Step4</span><span class="w"> </span><span class="c1">--&gt; Step5[5. invokeBeanFactoryPostProcessors&lt;br/&gt;处理配置类,注册BeanDefinition]</span>
+<span class="w">    </span><span class="n">Step5</span><span class="w"> </span><span class="c1">--&gt; Step6[6. registerBeanPostProcessors&lt;br/&gt;注册Bean后置处理器]</span>
+<span class="w">    </span><span class="n">Step6</span><span class="w"> </span><span class="c1">--&gt; Step7[7. initMessageSource&lt;br/&gt;初始化国际化消息源]</span>
+<span class="w">    </span><span class="n">Step7</span><span class="w"> </span><span class="c1">--&gt; Step8[8. initApplicationEventMulticaster&lt;br/&gt;初始化事件多播器]</span>
+
+<span class="w">    </span><span class="n">Step8</span><span class="w"> </span><span class="c1">--&gt; Step9[9. onRefresh&lt;br/&gt;创建WebServer]</span>
+<span class="w">    </span><span class="n">Step9</span><span class="w"> </span><span class="c1">--&gt; Step10[10. registerListeners&lt;br/&gt;注册监听器]</span>
+<span class="w">    </span><span class="n">Step10</span><span class="w"> </span><span class="c1">--&gt; Step11[11. finishBeanFactoryInitialization&lt;br/&gt;实例化所有单例Bean]</span>
+<span class="w">    </span><span class="n">Step11</span><span class="w"> </span><span class="c1">--&gt; Step12[12. finishRefresh&lt;br/&gt;启动WebServer,发布事件]</span>
+
+<span class="w">    </span><span class="n">Step12</span><span class="w"> </span><span class="c1">--&gt; Step13[13. resetCommonCaches&lt;br/&gt;清理缓存]</span>
+<span class="w">    </span><span class="n">Step13</span><span class="w"> </span><span class="c1">--&gt; End[Refresh完成]</span>
+
+<span class="w">    </span><span class="n">style</span><span class="w"> </span><span class="n">Step5</span><span class="w"> </span><span class="nl">fill</span><span class="p">:</span><span class="n">#ffe1e1</span>
+<span class="w">    </span><span class="n">style</span><span class="w"> </span><span class="n">Step6</span><span class="w"> </span><span class="nl">fill</span><span class="p">:</span><span class="n">#ffe1e1</span>
+<span class="w">    </span><span class="n">style</span><span class="w"> </span><span class="n">Step9</span><span class="w"> </span><span class="nl">fill</span><span class="p">:</span><span class="n">#e1f5ff</span>
+<span class="w">    </span><span class="n">style</span><span class="w"> </span><span class="n">Step11</span><span class="w"> </span><span class="nl">fill</span><span class="p">:</span><span class="n">#ffe1e1</span>
+<span class="w">    </span><span class="n">style</span><span class="w"> </span><span class="n">Step12</span><span class="w"> </span><span class="nl">fill</span><span class="p">:</span><span class="n">#e1f5ff</span>
+</code></pre></div>
+<h2 id="_2">关键步骤说明</h2>
+<h3 id="_3">核心步骤（必须关注）</h3>
+<ol>
+<li><strong>invokeBeanFactoryPostProcessors（步骤5）</strong></li>
+<li>扫描包路径，查找@Component等注解</li>
+<li>处理@Configuration配置类</li>
+<li>执行SpringBoot自动配置</li>
+<li>
+<p>将所有BeanDefinition注册到BeanFactory</p>
+</li>
+<li>
+<p><strong>registerBeanPostProcessors（步骤6）</strong></p>
+</li>
+<li>注册各种BeanPostProcessor</li>
+<li>
+<p>为后续的Bean实例化做准备</p>
+</li>
+<li>
+<p><strong>onRefresh（步骤9）</strong></p>
+</li>
+<li>Web应用创建WebServer实例（Tomcat/Jetty/Undertow）</li>
+<li>
+<p>但此时还未启动</p>
+</li>
+<li>
+<p><strong>finishBeanFactoryInitialization（步骤11）</strong></p>
+</li>
+<li>实例化所有非懒加载的单例Bean</li>
+<li>执行依赖注入</li>
+<li>
+<p>应用AOP代理</p>
+</li>
+<li>
+<p><strong>finishRefresh（步骤12）</strong></p>
+</li>
+<li>启动WebServer</li>
+<li>发布ContextRefreshedEvent事件</li>
+<li>应用开始可以接受请求</li>
+</ol>
+<h3 id="_4">事件发布时间线</h3>
+<div class="hljs"><pre><span></span><code>timeline
+    title Spring Boot启动事件时间线
+    section 启动前
+        starting : ApplicationStartingEvent
+        环境准备 : ApplicationEnvironmentPreparedEvent
+    section Context创建
+        Context准备 : ApplicationContextInitializedEvent
+        加载完成 : ApplicationPreparedEvent
+    section Refresh
+        刷新开始 : ContextRefreshedEvent
+    section 启动后
+        启动完成 : ApplicationStartedEvent
+        应用就绪 : ApplicationReadyEvent
+</code></pre></div>
+<h2 id="_5">启动性能分析</h2>
+<p>典型的Spring Boot应用启动时间分布：</p>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>耗时占比</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>准备阶段</td>
+<td>5%</td>
+<td>创建SpringApplication、加载配置</td>
+</tr>
+<tr>
+<td>创建Context</td>
+<td>5%</td>
+<td>创建ApplicationContext实例</td>
+</tr>
+<tr>
+<td>注册BeanDefinition</td>
+<td>15%</td>
+<td>扫描类、处理注解</td>
+</tr>
+<tr>
+<td>实例化Bean</td>
+<td>60%</td>
+<td>创建Bean实例、依赖注入</td>
+</tr>
+<tr>
+<td>启动WebServer</td>
+<td>10%</td>
+<td>启动Tomcat等</td>
+</tr>
+<tr>
+<td>其他</td>
+<td>5%</td>
+<td>发布事件、调用Runner等</td>
+</tr>
+</tbody>
+</table>
+<p><strong>优化建议</strong>：<br/>
+- 减少Bean的数量（懒加载）<br/>
+- 优化依赖关系（避免循环依赖）<br/>
+- 使用Spring Boot DevTools（开发环境）<br/>
+- 考虑使用Spring Native（生产环境）</p>
+<h2 id="_6">相关文档链接</h2>
+<ul>
+<li><a href="Application.run.html">Application.run详解</a></li>
+<li><a href="Application.createApplicationContext.html">Application.createApplicationContext</a></li>
+<li><a href="Application.refreshContext.html">Application.refreshContext</a></li>
+<li><a href="refresh-sequence-diagram.html">refresh方法时序图</a></li>
+</ul>
         </div>
     </div>
 

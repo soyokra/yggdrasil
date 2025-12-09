@@ -381,7 +381,19 @@
 <li class="nav-item">
 <div class="nav-link">
 <span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/refresh-sequence-diagram.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/refresh-sequence-diagram.html">refresh-sequence-diagram</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
 <a href="../../../html/spring/spring启动源码分析/ServletWebServerApplicationContext.onRefresh.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/ServletWebServerApplicationContext.onRefresh.html">ServletWebServerApplicationContext.onRefresh</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/spring-boot-startup-flow.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/spring-boot-startup-flow.html">spring-boot-startup-flow</a>
 </div>
 </li>
 </ul>
@@ -488,7 +500,109 @@
     <!-- 主内容区 -->
     <div class="main-content">
         <div class="content-body">
-            
+            <h2 id="_1">简述</h2>
+<p>获取刷新后的BeanFactory，这是refresh()方法的第二步。</p>
+<p>对于SpringBoot应用来说，使用的是GenericApplicationContext，BeanFactory在创建ApplicationContext时就已经实例化好了，这一步只是简单地返回已有的BeanFactory。</p>
+<p>如果是传统的Spring应用（如XML配置），会在这一步重新创建BeanFactory并加载Bean定义。</p>
+<h2 id="_2">核心流程</h2>
+<ol>
+<li>调用子类的refreshBeanFactory()方法</li>
+<li>对于GenericApplicationContext：只是设置refreshed标志为true</li>
+<li>对于AbstractRefreshableApplicationContext：会销毁旧的BeanFactory，创建新的DefaultListableBeanFactory</li>
+<li>返回BeanFactory实例</li>
+</ol>
+<h2 id="_3">源码分析</h2>
+<p>AbstractApplicationContext中的方法：</p>
+<div class="hljs"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">abstract</span><span class="w"> </span><span class="kd">class</span> <span class="nc">AbstractApplicationContext</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">DefaultResourceLoader</span>
+<span class="w">        </span><span class="kd">implements</span><span class="w"> </span><span class="n">ConfigurableApplicationContext</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="kd">protected</span><span class="w"> </span><span class="n">ConfigurableListableBeanFactory</span><span class="w"> </span><span class="nf">obtainFreshBeanFactory</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// 刷新BeanFactory，由子类实现</span>
+<span class="w">        </span><span class="n">refreshBeanFactory</span><span class="p">();</span>
+<span class="w">        </span><span class="c1">// 返回BeanFactory实例</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">getBeanFactory</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">protected</span><span class="w"> </span><span class="kd">abstract</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">refreshBeanFactory</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">BeansException</span><span class="p">,</span><span class="w"> </span><span class="n">IllegalStateException</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">abstract</span><span class="w"> </span><span class="n">ConfigurableListableBeanFactory</span><span class="w"> </span><span class="nf">getBeanFactory</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">IllegalStateException</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>SpringBoot使用的GenericApplicationContext实现：</p>
+<div class="hljs"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">GenericApplicationContext</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">AbstractApplicationContext</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">BeanDefinitionRegistry</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">DefaultListableBeanFactory</span><span class="w"> </span><span class="n">beanFactory</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">AtomicBoolean</span><span class="w"> </span><span class="n">refreshed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">AtomicBoolean</span><span class="p">();</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">GenericApplicationContext</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// BeanFactory在构造方法中就创建了</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">beanFactory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">DefaultListableBeanFactory</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">protected</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">refreshBeanFactory</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">IllegalStateException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// 只允许刷新一次</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="na">refreshed</span><span class="p">.</span><span class="na">compareAndSet</span><span class="p">(</span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">IllegalStateException</span><span class="p">(</span>
+<span class="w">                    </span><span class="s">"GenericApplicationContext does not support multiple refresh attempts: just call 'refresh' once"</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">beanFactory</span><span class="p">.</span><span class="na">setSerializationId</span><span class="p">(</span><span class="n">getId</span><span class="p">());</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">ConfigurableListableBeanFactory</span><span class="w"> </span><span class="nf">getBeanFactory</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">beanFactory</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>传统Spring应用使用的AbstractRefreshableApplicationContext实现（供参考）：</p>
+<div class="hljs"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">abstract</span><span class="w"> </span><span class="kd">class</span> <span class="nc">AbstractRefreshableApplicationContext</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">AbstractApplicationContext</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">DefaultListableBeanFactory</span><span class="w"> </span><span class="n">beanFactory</span><span class="p">;</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">protected</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">refreshBeanFactory</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">BeansException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// 如果已有BeanFactory，先销毁</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">hasBeanFactory</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">destroyBeans</span><span class="p">();</span>
+<span class="w">            </span><span class="n">closeBeanFactory</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// 创建新的BeanFactory</span>
+<span class="w">            </span><span class="n">DefaultListableBeanFactory</span><span class="w"> </span><span class="n">beanFactory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">createBeanFactory</span><span class="p">();</span>
+<span class="w">            </span><span class="n">beanFactory</span><span class="p">.</span><span class="na">setSerializationId</span><span class="p">(</span><span class="n">getId</span><span class="p">());</span>
+<span class="w">            </span><span class="n">customizeBeanFactory</span><span class="p">(</span><span class="n">beanFactory</span><span class="p">);</span>
+<span class="w">            </span><span class="c1">// 加载Bean定义（XML配置）</span>
+<span class="w">            </span><span class="n">loadBeanDefinitions</span><span class="p">(</span><span class="n">beanFactory</span><span class="p">);</span>
+<span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="na">beanFactory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">beanFactory</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">IOException</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ApplicationContextException</span><span class="p">(</span><span class="s">"I/O error parsing bean definition source"</span><span class="p">,</span><span class="w"> </span><span class="n">ex</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="genericapplicationcontextdefaultlistablebeanfactory">GenericApplicationContext与DefaultListableBeanFactory的关系</h2>
+<ul>
+<li><strong>GenericApplicationContext</strong>：ApplicationContext的实现类，提供完整的应用上下文功能</li>
+<li><strong>DefaultListableBeanFactory</strong>：BeanFactory的默认实现，负责Bean的管理和依赖注入</li>
+<li>GenericApplicationContext通过组合的方式持有DefaultListableBeanFactory实例</li>
+<li>GenericApplicationContext提供高层功能（事件、资源、环境），委托BeanFactory处理Bean相关操作</li>
+</ul>
+<h2 id="springboot">SpringBoot的优势</h2>
+<p>与传统Spring XML配置方式不同，SpringBoot在创建ApplicationContext时就初始化了BeanFactory，不需要在refresh时重新创建，这使得：<br/>
+1. refresh()方法可以被多次调用（在某些测试场景中）<br/>
+2. 可以在refresh之前通过编程方式注册Bean定义<br/>
+3. 启动性能更好，避免重复创建对象</p>
+<h2 id="_4">参考调用栈</h2>
+<div class="hljs"><pre><span></span><code>obtainFreshBeanFactory:620, AbstractApplicationContext (org.springframework.context.support)
+refresh:522, AbstractApplicationContext (org.springframework.context.support)
+refresh:143, ServletWebServerApplicationContext (org.springframework.boot.web.servlet.context)
+refresh:755, SpringApplication (org.springframework.boot)
+refreshContext:402, SpringApplication (org.springframework.boot)
+run:312, SpringApplication (org.springframework.boot)
+</code></pre></div>
         </div>
     </div>
 

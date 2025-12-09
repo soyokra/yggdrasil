@@ -381,7 +381,19 @@
 <li class="nav-item">
 <div class="nav-link">
 <span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/refresh-sequence-diagram.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/refresh-sequence-diagram.html">refresh-sequence-diagram</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
 <a href="../../../html/spring/spring启动源码分析/ServletWebServerApplicationContext.onRefresh.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/ServletWebServerApplicationContext.onRefresh.html">ServletWebServerApplicationContext.onRefresh</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/spring-boot-startup-flow.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/spring-boot-startup-flow.html">spring-boot-startup-flow</a>
 </div>
 </li>
 </ul>
@@ -488,7 +500,409 @@
     <!-- 主内容区 -->
     <div class="main-content">
         <div class="content-body">
-            
+            <h2 id="_1">简述</h2>
+<p>初始化ApplicationEventMulticaster（应用事件多播器），用于事件的发布和监听。</p>
+<p>这是refresh()方法的第8步，在MessageSource初始化之后执行。</p>
+<p>ApplicationEventMulticaster负责将ApplicationEvent事件广播给所有注册的监听器。</p>
+<h2 id="_2">核心流程</h2>
+<ol>
+<li>检查BeanFactory中是否已有名为"applicationEventMulticaster"的Bean</li>
+<li>如果有，直接使用</li>
+<li>如果没有，创建默认的SimpleApplicationEventMulticaster</li>
+<li>将ApplicationEventMulticaster注册为单例Bean</li>
+</ol>
+<h2 id="_3">源码分析</h2>
+<div class="hljs"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">abstract</span><span class="w"> </span><span class="kd">class</span> <span class="nc">AbstractApplicationContext</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">DefaultResourceLoader</span>
+<span class="w">        </span><span class="kd">implements</span><span class="w"> </span><span class="n">ConfigurableApplicationContext</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="cm">/** ApplicationEventMulticaster的Bean名称 */</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">APPLICATION_EVENT_MULTICASTER_BEAN_NAME</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"applicationEventMulticaster"</span><span class="p">;</span>
+
+<span class="w">    </span><span class="cm">/** ApplicationEventMulticaster实例 */</span>
+<span class="w">    </span><span class="nd">@Nullable</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">ApplicationEventMulticaster</span><span class="w"> </span><span class="n">applicationEventMulticaster</span><span class="p">;</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">refresh</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">BeansException</span><span class="p">,</span><span class="w"> </span><span class="n">IllegalStateException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">startupShutdownMonitor</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// ... 前面的步骤</span>
+
+<span class="w">            </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// ... registerBeanPostProcessors</span>
+<span class="w">                </span><span class="c1">// ... initMessageSource</span>
+
+<span class="w">                </span><span class="c1">// 初始化事件多播器</span>
+<span class="w">                </span><span class="n">initApplicationEventMulticaster</span><span class="p">();</span>
+
+<span class="w">                </span><span class="c1">// onRefresh</span>
+<span class="w">                </span><span class="c1">// registerListeners</span>
+<span class="w">                </span><span class="c1">// ... 后续步骤</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">BeansException</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// 异常处理</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">protected</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">initApplicationEventMulticaster</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">ConfigurableListableBeanFactory</span><span class="w"> </span><span class="n">beanFactory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getBeanFactory</span><span class="p">();</span>
+
+<span class="w">        </span><span class="c1">// 检查是否已有applicationEventMulticaster Bean</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">beanFactory</span><span class="p">.</span><span class="na">containsLocalBean</span><span class="p">(</span><span class="n">APPLICATION_EVENT_MULTICASTER_BEAN_NAME</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// 如果有，获取并使用</span>
+<span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="na">applicationEventMulticaster</span><span class="w"> </span><span class="o">=</span>
+<span class="w">                    </span><span class="n">beanFactory</span><span class="p">.</span><span class="na">getBean</span><span class="p">(</span><span class="n">APPLICATION_EVENT_MULTICASTER_BEAN_NAME</span><span class="p">,</span><span class="w"> </span>
+<span class="w">                                       </span><span class="n">ApplicationEventMulticaster</span><span class="p">.</span><span class="na">class</span><span class="p">);</span>
+
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">logger</span><span class="p">.</span><span class="na">isTraceEnabled</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">logger</span><span class="p">.</span><span class="na">trace</span><span class="p">(</span><span class="s">"Using ApplicationEventMulticaster ["</span><span class="w"> </span><span class="o">+</span><span class="w"> </span>
+<span class="w">                           </span><span class="k">this</span><span class="p">.</span><span class="na">applicationEventMulticaster</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">"]"</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// 如果没有，创建默认的SimpleApplicationEventMulticaster</span>
+<span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="na">applicationEventMulticaster</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">SimpleApplicationEventMulticaster</span><span class="p">(</span><span class="n">beanFactory</span><span class="p">);</span>
+
+<span class="w">            </span><span class="c1">// 注册为单例Bean</span>
+<span class="w">            </span><span class="n">beanFactory</span><span class="p">.</span><span class="na">registerSingleton</span><span class="p">(</span><span class="n">APPLICATION_EVENT_MULTICASTER_BEAN_NAME</span><span class="p">,</span><span class="w"> </span>
+<span class="w">                                         </span><span class="k">this</span><span class="p">.</span><span class="na">applicationEventMulticaster</span><span class="p">);</span>
+
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">logger</span><span class="p">.</span><span class="na">isTraceEnabled</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">logger</span><span class="p">.</span><span class="na">trace</span><span class="p">(</span><span class="s">"No '"</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">APPLICATION_EVENT_MULTICASTER_BEAN_NAME</span><span class="w"> </span><span class="o">+</span><span class="w"> </span>
+<span class="w">                           </span><span class="s">"' bean, using ["</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">applicationEventMulticaster</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">"]"</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="applicationeventmulticaster">ApplicationEventMulticaster接口</h2>
+<div class="hljs"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">ApplicationEventMulticaster</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="cm">/**</span>
+<span class="cm">     * 添加监听器</span>
+<span class="cm">     */</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">addApplicationListener</span><span class="p">(</span><span class="n">ApplicationListener</span><span class="o">&lt;?&gt;</span><span class="w"> </span><span class="n">listener</span><span class="p">);</span>
+
+<span class="w">    </span><span class="cm">/**</span>
+<span class="cm">     * 通过Bean名称添加监听器</span>
+<span class="cm">     */</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">addApplicationListenerBean</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">listenerBeanName</span><span class="p">);</span>
+
+<span class="w">    </span><span class="cm">/**</span>
+<span class="cm">     * 移除监听器</span>
+<span class="cm">     */</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">removeApplicationListener</span><span class="p">(</span><span class="n">ApplicationListener</span><span class="o">&lt;?&gt;</span><span class="w"> </span><span class="n">listener</span><span class="p">);</span>
+
+<span class="w">    </span><span class="cm">/**</span>
+<span class="cm">     * 移除指定Bean名称的监听器</span>
+<span class="cm">     */</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">removeApplicationListenerBean</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">listenerBeanName</span><span class="p">);</span>
+
+<span class="w">    </span><span class="cm">/**</span>
+<span class="cm">     * 移除所有监听器</span>
+<span class="cm">     */</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">removeAllListeners</span><span class="p">();</span>
+
+<span class="w">    </span><span class="cm">/**</span>
+<span class="cm">     * 广播事件给所有合适的监听器</span>
+<span class="cm">     */</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">multicastEvent</span><span class="p">(</span><span class="n">ApplicationEvent</span><span class="w"> </span><span class="n">event</span><span class="p">);</span>
+
+<span class="w">    </span><span class="cm">/**</span>
+<span class="cm">     * 广播事件给所有合适的监听器（带事件类型）</span>
+<span class="cm">     */</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">multicastEvent</span><span class="p">(</span><span class="n">ApplicationEvent</span><span class="w"> </span><span class="n">event</span><span class="p">,</span><span class="w"> </span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">ResolvableType</span><span class="w"> </span><span class="n">eventType</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="simpleapplicationeventmulticaster">SimpleApplicationEventMulticaster实现</h2>
+<p>默认的事件多播器实现：</p>
+<div class="hljs"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">SimpleApplicationEventMulticaster</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">AbstractApplicationEventMulticaster</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="nd">@Nullable</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Executor</span><span class="w"> </span><span class="n">taskExecutor</span><span class="p">;</span>
+
+<span class="w">    </span><span class="nd">@Nullable</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">ErrorHandler</span><span class="w"> </span><span class="n">errorHandler</span><span class="p">;</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">multicastEvent</span><span class="p">(</span><span class="n">ApplicationEvent</span><span class="w"> </span><span class="n">event</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">multicastEvent</span><span class="p">(</span><span class="n">event</span><span class="p">,</span><span class="w"> </span><span class="n">resolveDefaultEventType</span><span class="p">(</span><span class="n">event</span><span class="p">));</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">multicastEvent</span><span class="p">(</span><span class="kd">final</span><span class="w"> </span><span class="n">ApplicationEvent</span><span class="w"> </span><span class="n">event</span><span class="p">,</span><span class="w"> </span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">ResolvableType</span><span class="w"> </span><span class="n">eventType</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">ResolvableType</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">eventType</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">eventType</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">resolveDefaultEventType</span><span class="p">(</span><span class="n">event</span><span class="p">));</span>
+<span class="w">        </span><span class="n">Executor</span><span class="w"> </span><span class="n">executor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getTaskExecutor</span><span class="p">();</span>
+
+<span class="w">        </span><span class="c1">// 获取所有对该事件感兴趣的监听器</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">ApplicationListener</span><span class="o">&lt;?&gt;</span><span class="w"> </span><span class="n">listener</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">getApplicationListeners</span><span class="p">(</span><span class="n">event</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">executor</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// 如果配置了Executor，异步执行</span>
+<span class="w">                </span><span class="n">executor</span><span class="p">.</span><span class="na">execute</span><span class="p">(()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">invokeListener</span><span class="p">(</span><span class="n">listener</span><span class="p">,</span><span class="w"> </span><span class="n">event</span><span class="p">));</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// 否则同步执行</span>
+<span class="w">                </span><span class="n">invokeListener</span><span class="p">(</span><span class="n">listener</span><span class="p">,</span><span class="w"> </span><span class="n">event</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">protected</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">invokeListener</span><span class="p">(</span><span class="n">ApplicationListener</span><span class="o">&lt;?&gt;</span><span class="w"> </span><span class="n">listener</span><span class="p">,</span><span class="w"> </span><span class="n">ApplicationEvent</span><span class="w"> </span><span class="n">event</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">ErrorHandler</span><span class="w"> </span><span class="n">errorHandler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getErrorHandler</span><span class="p">();</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">errorHandler</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">doInvokeListener</span><span class="p">(</span><span class="n">listener</span><span class="p">,</span><span class="w"> </span><span class="n">event</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Throwable</span><span class="w"> </span><span class="n">err</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">errorHandler</span><span class="p">.</span><span class="na">handleError</span><span class="p">(</span><span class="n">err</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">doInvokeListener</span><span class="p">(</span><span class="n">listener</span><span class="p">,</span><span class="w"> </span><span class="n">event</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@SuppressWarnings</span><span class="p">({</span><span class="s">"rawtypes"</span><span class="p">,</span><span class="w"> </span><span class="s">"unchecked"</span><span class="p">})</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">doInvokeListener</span><span class="p">(</span><span class="n">ApplicationListener</span><span class="w"> </span><span class="n">listener</span><span class="p">,</span><span class="w"> </span><span class="n">ApplicationEvent</span><span class="w"> </span><span class="n">event</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">listener</span><span class="p">.</span><span class="na">onApplicationEvent</span><span class="p">(</span><span class="n">event</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">ClassCastException</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">String</span><span class="w"> </span><span class="n">msg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ex</span><span class="p">.</span><span class="na">getMessage</span><span class="p">();</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">msg</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">matchesClassCastMessage</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span><span class="w"> </span><span class="n">event</span><span class="p">.</span><span class="na">getClass</span><span class="p">()))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// 可能只是泛型类型不匹配，记录日志后忽略</span>
+<span class="w">                </span><span class="n">Log</span><span class="w"> </span><span class="n">logger</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LogFactory</span><span class="p">.</span><span class="na">getLog</span><span class="p">(</span><span class="n">getClass</span><span class="p">());</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">logger</span><span class="p">.</span><span class="na">isTraceEnabled</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="n">logger</span><span class="p">.</span><span class="na">trace</span><span class="p">(</span><span class="s">"Non-matching event type for listener: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">listener</span><span class="p">,</span><span class="w"> </span><span class="n">ex</span><span class="p">);</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">throw</span><span class="w"> </span><span class="n">ex</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="applicationeventmulticaster_1">自定义ApplicationEventMulticaster</h2>
+<p>可以自定义事件多播器来实现异步事件处理或错误处理：</p>
+<div class="hljs"><pre><span></span><code><span class="nd">@Configuration</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">EventConfig</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="nd">@Bean</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">ApplicationEventMulticaster</span><span class="w"> </span><span class="nf">applicationEventMulticaster</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">SimpleApplicationEventMulticaster</span><span class="w"> </span><span class="n">multicaster</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+<span class="w">                </span><span class="k">new</span><span class="w"> </span><span class="n">SimpleApplicationEventMulticaster</span><span class="p">();</span>
+
+<span class="w">        </span><span class="c1">// 设置线程池，使事件异步处理</span>
+<span class="w">        </span><span class="n">ThreadPoolTaskExecutor</span><span class="w"> </span><span class="n">executor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ThreadPoolTaskExecutor</span><span class="p">();</span>
+<span class="w">        </span><span class="n">executor</span><span class="p">.</span><span class="na">setCorePoolSize</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+<span class="w">        </span><span class="n">executor</span><span class="p">.</span><span class="na">setMaxPoolSize</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
+<span class="w">        </span><span class="n">executor</span><span class="p">.</span><span class="na">setQueueCapacity</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>
+<span class="w">        </span><span class="n">executor</span><span class="p">.</span><span class="na">setThreadNamePrefix</span><span class="p">(</span><span class="s">"event-"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">executor</span><span class="p">.</span><span class="na">initialize</span><span class="p">();</span>
+<span class="w">        </span><span class="n">multicaster</span><span class="p">.</span><span class="na">setTaskExecutor</span><span class="p">(</span><span class="n">executor</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// 设置错误处理器</span>
+<span class="w">        </span><span class="n">multicaster</span><span class="p">.</span><span class="na">setErrorHandler</span><span class="p">(</span><span class="n">t</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">err</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Error in event listener: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="na">getMessage</span><span class="p">());</span>
+<span class="w">        </span><span class="p">});</span>
+
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">multicaster</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="_4">事件发布流程</h2>
+<div class="hljs"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">abstract</span><span class="w"> </span><span class="kd">class</span> <span class="nc">AbstractApplicationContext</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">DefaultResourceLoader</span>
+<span class="w">        </span><span class="kd">implements</span><span class="w"> </span><span class="n">ConfigurableApplicationContext</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">publishEvent</span><span class="p">(</span><span class="n">ApplicationEvent</span><span class="w"> </span><span class="n">event</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">publishEvent</span><span class="p">(</span><span class="n">event</span><span class="p">,</span><span class="w"> </span><span class="kc">null</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">protected</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">publishEvent</span><span class="p">(</span><span class="n">Object</span><span class="w"> </span><span class="n">event</span><span class="p">,</span><span class="w"> </span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">ResolvableType</span><span class="w"> </span><span class="n">eventType</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Assert</span><span class="p">.</span><span class="na">notNull</span><span class="p">(</span><span class="n">event</span><span class="p">,</span><span class="w"> </span><span class="s">"Event must not be null"</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// 如果需要，将事件包装为ApplicationEvent</span>
+<span class="w">        </span><span class="n">ApplicationEvent</span><span class="w"> </span><span class="n">applicationEvent</span><span class="p">;</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">event</span><span class="w"> </span><span class="k">instanceof</span><span class="w"> </span><span class="n">ApplicationEvent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">applicationEvent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">ApplicationEvent</span><span class="p">)</span><span class="w"> </span><span class="n">event</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">applicationEvent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">PayloadApplicationEvent</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="n">event</span><span class="p">);</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">eventType</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">eventType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">((</span><span class="n">PayloadApplicationEvent</span><span class="o">&lt;?&gt;</span><span class="p">)</span><span class="w"> </span><span class="n">applicationEvent</span><span class="p">).</span><span class="na">getResolvableType</span><span class="p">();</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="c1">// 如果在多播器创建之前，暂存早期事件</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">earlyApplicationEvents</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="na">earlyApplicationEvents</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="n">applicationEvent</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// 使用多播器广播事件</span>
+<span class="w">            </span><span class="n">getApplicationEventMulticaster</span><span class="p">().</span><span class="na">multicastEvent</span><span class="p">(</span><span class="n">applicationEvent</span><span class="p">,</span><span class="w"> </span><span class="n">eventType</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="c1">// 如果有父上下文，也在父上下文中发布</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">parent</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">parent</span><span class="w"> </span><span class="k">instanceof</span><span class="w"> </span><span class="n">AbstractApplicationContext</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="p">((</span><span class="n">AbstractApplicationContext</span><span class="p">)</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">parent</span><span class="p">).</span><span class="na">publishEvent</span><span class="p">(</span><span class="n">event</span><span class="p">,</span><span class="w"> </span><span class="n">eventType</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">this</span><span class="p">.</span><span class="na">parent</span><span class="p">.</span><span class="na">publishEvent</span><span class="p">(</span><span class="n">event</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="_5">内置事件类型</h2>
+<p>Spring提供了多个内置的ApplicationEvent：</p>
+<table>
+<thead>
+<tr>
+<th>事件类型</th>
+<th>触发时机</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ContextRefreshedEvent</td>
+<td>ApplicationContext初始化或刷新完成时</td>
+</tr>
+<tr>
+<td>ContextStartedEvent</td>
+<td>ApplicationContext启动时</td>
+</tr>
+<tr>
+<td>ContextStoppedEvent</td>
+<td>ApplicationContext停止时</td>
+</tr>
+<tr>
+<td>ContextClosedEvent</td>
+<td>ApplicationContext关闭时</td>
+</tr>
+<tr>
+<td>RequestHandledEvent</td>
+<td>HTTP请求处理完成时（Web应用）</td>
+</tr>
+<tr>
+<td>ServletWebServerInitializedEvent</td>
+<td>WebServer初始化完成时</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_6">自定义事件</h2>
+<h3 id="1">1. 定义事件</h3>
+<div class="hljs"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">UserRegisteredEvent</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">ApplicationEvent</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">username</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">email</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">UserRegisteredEvent</span><span class="p">(</span><span class="n">Object</span><span class="w"> </span><span class="n">source</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">email</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">super</span><span class="p">(</span><span class="n">source</span><span class="p">);</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">username</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">username</span><span class="p">;</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">email</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">email</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">getUsername</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">username</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">getEmail</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">email</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="2">2. 发布事件</h3>
+<div class="hljs"><pre><span></span><code><span class="nd">@Service</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">UserService</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="nd">@Autowired</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">ApplicationEventPublisher</span><span class="w"> </span><span class="n">eventPublisher</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">registerUser</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">email</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// 注册用户逻辑</span>
+<span class="w">        </span><span class="c1">// ...</span>
+
+<span class="w">        </span><span class="c1">// 发布事件</span>
+<span class="w">        </span><span class="n">eventPublisher</span><span class="p">.</span><span class="na">publishEvent</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">UserRegisteredEvent</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="n">email</span><span class="p">));</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="3">3. 监听事件</h3>
+<p>方式一：实现ApplicationListener接口</p>
+<div class="hljs"><pre><span></span><code><span class="nd">@Component</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">UserRegisteredListener</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">ApplicationListener</span><span class="o">&lt;</span><span class="n">UserRegisteredEvent</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">onApplicationEvent</span><span class="p">(</span><span class="n">UserRegisteredEvent</span><span class="w"> </span><span class="n">event</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"用户注册: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">event</span><span class="p">.</span><span class="na">getUsername</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">", "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">event</span><span class="p">.</span><span class="na">getEmail</span><span class="p">());</span>
+<span class="w">        </span><span class="c1">// 发送欢迎邮件等</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>方式二：使用@EventListener注解</p>
+<div class="hljs"><pre><span></span><code><span class="nd">@Component</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">UserEventHandler</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="nd">@EventListener</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">handleUserRegistered</span><span class="p">(</span><span class="n">UserRegisteredEvent</span><span class="w"> </span><span class="n">event</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"用户注册: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">event</span><span class="p">.</span><span class="na">getUsername</span><span class="p">());</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@EventListener</span>
+<span class="w">    </span><span class="nd">@Async</span><span class="w">  </span><span class="c1">// 异步处理</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">sendWelcomeEmail</span><span class="p">(</span><span class="n">UserRegisteredEvent</span><span class="w"> </span><span class="n">event</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// 发送欢迎邮件</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="vs">同步 vs 异步事件处理</h2>
+<h3 id="_7">默认（同步）</h3>
+<ul>
+<li>事件在发布者的线程中同步执行</li>
+<li>监听器的异常会影响发布者</li>
+<li>执行顺序可以通过@Order控制</li>
+</ul>
+<h3 id="_8">异步配置</h3>
+<div class="hljs"><pre><span></span><code><span class="c1">// 方式1：配置ApplicationEventMulticaster</span>
+<span class="nd">@Bean</span>
+<span class="kd">public</span><span class="w"> </span><span class="n">ApplicationEventMulticaster</span><span class="w"> </span><span class="nf">applicationEventMulticaster</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">SimpleApplicationEventMulticaster</span><span class="w"> </span><span class="n">multicaster</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">SimpleApplicationEventMulticaster</span><span class="p">();</span>
+<span class="w">    </span><span class="n">multicaster</span><span class="p">.</span><span class="na">setTaskExecutor</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">SimpleAsyncTaskExecutor</span><span class="p">());</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">multicaster</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// 方式2：在监听器方法上使用@Async</span>
+<span class="nd">@EnableAsync</span>
+<span class="nd">@Configuration</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">AsyncConfig</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// 启用@Async支持</span>
+<span class="p">}</span>
+
+<span class="nd">@Component</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">EventHandler</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nd">@Async</span>
+<span class="w">    </span><span class="nd">@EventListener</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">handleEvent</span><span class="p">(</span><span class="n">MyEvent</span><span class="w"> </span><span class="n">event</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// 异步处理</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="_9">参考调用栈</h2>
+<div class="hljs"><pre><span></span><code>initApplicationEventMulticaster:877, AbstractApplicationContext (org.springframework.context.support)
+refresh:540, AbstractApplicationContext (org.springframework.context.support)
+refresh:143, ServletWebServerApplicationContext (org.springframework.boot.web.servlet.context)
+refresh:755, SpringApplication (org.springframework.boot)
+refreshContext:402, SpringApplication (org.springframework.boot)
+run:312, SpringApplication (org.springframework.boot)
+</code></pre></div>
+<h2 id="_10">相关链接</h2>
+<ul>
+<li><a href="AbstractApplicationContext.registerListeners.html">AbstractApplicationContext.registerListeners</a></li>
+<li><a href="https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#context-functionality-events">Spring官方文档 - Standard and Custom Events</a></li>
+</ul>
         </div>
     </div>
 

@@ -381,7 +381,19 @@
 <li class="nav-item">
 <div class="nav-link">
 <span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/refresh-sequence-diagram.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/refresh-sequence-diagram.html">refresh-sequence-diagram</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
 <a href="../../../html/spring/spring启动源码分析/ServletWebServerApplicationContext.onRefresh.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/ServletWebServerApplicationContext.onRefresh.html">ServletWebServerApplicationContext.onRefresh</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/spring-boot-startup-flow.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/spring-boot-startup-flow.html">spring-boot-startup-flow</a>
 </div>
 </li>
 </ul>
@@ -489,8 +501,35 @@
     <div class="main-content">
         <div class="content-body">
             <h2 id="_1">简述</h2>
-<p>spring boot的SpringApplication类的启动流程，本质是初始化一个ApplicationContext</p>
-<p>构造方法</p>
+<p>SpringBoot的SpringApplication.run()方法是应用的启动入口，本质是<strong>创建并初始化一个ApplicationContext</strong>。</p>
+<p>整个启动流程可以分为三个阶段：<br/>
+1. <strong>SpringApplication构造</strong>：推断应用类型、加载初始化器和监听器<br/>
+2. <strong>环境准备</strong>：配置环境、打印Banner<br/>
+3. <strong>Context初始化</strong>：创建、准备、刷新ApplicationContext</p>
+<h2 id="_2">启动流程概览</h2>
+<div class="hljs"><pre><span></span><code>main方法
+  └─&gt; SpringApplication.run(主类, 参数)
+       ├─&gt; new SpringApplication(主类) ────────── 构造阶段
+       │    ├─&gt; 推断应用类型（SERVLET/REACTIVE/NONE）
+       │    ├─&gt; 加载ApplicationContextInitializer
+       │    ├─&gt; 加载ApplicationListener
+       │    └─&gt; 推断主类
+       │
+       └─&gt; run(参数) ────────────────────────── 运行阶段
+            ├─&gt; 启动计时器
+            ├─&gt; 配置Headless属性
+            ├─&gt; 获取并启动SpringApplicationRunListeners
+            ├─&gt; 准备Environment
+            ├─&gt; 打印Banner
+            ├─&gt; createApplicationContext() ────── 创建Context
+            ├─&gt; prepareContext() ───────────── 准备Context
+            ├─&gt; refreshContext() ────────────── 刷新Context（核心）
+            ├─&gt; afterRefresh()
+            ├─&gt; 停止计时器并打印启动信息
+            ├─&gt; 发布ApplicationStartedEvent
+            └─&gt; 调用ApplicationRunner和CommandLineRunner
+</code></pre></div>
+<h2 id="_3">构造方法</h2>
 <div class="hljs"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="nf">SpringApplication</span><span class="p">(</span><span class="n">ResourceLoader</span><span class="w"> </span><span class="n">resourceLoader</span><span class="p">,</span><span class="w"> </span><span class="n">Class</span><span class="o">&lt;?&gt;</span><span class="p">...</span><span class="w"> </span><span class="n">primarySources</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="na">resourceLoader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">resourceLoader</span><span class="p">;</span>
 <span class="w">    </span><span class="n">Assert</span><span class="p">.</span><span class="na">notNull</span><span class="p">(</span><span class="n">primarySources</span><span class="p">,</span><span class="w"> </span><span class="s">"PrimarySources must not be null"</span><span class="p">);</span>
@@ -501,57 +540,339 @@
 <span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="na">mainApplicationClass</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">deduceMainApplicationClass</span><span class="p">();</span>
 <span class="p">}</span>
 </code></pre></div>
-<p>run方法</p>
+<h2 id="run">run方法详解</h2>
+<h3 id="_4">源码分析</h3>
 <div class="hljs"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="n">ConfigurableApplicationContext</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="n">String</span><span class="p">...</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// 1. 启动计时器，用于记录启动耗时</span>
 <span class="w">    </span><span class="n">StopWatch</span><span class="w"> </span><span class="n">stopWatch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">StopWatch</span><span class="p">();</span>
 <span class="w">    </span><span class="n">stopWatch</span><span class="p">.</span><span class="na">start</span><span class="p">();</span>
 
 <span class="w">    </span><span class="n">ConfigurableApplicationContext</span><span class="w"> </span><span class="n">context</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// 2. 配置Headless模式（java.awt.headless）</span>
+<span class="w">    </span><span class="c1">// 默认为true，表示在没有显示器、键盘等外设的服务器环境中运行</span>
 <span class="w">    </span><span class="n">configureHeadlessProperty</span><span class="p">();</span>
 
+<span class="w">    </span><span class="c1">// 3. 获取SpringApplicationRunListeners，并发布starting事件</span>
+<span class="w">    </span><span class="c1">// 这是SpringBoot的事件机制，用于在启动过程中发布各种事件</span>
 <span class="w">    </span><span class="n">SpringApplicationRunListeners</span><span class="w"> </span><span class="n">listeners</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getRunListeners</span><span class="p">(</span><span class="n">args</span><span class="p">);</span>
 <span class="w">    </span><span class="n">listeners</span><span class="p">.</span><span class="na">starting</span><span class="p">();</span>
 
 <span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">       </span><span class="c1">// 4. 封装命令行参数</span>
 <span class="w">       </span><span class="n">ApplicationArguments</span><span class="w"> </span><span class="n">applicationArguments</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">DefaultApplicationArguments</span><span class="p">(</span><span class="n">args</span><span class="p">);</span>
 
+<span class="w">       </span><span class="c1">// 5. 准备环境（Environment）</span>
+<span class="w">       </span><span class="c1">// 包括：系统属性、环境变量、配置文件（application.properties/yml）等</span>
 <span class="w">       </span><span class="n">ConfigurableEnvironment</span><span class="w"> </span><span class="n">environment</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prepareEnvironment</span><span class="p">(</span><span class="n">listeners</span><span class="p">,</span><span class="w"> </span><span class="n">applicationArguments</span><span class="p">);</span>
 <span class="w">       </span><span class="n">configureIgnoreBeanInfo</span><span class="p">(</span><span class="n">environment</span><span class="p">);</span>
 
+<span class="w">       </span><span class="c1">// 6. 打印Banner（启动时的那个Spring图标）</span>
 <span class="w">       </span><span class="n">Banner</span><span class="w"> </span><span class="n">printedBanner</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">printBanner</span><span class="p">(</span><span class="n">environment</span><span class="p">);</span>
 
+<span class="w">       </span><span class="c1">// 7. 创建ApplicationContext</span>
+<span class="w">       </span><span class="c1">// 根据应用类型创建：AnnotationConfigServletWebServerApplicationContext（Web应用）</span>
 <span class="w">       </span><span class="n">context</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">createApplicationContext</span><span class="p">();</span>
 
+<span class="w">       </span><span class="c1">// 8. 准备Context</span>
+<span class="w">       </span><span class="c1">// 设置environment、应用初始化器、注册主类为Bean等</span>
 <span class="w">       </span><span class="n">prepareContext</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">environment</span><span class="p">,</span><span class="w"> </span><span class="n">listeners</span><span class="p">,</span><span class="w"> </span><span class="n">applicationArguments</span><span class="p">,</span><span class="w"> </span><span class="n">printedBanner</span><span class="p">);</span>
 
+<span class="w">       </span><span class="c1">// 9. 刷新Context（最核心的步骤）</span>
+<span class="w">       </span><span class="c1">// 执行AbstractApplicationContext.refresh()的13个步骤</span>
 <span class="w">       </span><span class="n">refreshContext</span><span class="p">(</span><span class="n">context</span><span class="p">);</span>
 
+<span class="w">       </span><span class="c1">// 10. 刷新后的处理（空方法，留给子类扩展）</span>
 <span class="w">       </span><span class="n">afterRefresh</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">applicationArguments</span><span class="p">);</span>
 
+<span class="w">       </span><span class="c1">// 11. 停止计时器，打印启动日志</span>
 <span class="w">       </span><span class="n">stopWatch</span><span class="p">.</span><span class="na">stop</span><span class="p">();</span>
 <span class="w">       </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">logStartupInfo</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">          </span><span class="k">new</span><span class="w"> </span><span class="n">StartupInfoLogger</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">mainApplicationClass</span><span class="p">).</span><span class="na">logStarted</span><span class="p">(</span><span class="n">getApplicationLog</span><span class="p">(),</span><span class="w"> </span><span class="n">stopWatch</span><span class="p">);</span>
 <span class="w">       </span><span class="p">}</span>
 
+<span class="w">       </span><span class="c1">// 12. 发布ApplicationStartedEvent事件</span>
 <span class="w">       </span><span class="n">listeners</span><span class="p">.</span><span class="na">started</span><span class="p">(</span><span class="n">context</span><span class="p">);</span>
 
+<span class="w">       </span><span class="c1">// 13. 调用ApplicationRunner和CommandLineRunner</span>
+<span class="w">       </span><span class="c1">// 执行用户自定义的启动逻辑</span>
 <span class="w">       </span><span class="n">callRunners</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">applicationArguments</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="w">    </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Throwable</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">       </span><span class="c1">// 异常处理：发布ApplicationFailedEvent事件</span>
 <span class="w">       </span><span class="n">handleRunFailure</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">ex</span><span class="p">,</span><span class="w"> </span><span class="n">listeners</span><span class="p">);</span>
 <span class="w">       </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">IllegalStateException</span><span class="p">(</span><span class="n">ex</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
 
 <span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">       </span><span class="c1">// 14. 发布ApplicationReadyEvent事件，表示应用已准备好接受请求</span>
 <span class="w">       </span><span class="n">listeners</span><span class="p">.</span><span class="na">running</span><span class="p">(</span><span class="n">context</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="w">    </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Throwable</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">       </span><span class="n">handleRunFailure</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">ex</span><span class="p">,</span><span class="w"> </span><span class="kc">null</span><span class="p">);</span>
 <span class="w">       </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">IllegalStateException</span><span class="p">(</span><span class="n">ex</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// 15. 返回ApplicationContext</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">context</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div>
+<h3 id="_5">关键步骤详解</h3>
+<h4 id="1-springapplicationrunlisteners">1. 获取SpringApplicationRunListeners</h4>
+<div class="hljs"><pre><span></span><code><span class="n">SpringApplicationRunListeners</span><span class="w"> </span><span class="n">listeners</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getRunListeners</span><span class="p">(</span><span class="n">args</span><span class="p">);</span>
+
+<span class="kd">private</span><span class="w"> </span><span class="n">SpringApplicationRunListeners</span><span class="w"> </span><span class="nf">getRunListeners</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Class</span><span class="o">&lt;?&gt;[]</span><span class="w"> </span><span class="n">types</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Class</span><span class="o">&lt;?&gt;[]</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">SpringApplication</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="o">[]</span><span class="p">.</span><span class="na">class</span><span class="w"> </span><span class="p">};</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">SpringApplicationRunListeners</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span>
+<span class="w">            </span><span class="n">getSpringFactoriesInstances</span><span class="p">(</span><span class="n">SpringApplicationRunListener</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"> </span><span class="n">types</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">));</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>SpringApplicationRunListener是SpringBoot的事件发布机制，默认实现是<code>EventPublishingRunListener</code>，它会在启动的各个阶段发布事件：</p>
+<table>
+<thead>
+<tr>
+<th>事件</th>
+<th>时机</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ApplicationStartingEvent</td>
+<td>starting()</td>
+<td>应用开始启动</td>
+</tr>
+<tr>
+<td>ApplicationEnvironmentPreparedEvent</td>
+<td>environmentPrepared()</td>
+<td>环境准备完成</td>
+</tr>
+<tr>
+<td>ApplicationContextInitializedEvent</td>
+<td>contextPrepared()</td>
+<td>Context创建完成</td>
+</tr>
+<tr>
+<td>ApplicationPreparedEvent</td>
+<td>contextLoaded()</td>
+<td>Context准备完成</td>
+</tr>
+<tr>
+<td>ApplicationStartedEvent</td>
+<td>started()</td>
+<td>Context刷新完成</td>
+</tr>
+<tr>
+<td>ApplicationReadyEvent</td>
+<td>running()</td>
+<td>应用已就绪</td>
+</tr>
+<tr>
+<td>ApplicationFailedEvent</td>
+<td>failed()</td>
+<td>启动失败</td>
+</tr>
+</tbody>
+</table>
+<h4 id="2-environment">2. 准备Environment</h4>
+<div class="hljs"><pre><span></span><code><span class="kd">private</span><span class="w"> </span><span class="n">ConfigurableEnvironment</span><span class="w"> </span><span class="nf">prepareEnvironment</span><span class="p">(</span>
+<span class="w">        </span><span class="n">SpringApplicationRunListeners</span><span class="w"> </span><span class="n">listeners</span><span class="p">,</span>
+<span class="w">        </span><span class="n">ApplicationArguments</span><span class="w"> </span><span class="n">applicationArguments</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="c1">// 创建Environment</span>
+<span class="w">    </span><span class="n">ConfigurableEnvironment</span><span class="w"> </span><span class="n">environment</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getOrCreateEnvironment</span><span class="p">();</span>
+
+<span class="w">    </span><span class="c1">// 配置Environment：添加命令行参数等</span>
+<span class="w">    </span><span class="n">configureEnvironment</span><span class="p">(</span><span class="n">environment</span><span class="p">,</span><span class="w"> </span><span class="n">applicationArguments</span><span class="p">.</span><span class="na">getSourceArgs</span><span class="p">());</span>
+
+<span class="w">    </span><span class="c1">// 附加额外的PropertySource</span>
+<span class="w">    </span><span class="n">ConfigurationPropertySources</span><span class="p">.</span><span class="na">attach</span><span class="p">(</span><span class="n">environment</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// 发布environmentPrepared事件</span>
+<span class="w">    </span><span class="c1">// ConfigFileApplicationListener会在这时加载application.properties/yml</span>
+<span class="w">    </span><span class="n">listeners</span><span class="p">.</span><span class="na">environmentPrepared</span><span class="p">(</span><span class="n">environment</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// 将Environment绑定到SpringApplication</span>
+<span class="w">    </span><span class="n">bindToSpringApplication</span><span class="p">(</span><span class="n">environment</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">environment</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Environment的PropertySource层次结构：</p>
+<div class="hljs"><pre><span></span><code>ConfigurableEnvironment
+  └── MutablePropertySources
+        ├── commandLineArgs (命令行参数，优先级最高)
+        ├── systemProperties (System.getProperties())
+        ├── systemEnvironment (System.getenv())
+        ├── random (random.*)
+        ├── applicationConfig: [classpath:/application.properties]
+        ├── applicationConfig: [classpath:/application-{profile}.properties]
+        └── defaultProperties (默认属性，优先级最低)
+</code></pre></div>
+<h4 id="3-applicationcontext">3. 创建ApplicationContext</h4>
+<p>详见：<a href="Application.createApplicationContext.html">Application.createApplicationContext</a></p>
+<p>根据<code>webApplicationType</code>创建不同类型的Context：<br/>
+- <strong>SERVLET</strong>: <code>AnnotationConfigServletWebServerApplicationContext</code>（Web应用）<br/>
+- <strong>REACTIVE</strong>: <code>AnnotationConfigReactiveWebServerApplicationContext</code>（响应式应用）<br/>
+- <strong>NONE</strong>: <code>AnnotationConfigApplicationContext</code>（非Web应用）</p>
+<h4 id="4-context">4. 准备Context</h4>
+<div class="hljs"><pre><span></span><code><span class="kd">private</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">prepareContext</span><span class="p">(</span><span class="n">ConfigurableApplicationContext</span><span class="w"> </span><span class="n">context</span><span class="p">,</span>
+<span class="w">        </span><span class="n">ConfigurableEnvironment</span><span class="w"> </span><span class="n">environment</span><span class="p">,</span>
+<span class="w">        </span><span class="n">SpringApplicationRunListeners</span><span class="w"> </span><span class="n">listeners</span><span class="p">,</span>
+<span class="w">        </span><span class="n">ApplicationArguments</span><span class="w"> </span><span class="n">applicationArguments</span><span class="p">,</span>
+<span class="w">        </span><span class="n">Banner</span><span class="w"> </span><span class="n">printedBanner</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="c1">// 设置环境</span>
+<span class="w">    </span><span class="n">context</span><span class="p">.</span><span class="na">setEnvironment</span><span class="p">(</span><span class="n">environment</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// 后处理Context：设置BeanNameGenerator、ResourceLoader等</span>
+<span class="w">    </span><span class="n">postProcessApplicationContext</span><span class="p">(</span><span class="n">context</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// 应用所有ApplicationContextInitializer</span>
+<span class="w">    </span><span class="n">applyInitializers</span><span class="p">(</span><span class="n">context</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// 发布contextPrepared事件</span>
+<span class="w">    </span><span class="n">listeners</span><span class="p">.</span><span class="na">contextPrepared</span><span class="p">(</span><span class="n">context</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// 打印启动和Profile信息</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">logStartupInfo</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">logStartupInfo</span><span class="p">(</span><span class="n">context</span><span class="p">.</span><span class="na">getParent</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">);</span>
+<span class="w">        </span><span class="n">logStartupProfileInfo</span><span class="p">(</span><span class="n">context</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// 注册特殊的单例Bean</span>
+<span class="w">    </span><span class="n">ConfigurableListableBeanFactory</span><span class="w"> </span><span class="n">beanFactory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">context</span><span class="p">.</span><span class="na">getBeanFactory</span><span class="p">();</span>
+<span class="w">    </span><span class="n">beanFactory</span><span class="p">.</span><span class="na">registerSingleton</span><span class="p">(</span><span class="s">"springApplicationArguments"</span><span class="p">,</span><span class="w"> </span><span class="n">applicationArguments</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">printedBanner</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">beanFactory</span><span class="p">.</span><span class="na">registerSingleton</span><span class="p">(</span><span class="s">"springBootBanner"</span><span class="p">,</span><span class="w"> </span><span class="n">printedBanner</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// 设置是否允许Bean定义覆盖</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">beanFactory</span><span class="w"> </span><span class="k">instanceof</span><span class="w"> </span><span class="n">DefaultListableBeanFactory</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="p">((</span><span class="n">DefaultListableBeanFactory</span><span class="p">)</span><span class="w"> </span><span class="n">beanFactory</span><span class="p">)</span>
+<span class="w">                </span><span class="p">.</span><span class="na">setAllowBeanDefinitionOverriding</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">allowBeanDefinitionOverriding</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// 加载Bean源（通常是主类）</span>
+<span class="w">    </span><span class="n">Set</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;</span><span class="w"> </span><span class="n">sources</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getAllSources</span><span class="p">();</span>
+<span class="w">    </span><span class="n">Assert</span><span class="p">.</span><span class="na">notEmpty</span><span class="p">(</span><span class="n">sources</span><span class="p">,</span><span class="w"> </span><span class="s">"Sources must not be empty"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">load</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">sources</span><span class="p">.</span><span class="na">toArray</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">Object</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="p">));</span>
+
+<span class="w">    </span><span class="c1">// 发布contextLoaded事件</span>
+<span class="w">    </span><span class="n">listeners</span><span class="p">.</span><span class="na">contextLoaded</span><span class="p">(</span><span class="n">context</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<h4 id="5-context">5. 刷新Context</h4>
+<p>详见：<a href="Application.refreshContext.html">Application.refreshContext</a></p>
+<p>这是最核心的步骤，执行<code>AbstractApplicationContext.refresh()</code>的13个步骤，完成：<br/>
+- BeanDefinition注册<br/>
+- Bean实例化<br/>
+- WebServer创建和启动<br/>
+- 等等</p>
+<h4 id="6-runners">6. 调用Runners</h4>
+<div class="hljs"><pre><span></span><code><span class="kd">private</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">callRunners</span><span class="p">(</span><span class="n">ApplicationContext</span><span class="w"> </span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">ApplicationArguments</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;</span><span class="w"> </span><span class="n">runners</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ArrayList</span><span class="o">&lt;&gt;</span><span class="p">();</span>
+<span class="w">    </span><span class="n">runners</span><span class="p">.</span><span class="na">addAll</span><span class="p">(</span><span class="n">context</span><span class="p">.</span><span class="na">getBeansOfType</span><span class="p">(</span><span class="n">ApplicationRunner</span><span class="p">.</span><span class="na">class</span><span class="p">).</span><span class="na">values</span><span class="p">());</span>
+<span class="w">    </span><span class="n">runners</span><span class="p">.</span><span class="na">addAll</span><span class="p">(</span><span class="n">context</span><span class="p">.</span><span class="na">getBeansOfType</span><span class="p">(</span><span class="n">CommandLineRunner</span><span class="p">.</span><span class="na">class</span><span class="p">).</span><span class="na">values</span><span class="p">());</span>
+<span class="w">    </span><span class="n">AnnotationAwareOrderComparator</span><span class="p">.</span><span class="na">sort</span><span class="p">(</span><span class="n">runners</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">Object</span><span class="w"> </span><span class="n">runner</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">LinkedHashSet</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="n">runners</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">runner</span><span class="w"> </span><span class="k">instanceof</span><span class="w"> </span><span class="n">ApplicationRunner</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">callRunner</span><span class="p">((</span><span class="n">ApplicationRunner</span><span class="p">)</span><span class="w"> </span><span class="n">runner</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">runner</span><span class="w"> </span><span class="k">instanceof</span><span class="w"> </span><span class="n">CommandLineRunner</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">callRunner</span><span class="p">((</span><span class="n">CommandLineRunner</span><span class="p">)</span><span class="w"> </span><span class="n">runner</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>ApplicationRunner和CommandLineRunner用于在应用启动完成后执行自定义逻辑：</p>
+<div class="hljs"><pre><span></span><code><span class="nd">@Component</span>
+<span class="nd">@Order</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MyApplicationRunner</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">ApplicationRunner</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="n">ApplicationArguments</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"ApplicationRunner executed"</span><span class="p">);</span>
+<span class="w">        </span><span class="c1">// 执行启动后的初始化逻辑</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nd">@Component</span>
+<span class="nd">@Order</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MyCommandLineRunner</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">CommandLineRunner</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="n">String</span><span class="p">...</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"CommandLineRunner executed"</span><span class="p">);</span>
+<span class="w">        </span><span class="c1">// 执行启动后的初始化逻辑</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="springapplicationrunlisteners">SpringApplicationRunListeners的作用</h3>
+<p>SpringApplicationRunListeners是SpringBoot的事件发布机制的核心，它在启动的各个关键节点发布事件，允许监听器响应这些事件。</p>
+<h4 id="_6">事件发布时间线</h4>
+<div class="hljs"><pre><span></span><code>应用启动
+  ↓
+listeners.starting()          → ApplicationStartingEvent
+  ↓
+准备Environment
+  ↓
+listeners.environmentPrepared() → ApplicationEnvironmentPreparedEvent
+  ↓                               (ConfigFileApplicationListener加载配置文件)
+创建Context
+  ↓
+listeners.contextPrepared()    → ApplicationContextInitializedEvent
+  ↓
+加载Bean定义
+  ↓
+listeners.contextLoaded()      → ApplicationPreparedEvent
+  ↓
+refresh Context（13步）
+  ↓
+listeners.started()            → ApplicationStartedEvent
+  ↓
+调用Runners
+  ↓
+listeners.running()            → ApplicationReadyEvent
+  ↓
+应用就绪，可接受请求
+</code></pre></div>
+<h4 id="_7">监听事件示例</h4>
+<div class="hljs"><pre><span></span><code><span class="nd">@Component</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MyApplicationListener</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">ApplicationListener</span><span class="o">&lt;</span><span class="n">ApplicationReadyEvent</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">onApplicationEvent</span><span class="p">(</span><span class="n">ApplicationReadyEvent</span><span class="w"> </span><span class="n">event</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"应用已就绪，可以开始接受请求"</span><span class="p">);</span>
+<span class="w">        </span><span class="c1">// 执行一些初始化工作</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// 或者使用@EventListener</span>
+<span class="nd">@Component</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MyEventListener</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="nd">@EventListener</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">handleApplicationReady</span><span class="p">(</span><span class="n">ApplicationReadyEvent</span><span class="w"> </span><span class="n">event</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"应用已就绪"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@EventListener</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">handleApplicationStarted</span><span class="p">(</span><span class="n">ApplicationStartedEvent</span><span class="w"> </span><span class="n">event</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"应用已启动"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="_8">总结</h2>
+<p>SpringApplication.run()方法的执行流程：</p>
+<ol>
+<li><strong>初始化阶段</strong>：创建SpringApplication，加载配置</li>
+<li><strong>环境准备</strong>：创建和配置Environment</li>
+<li><strong>Context创建</strong>：创建ApplicationContext实例</li>
+<li><strong>Context准备</strong>：应用初始化器、注册特殊Bean</li>
+<li><strong>Context刷新</strong>：执行refresh()的13个步骤（核心）</li>
+<li><strong>启动完成</strong>：调用Runners，发布Ready事件</li>
+</ol>
+<p>整个过程通过SpringApplicationRunListeners发布事件，各个组件可以通过监听事件来参与启动过程。</p>
         </div>
     </div>
 

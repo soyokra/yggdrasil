@@ -381,7 +381,19 @@
 <li class="nav-item">
 <div class="nav-link">
 <span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/refresh-sequence-diagram.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/refresh-sequence-diagram.html">refresh-sequence-diagram</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
 <a href="../../../html/spring/spring启动源码分析/ServletWebServerApplicationContext.onRefresh.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/ServletWebServerApplicationContext.onRefresh.html">ServletWebServerApplicationContext.onRefresh</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/spring-boot-startup-flow.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/spring-boot-startup-flow.html">spring-boot-startup-flow</a>
 </div>
 </li>
 </ul>
@@ -488,7 +500,435 @@
     <!-- 主内容区 -->
     <div class="main-content">
         <div class="content-body">
-            
+            <h2 id="_1">简述</h2>
+<p>重置Spring核心的通用内省缓存，减少内存占用。</p>
+<p>这是refresh()方法finally块中的最后一步，无论refresh成功还是失败都会执行。</p>
+<p>在refresh完成后，某些用于类型分析的元数据缓存可能不再需要，清理这些缓存可以释放内存。</p>
+<h2 id="_2">核心流程</h2>
+<ol>
+<li>清理ReflectionUtils的缓存</li>
+<li>清理AnnotationUtils的缓存</li>
+<li>清理ResolvableType的缓存</li>
+<li>清理CachedIntrospectionResults的缓存</li>
+</ol>
+<h2 id="_3">源码分析</h2>
+<div class="hljs"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">abstract</span><span class="w"> </span><span class="kd">class</span> <span class="nc">AbstractApplicationContext</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">DefaultResourceLoader</span>
+<span class="w">        </span><span class="kd">implements</span><span class="w"> </span><span class="n">ConfigurableApplicationContext</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">refresh</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">BeansException</span><span class="p">,</span><span class="w"> </span><span class="n">IllegalStateException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">startupShutdownMonitor</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// ... 准备刷新</span>
+
+<span class="w">            </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// ... 各种初始化步骤</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">BeansException</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// 异常处理</span>
+<span class="w">                </span><span class="n">destroyBeans</span><span class="p">();</span>
+<span class="w">                </span><span class="n">cancelRefresh</span><span class="p">(</span><span class="n">ex</span><span class="p">);</span>
+<span class="w">                </span><span class="k">throw</span><span class="w"> </span><span class="n">ex</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">finally</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// 无论成功还是失败，都清理缓存</span>
+<span class="w">                </span><span class="c1">// 因为我们可能不再需要单例Bean的元数据了</span>
+<span class="w">                </span><span class="n">resetCommonCaches</span><span class="p">();</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="cm">/**</span>
+<span class="cm">     * 重置Spring核心中的通用内省缓存</span>
+<span class="cm">     * 从Spring 4.2开始，因为我们可能不再需要单例Bean的元数据</span>
+<span class="cm">     */</span>
+<span class="w">    </span><span class="kd">protected</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">resetCommonCaches</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">ReflectionUtils</span><span class="p">.</span><span class="na">clearCache</span><span class="p">();</span>
+<span class="w">        </span><span class="n">AnnotationUtils</span><span class="p">.</span><span class="na">clearCache</span><span class="p">();</span>
+<span class="w">        </span><span class="n">ResolvableType</span><span class="p">.</span><span class="na">clearCache</span><span class="p">();</span>
+<span class="w">        </span><span class="n">CachedIntrospectionResults</span><span class="p">.</span><span class="na">clearClassLoader</span><span class="p">(</span><span class="n">getClassLoader</span><span class="p">());</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="_4">各个缓存的作用</h2>
+<h3 id="1-reflectionutils">1. ReflectionUtils缓存</h3>
+<p>ReflectionUtils缓存反射相关的信息以提高性能：</p>
+<div class="hljs"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">abstract</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ReflectionUtils</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="cm">/**</span>
+<span class="cm">     * 方法缓存：Class -&gt; Method数组</span>
+<span class="cm">     * 缓存类的所有声明方法</span>
+<span class="cm">     */</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">Map</span><span class="o">&lt;</span><span class="n">Class</span><span class="o">&lt;?&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">Method</span><span class="o">[]&gt;</span><span class="w"> </span><span class="n">declaredMethodsCache</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+<span class="w">            </span><span class="k">new</span><span class="w"> </span><span class="n">ConcurrentReferenceHashMap</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="mi">256</span><span class="p">);</span>
+
+<span class="w">    </span><span class="cm">/**</span>
+<span class="cm">     * 字段缓存：Class -&gt; Field数组</span>
+<span class="cm">     * 缓存类的所有声明字段</span>
+<span class="cm">     */</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">Map</span><span class="o">&lt;</span><span class="n">Class</span><span class="o">&lt;?&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">Field</span><span class="o">[]&gt;</span><span class="w"> </span><span class="n">declaredFieldsCache</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+<span class="w">            </span><span class="k">new</span><span class="w"> </span><span class="n">ConcurrentReferenceHashMap</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="mi">256</span><span class="p">);</span>
+
+<span class="w">    </span><span class="cm">/**</span>
+<span class="cm">     * 清理缓存</span>
+<span class="cm">     */</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">clearCache</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">declaredMethodsCache</span><span class="p">.</span><span class="na">clear</span><span class="p">();</span>
+<span class="w">        </span><span class="n">declaredFieldsCache</span><span class="p">.</span><span class="na">clear</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="cm">/**</span>
+<span class="cm">     * 获取类的所有方法（使用缓存）</span>
+<span class="cm">     */</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="n">Method</span><span class="o">[]</span><span class="w"> </span><span class="nf">getDeclaredMethods</span><span class="p">(</span><span class="n">Class</span><span class="o">&lt;?&gt;</span><span class="w"> </span><span class="n">clazz</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Method</span><span class="o">[]</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">declaredMethodsCache</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="n">clazz</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">result</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">Method</span><span class="o">[]</span><span class="w"> </span><span class="n">declaredMethods</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">clazz</span><span class="p">.</span><span class="na">getDeclaredMethods</span><span class="p">();</span>
+<span class="w">                </span><span class="c1">// 过滤合成方法等</span>
+<span class="w">                </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Method</span><span class="o">&gt;</span><span class="w"> </span><span class="n">defaultMethods</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">findConcreteMethodsOnInterfaces</span><span class="p">(</span><span class="n">clazz</span><span class="p">);</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">defaultMethods</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Method</span><span class="o">[</span><span class="n">declaredMethods</span><span class="p">.</span><span class="na">length</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">defaultMethods</span><span class="p">.</span><span class="na">size</span><span class="p">()</span><span class="o">]</span><span class="p">;</span>
+<span class="w">                    </span><span class="n">System</span><span class="p">.</span><span class="na">arraycopy</span><span class="p">(</span><span class="n">declaredMethods</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">result</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">declaredMethods</span><span class="p">.</span><span class="na">length</span><span class="p">);</span>
+<span class="w">                    </span><span class="kt">int</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">declaredMethods</span><span class="p">.</span><span class="na">length</span><span class="p">;</span>
+<span class="w">                    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">Method</span><span class="w"> </span><span class="n">defaultMethod</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">defaultMethods</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                        </span><span class="n">result</span><span class="o">[</span><span class="n">index</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">defaultMethod</span><span class="p">;</span>
+<span class="w">                        </span><span class="n">index</span><span class="o">++</span><span class="p">;</span>
+<span class="w">                    </span><span class="p">}</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">                </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">declaredMethods</span><span class="p">;</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">                </span><span class="n">declaredMethodsCache</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="n">clazz</span><span class="p">,</span><span class="w"> </span><span class="n">result</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Throwable</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">IllegalStateException</span><span class="p">(</span><span class="s">"Failed to introspect Class ["</span><span class="w"> </span><span class="o">+</span><span class="w"> </span>
+<span class="w">                        </span><span class="n">clazz</span><span class="p">.</span><span class="na">getName</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">"]"</span><span class="p">,</span><span class="w"> </span><span class="n">ex</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">result</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>用途：<br/>
+- 在Bean实例化时查找构造函数<br/>
+- 在依赖注入时查找字段和方法<br/>
+- 在AOP代理时分析方法</p>
+<h3 id="2-annotationutils">2. AnnotationUtils缓存</h3>
+<p>AnnotationUtils缓存注解查找结果：</p>
+<div class="hljs"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">abstract</span><span class="w"> </span><span class="kd">class</span> <span class="nc">AnnotationUtils</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="cm">/**</span>
+<span class="cm">     * 注解属性缓存</span>
+<span class="cm">     */</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">Map</span><span class="o">&lt;</span><span class="n">AnnotationCacheKey</span><span class="p">,</span><span class="w"> </span><span class="n">Annotation</span><span class="o">&gt;</span><span class="w"> </span><span class="n">findAnnotationCache</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+<span class="w">            </span><span class="k">new</span><span class="w"> </span><span class="n">ConcurrentReferenceHashMap</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="mi">256</span><span class="p">);</span>
+
+<span class="w">    </span><span class="cm">/**</span>
+<span class="cm">     * 可合成注解缓存</span>
+<span class="cm">     */</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">Map</span><span class="o">&lt;</span><span class="n">AnnotationCacheKey</span><span class="p">,</span><span class="w"> </span><span class="n">Boolean</span><span class="o">&gt;</span><span class="w"> </span><span class="n">metaPresentCache</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+<span class="w">            </span><span class="k">new</span><span class="w"> </span><span class="n">ConcurrentReferenceHashMap</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="mi">256</span><span class="p">);</span>
+
+<span class="w">    </span><span class="cm">/**</span>
+<span class="cm">     * 清理缓存</span>
+<span class="cm">     */</span>
+<span class="w">    </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">clearCache</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">findAnnotationCache</span><span class="p">.</span><span class="na">clear</span><span class="p">();</span>
+<span class="w">        </span><span class="n">metaPresentCache</span><span class="p">.</span><span class="na">clear</span><span class="p">();</span>
+<span class="w">        </span><span class="c1">// 其他缓存...</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="cm">/**</span>
+<span class="cm">     * 查找注解（使用缓存）</span>
+<span class="cm">     */</span>
+<span class="w">    </span><span class="nd">@Nullable</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="o">&lt;</span><span class="n">A</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">Annotation</span><span class="o">&gt;</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="nf">findAnnotation</span><span class="p">(</span><span class="n">Class</span><span class="o">&lt;?&gt;</span><span class="w"> </span><span class="n">clazz</span><span class="p">,</span><span class="w"> </span>
+<span class="w">            </span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">Class</span><span class="o">&lt;</span><span class="n">A</span><span class="o">&gt;</span><span class="w"> </span><span class="n">annotationType</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">annotationType</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="n">AnnotationCacheKey</span><span class="w"> </span><span class="n">cacheKey</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">AnnotationCacheKey</span><span class="p">(</span><span class="n">clazz</span><span class="p">,</span><span class="w"> </span><span class="n">annotationType</span><span class="p">);</span>
+<span class="w">        </span><span class="n">A</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">A</span><span class="p">)</span><span class="w"> </span><span class="n">findAnnotationCache</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="n">cacheKey</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">result</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">findAnnotation</span><span class="p">(</span><span class="n">clazz</span><span class="p">,</span><span class="w"> </span><span class="n">annotationType</span><span class="p">,</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">HashSet</span><span class="o">&lt;&gt;</span><span class="p">());</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">result</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">findAnnotationCache</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="n">cacheKey</span><span class="p">,</span><span class="w"> </span><span class="n">result</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">result</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>用途：<br/>
+- 查找类上的注解（@Component、@Service等）<br/>
+- 查找方法上的注解（@Autowired、@Transactional等）<br/>
+- 查找元注解（注解的注解）</p>
+<h3 id="3-resolvabletype">3. ResolvableType缓存</h3>
+<p>ResolvableType缓存泛型类型信息：</p>
+<div class="hljs"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ResolvableType</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">Serializable</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="cm">/**</span>
+<span class="cm">     * 类型缓存：Type -&gt; ResolvableType</span>
+<span class="cm">     */</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">ConcurrentReferenceHashMap</span><span class="o">&lt;</span><span class="n">ResolvableType</span><span class="p">,</span><span class="w"> </span><span class="n">ResolvableType</span><span class="o">&gt;</span><span class="w"> </span><span class="n">cache</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+<span class="w">            </span><span class="k">new</span><span class="w"> </span><span class="n">ConcurrentReferenceHashMap</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="mi">256</span><span class="p">);</span>
+
+<span class="w">    </span><span class="cm">/**</span>
+<span class="cm">     * 清理缓存</span>
+<span class="cm">     */</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">clearCache</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">cache</span><span class="p">.</span><span class="na">clear</span><span class="p">();</span>
+<span class="w">        </span><span class="n">SerializableTypeWrapper</span><span class="p">.</span><span class="na">cache</span><span class="p">.</span><span class="na">clear</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="cm">/**</span>
+<span class="cm">     * 获取ResolvableType（使用缓存）</span>
+<span class="cm">     */</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="n">ResolvableType</span><span class="w"> </span><span class="nf">forType</span><span class="p">(</span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">Type</span><span class="w"> </span><span class="n">type</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">forType</span><span class="p">(</span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w"> </span><span class="kc">null</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">static</span><span class="w"> </span><span class="n">ResolvableType</span><span class="w"> </span><span class="nf">forType</span><span class="p">(</span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">Type</span><span class="w"> </span><span class="n">type</span><span class="p">,</span><span class="w"> </span>
+<span class="w">            </span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">TypeProvider</span><span class="w"> </span><span class="n">typeProvider</span><span class="p">,</span><span class="w"> </span>
+<span class="w">            </span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">VariableResolver</span><span class="w"> </span><span class="n">variableResolver</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">type</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">typeProvider</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SerializableTypeWrapper</span><span class="p">.</span><span class="na">forTypeProvider</span><span class="p">(</span><span class="n">typeProvider</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">type</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">NONE</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="n">ResolvableType</span><span class="w"> </span><span class="n">resultType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ResolvableType</span><span class="p">(</span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="n">typeProvider</span><span class="p">,</span><span class="w"> </span><span class="n">variableResolver</span><span class="p">);</span>
+<span class="w">        </span><span class="n">ResolvableType</span><span class="w"> </span><span class="n">cachedType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cache</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="n">resultType</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">cachedType</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">cachedType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">resultType</span><span class="p">;</span>
+<span class="w">            </span><span class="n">cache</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="n">cachedType</span><span class="p">,</span><span class="w"> </span><span class="n">cachedType</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">cachedType</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>用途：<br/>
+- 解析泛型类型（List<string>、Map<string, object="">等）<br/>
+- 匹配Bean的类型<br/>
+- 事件监听器的类型匹配</string,></string></p>
+<h3 id="4-cachedintrospectionresults">4. CachedIntrospectionResults缓存</h3>
+<p>CachedIntrospectionResults缓存JavaBeans内省结果：</p>
+<div class="hljs"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="kd">class</span> <span class="nc">CachedIntrospectionResults</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="cm">/**</span>
+<span class="cm">     * 类加载器 -&gt; 内省结果映射</span>
+<span class="cm">     */</span>
+<span class="w">    </span><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">ConcurrentMap</span><span class="o">&lt;</span><span class="n">Class</span><span class="o">&lt;?&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">CachedIntrospectionResults</span><span class="o">&gt;</span><span class="w"> </span><span class="n">strongClassCache</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+<span class="w">            </span><span class="k">new</span><span class="w"> </span><span class="n">ConcurrentHashMap</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="mi">64</span><span class="p">);</span>
+
+<span class="w">    </span><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">ConcurrentMap</span><span class="o">&lt;</span><span class="n">Class</span><span class="o">&lt;?&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">CachedIntrospectionResults</span><span class="o">&gt;</span><span class="w"> </span><span class="n">softClassCache</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+<span class="w">            </span><span class="k">new</span><span class="w"> </span><span class="n">ConcurrentReferenceHashMap</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="mi">64</span><span class="p">);</span>
+
+<span class="w">    </span><span class="cm">/**</span>
+<span class="cm">     * 接受的类加载器集合</span>
+<span class="cm">     */</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">Set</span><span class="o">&lt;</span><span class="n">ClassLoader</span><span class="o">&gt;</span><span class="w"> </span><span class="n">acceptedClassLoaders</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+<span class="w">            </span><span class="n">Collections</span><span class="p">.</span><span class="na">newSetFromMap</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">ConcurrentHashMap</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="mi">16</span><span class="p">));</span>
+
+<span class="w">    </span><span class="cm">/**</span>
+<span class="cm">     * 清理指定类加载器的缓存</span>
+<span class="cm">     */</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">clearClassLoader</span><span class="p">(</span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">ClassLoader</span><span class="w"> </span><span class="n">classLoader</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">acceptedClassLoaders</span><span class="p">.</span><span class="na">removeIf</span><span class="p">(</span><span class="n">registeredLoader</span><span class="w"> </span><span class="o">-&gt;</span>
+<span class="w">                </span><span class="n">isUnderneathClassLoader</span><span class="p">(</span><span class="n">registeredLoader</span><span class="p">,</span><span class="w"> </span><span class="n">classLoader</span><span class="p">));</span>
+
+<span class="w">        </span><span class="n">strongClassCache</span><span class="p">.</span><span class="na">keySet</span><span class="p">().</span><span class="na">removeIf</span><span class="p">(</span><span class="n">beanClass</span><span class="w"> </span><span class="o">-&gt;</span>
+<span class="w">                </span><span class="n">isUnderneathClassLoader</span><span class="p">(</span><span class="n">beanClass</span><span class="p">.</span><span class="na">getClassLoader</span><span class="p">(),</span><span class="w"> </span><span class="n">classLoader</span><span class="p">));</span>
+
+<span class="w">        </span><span class="n">softClassCache</span><span class="p">.</span><span class="na">keySet</span><span class="p">().</span><span class="na">removeIf</span><span class="p">(</span><span class="n">beanClass</span><span class="w"> </span><span class="o">-&gt;</span>
+<span class="w">                </span><span class="n">isUnderneathClassLoader</span><span class="p">(</span><span class="n">beanClass</span><span class="p">.</span><span class="na">getClassLoader</span><span class="p">(),</span><span class="w"> </span><span class="n">classLoader</span><span class="p">));</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="cm">/**</span>
+<span class="cm">     * 判断是否是子类加载器</span>
+<span class="cm">     */</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">isUnderneathClassLoader</span><span class="p">(</span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">ClassLoader</span><span class="w"> </span><span class="n">candidate</span><span class="p">,</span><span class="w"> </span>
+<span class="w">            </span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">ClassLoader</span><span class="w"> </span><span class="n">parent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">candidate</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">parent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">candidate</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">ClassLoader</span><span class="w"> </span><span class="n">classLoaderToCheck</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">candidate</span><span class="p">;</span>
+<span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">classLoaderToCheck</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">classLoaderToCheck</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">classLoaderToCheck</span><span class="p">.</span><span class="na">getParent</span><span class="p">();</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">classLoaderToCheck</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">parent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>用途：<br/>
+- 缓存Bean的属性描述符（PropertyDescriptor）<br/>
+- 用于属性绑定和数据绑定<br/>
+- 提高BeanWrapper的性能</p>
+<h2 id="_5">为什么要清理缓存？</h2>
+<h3 id="1">1. 减少内存占用</h3>
+<p>在refresh完成后：<br/>
+- 所有Bean已经实例化完成<br/>
+- 元数据缓存主要在Bean创建阶段使用<br/>
+- 清理缓存可以释放可观的内存</p>
+<h3 id="2">2. 避免内存泄漏</h3>
+<p>某些缓存可能持有Class引用，如果不清理：<br/>
+- 在类重新加载时可能导致内存泄漏<br/>
+- 在测试环境中尤其重要</p>
+<h3 id="3-bean">3. 适用于单例Bean场景</h3>
+<p>Spring的设计假设：<br/>
+- 大部分Bean是单例的<br/>
+- 单例Bean在refresh后不再需要重复创建<br/>
+- 因此元数据缓存可以安全清理</p>
+<h2 id="_6">何时不应该清理？</h2>
+<p>如果应用需要频繁创建原型Bean，清理缓存可能影响性能：</p>
+<div class="hljs"><pre><span></span><code><span class="c1">// 自定义ApplicationContext，不清理缓存</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">CustomApplicationContext</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">AnnotationConfigApplicationContext</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">protected</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">resetCommonCaches</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// 不清理缓存，保持性能</span>
+<span class="w">        </span><span class="c1">// super.resetCommonCaches();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>但通常情况下，保留默认行为即可。</p>
+<h2 id="_7">缓存清理的时机</h2>
+<div class="hljs"><pre><span></span><code><span class="nd">@Override</span>
+<span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">refresh</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">BeansException</span><span class="p">,</span><span class="w"> </span><span class="n">IllegalStateException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">startupShutdownMonitor</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">prepareRefresh</span><span class="p">();</span>
+
+<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// ... 所有初始化步骤</span>
+<span class="w">            </span><span class="c1">// 在这些步骤中会使用各种缓存</span>
+<span class="w">            </span><span class="n">finishBeanFactoryInitialization</span><span class="p">(</span><span class="n">beanFactory</span><span class="p">);</span>
+<span class="w">            </span><span class="n">finishRefresh</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">BeansException</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// 即使失败也要清理</span>
+<span class="w">            </span><span class="n">destroyBeans</span><span class="p">();</span>
+<span class="w">            </span><span class="n">cancelRefresh</span><span class="p">(</span><span class="n">ex</span><span class="p">);</span>
+<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="n">ex</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">finally</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// 最后清理缓存</span>
+<span class="w">            </span><span class="c1">// 无论成功还是失败都执行</span>
+<span class="w">            </span><span class="n">resetCommonCaches</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>时机选择的原因：<br/>
+- <strong>在finally块中</strong>：确保无论成功失败都执行<br/>
+- <strong>在最后一步</strong>：确保所有可能使用缓存的操作都已完成</p>
+<h2 id="_8">内存影响</h2>
+<p>根据应用规模，这些缓存可能占用的内存：</p>
+<table>
+<thead>
+<tr>
+<th>应用规模</th>
+<th>Bean数量</th>
+<th>预估缓存大小</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>小型</td>
+<td>&lt; 100</td>
+<td>&lt; 1MB</td>
+</tr>
+<tr>
+<td>中型</td>
+<td>100-500</td>
+<td>1-5MB</td>
+</tr>
+<tr>
+<td>大型</td>
+<td>&gt; 500</td>
+<td>5-20MB</td>
+</tr>
+</tbody>
+</table>
+<p>对于大型应用，清理这些缓存可以节省可观的内存。</p>
+<h2 id="concurrentreferencehashmap">ConcurrentReferenceHashMap</h2>
+<p>Spring使用ConcurrentReferenceHashMap作为缓存，它支持弱引用和软引用：</p>
+<div class="hljs"><pre><span></span><code><span class="c1">// 弱引用缓存（GC时可以回收）</span>
+<span class="n">Map</span><span class="o">&lt;</span><span class="n">Class</span><span class="o">&lt;?&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">Method</span><span class="o">[]&gt;</span><span class="w"> </span><span class="n">cache</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ConcurrentReferenceHashMap</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span><span class="w"> </span><span class="n">ReferenceType</span><span class="p">.</span><span class="na">WEAK</span><span class="p">);</span>
+
+<span class="c1">// 软引用缓存（内存不足时回收）</span>
+<span class="n">Map</span><span class="o">&lt;</span><span class="n">Class</span><span class="o">&lt;?&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">Method</span><span class="o">[]&gt;</span><span class="w"> </span><span class="n">cache</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ConcurrentReferenceHashMap</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span><span class="w"> </span><span class="n">ReferenceType</span><span class="p">.</span><span class="na">SOFT</span><span class="p">);</span>
+</code></pre></div>
+<p>即使不显式清理，GC也可能回收这些缓存，但显式清理更及时。</p>
+<h2 id="_9">开发和生产环境的差异</h2>
+<h3 id="_10">开发环境</h3>
+<ul>
+<li>可能需要热重载</li>
+<li>缓存清理很重要，避免内存泄漏</li>
+<li>Spring DevTools会自动处理</li>
+</ul>
+<h3 id="_11">生产环境</h3>
+<ul>
+<li>应用启动后很少重启</li>
+<li>缓存清理节省启动后的内存</li>
+<li>原型Bean较少，影响有限</li>
+</ul>
+<h2 id="_12">最佳实践</h2>
+<h3 id="1_1">1. 保持默认行为</h3>
+<p>大多数情况下，不需要自定义：</p>
+<div class="hljs"><pre><span></span><code><span class="c1">// 推荐：使用默认实现</span>
+<span class="nd">@SpringBootApplication</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Application</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">SpringApplication</span><span class="p">.</span><span class="na">run</span><span class="p">(</span><span class="n">Application</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="2_1">2. 监控内存使用</h3>
+<div class="hljs"><pre><span></span><code><span class="nd">@Component</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MemoryMonitor</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">ApplicationListener</span><span class="o">&lt;</span><span class="n">ContextRefreshedEvent</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">onApplicationEvent</span><span class="p">(</span><span class="n">ContextRefreshedEvent</span><span class="w"> </span><span class="n">event</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Runtime</span><span class="w"> </span><span class="n">runtime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Runtime</span><span class="p">.</span><span class="na">getRuntime</span><span class="p">();</span>
+<span class="w">        </span><span class="kt">long</span><span class="w"> </span><span class="n">usedMemory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">runtime</span><span class="p">.</span><span class="na">totalMemory</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">runtime</span><span class="p">.</span><span class="na">freeMemory</span><span class="p">();</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Memory used after refresh: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span>
+<span class="w">                          </span><span class="p">(</span><span class="n">usedMemory</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1024</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1024</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">"MB"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="3-bean_1">3. 大量原型Bean的处理</h3>
+<p>如果应用有大量原型Bean：</p>
+<div class="hljs"><pre><span></span><code><span class="nd">@Configuration</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">PrototypeBeanConfig</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="c1">// 考虑使用对象池而不是每次创建</span>
+<span class="w">    </span><span class="nd">@Bean</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">GenericObjectPool</span><span class="o">&lt;</span><span class="n">MyPrototypeBean</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">beanPool</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">GenericObjectPool</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">MyPrototypeBeanFactory</span><span class="p">());</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="_13">参考调用栈</h2>
+<div class="hljs"><pre><span></span><code>resetCommonCaches:1065, AbstractApplicationContext (org.springframework.context.support)
+refresh:561, AbstractApplicationContext (org.springframework.context.support)
+refresh:143, ServletWebServerApplicationContext (org.springframework.boot.web.servlet.context)
+refresh:755, SpringApplication (org.springframework.boot)
+refreshContext:402, SpringApplication (org.springframework.boot)
+run:312, SpringApplication (org.springframework.boot)
+</code></pre></div>
+<h2 id="_14">相关链接</h2>
+<ul>
+<li><a href="AbstractApplicationContext.finishRefresh.html">AbstractApplicationContext.finishRefresh</a></li>
+<li><a href="AbstractApplicationContext.cancelRefresh.html">AbstractApplicationContext.cancelRefresh</a></li>
+</ul>
         </div>
     </div>
 

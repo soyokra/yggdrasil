@@ -381,7 +381,19 @@
 <li class="nav-item">
 <div class="nav-link">
 <span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/refresh-sequence-diagram.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/refresh-sequence-diagram.html">refresh-sequence-diagram</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
 <a href="../../../html/spring/spring启动源码分析/ServletWebServerApplicationContext.onRefresh.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/ServletWebServerApplicationContext.onRefresh.html">ServletWebServerApplicationContext.onRefresh</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/spring-boot-startup-flow.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/spring-boot-startup-flow.html">spring-boot-startup-flow</a>
 </div>
 </li>
 </ul>
@@ -488,7 +500,148 @@
     <!-- 主内容区 -->
     <div class="main-content">
         <div class="content-body">
-            
+            <h2 id="_1">简述</h2>
+<p>onRefresh()是refresh()过程中的一个模板方法，留给子类扩展，用于初始化特定的Bean。</p>
+<p>这是refresh()的第9步，在所有普通Bean实例化之前执行，允许子类创建一些特殊的Bean。</p>
+<p>对于SpringBoot的Web应用，ServletWebServerApplicationContext在这一步创建并初始化嵌入式Web服务器（Tomcat、Jetty或Undertow）。</p>
+<h2 id="_2">核心流程</h2>
+<ol>
+<li>AbstractApplicationContext提供空实现</li>
+<li>ServletWebServerApplicationContext重写此方法</li>
+<li>创建WebServer（通过ServletWebServerFactory）</li>
+<li>将WebServer相关的生命周期Bean注册到容器中</li>
+</ol>
+<h2 id="_3">源码分析</h2>
+<p>AbstractApplicationContext的模板方法（空实现）：</p>
+<div class="hljs"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">abstract</span><span class="w"> </span><span class="kd">class</span> <span class="nc">AbstractApplicationContext</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">DefaultResourceLoader</span>
+<span class="w">        </span><span class="kd">implements</span><span class="w"> </span><span class="n">ConfigurableApplicationContext</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">refresh</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">BeansException</span><span class="p">,</span><span class="w"> </span><span class="n">IllegalStateException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">startupShutdownMonitor</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// ... 前面的步骤</span>
+
+<span class="w">            </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// ... prepareBeanFactory、postProcessBeanFactory等</span>
+
+<span class="w">                </span><span class="c1">// 调用onRefresh模板方法</span>
+<span class="w">                </span><span class="n">onRefresh</span><span class="p">();</span>
+
+<span class="w">                </span><span class="c1">// ... 后续步骤</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">BeansException</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// 异常处理</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="cm">/**</span>
+<span class="cm">     * 模板方法，子类可以重写以初始化特殊的Bean</span>
+<span class="cm">     * 在单例Bean实例化之前调用</span>
+<span class="cm">     */</span>
+<span class="w">    </span><span class="kd">protected</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">onRefresh</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">BeansException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// 默认空实现，供子类重写</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="servletwebserverapplicationcontext">ServletWebServerApplicationContext的实现</h2>
+<p>详见：<a href="ServletWebServerApplicationContext.onRefresh.html">ServletWebServerApplicationContext.onRefresh</a></p>
+<p>ServletWebServerApplicationContext重写了onRefresh方法，创建嵌入式Web服务器：</p>
+<div class="hljs"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ServletWebServerApplicationContext</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">GenericWebApplicationContext</span>
+<span class="w">        </span><span class="kd">implements</span><span class="w"> </span><span class="n">ConfigurableWebServerApplicationContext</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">protected</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">onRefresh</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// 调用父类实现</span>
+<span class="w">        </span><span class="kd">super</span><span class="p">.</span><span class="na">onRefresh</span><span class="p">();</span>
+<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// 创建Web服务器</span>
+<span class="w">            </span><span class="n">createWebServer</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Throwable</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ApplicationContextException</span><span class="p">(</span><span class="s">"Unable to start web server"</span><span class="p">,</span><span class="w"> </span><span class="n">ex</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">createWebServer</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">WebServer</span><span class="w"> </span><span class="n">webServer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">webServer</span><span class="p">;</span>
+<span class="w">        </span><span class="n">ServletContext</span><span class="w"> </span><span class="n">servletContext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getServletContext</span><span class="p">();</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">webServer</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">servletContext</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// 获取ServletWebServerFactory（Tomcat/Jetty/Undertow）</span>
+<span class="w">            </span><span class="n">ServletWebServerFactory</span><span class="w"> </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getWebServerFactory</span><span class="p">();</span>
+<span class="w">            </span><span class="c1">// 创建WebServer实例</span>
+<span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="na">webServer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">factory</span><span class="p">.</span><span class="na">getWebServer</span><span class="p">(</span><span class="n">getSelfInitializer</span><span class="p">());</span>
+
+<span class="w">            </span><span class="c1">// 注册WebServer生命周期Bean</span>
+<span class="w">            </span><span class="n">getBeanFactory</span><span class="p">().</span><span class="na">registerSingleton</span><span class="p">(</span><span class="s">"webServerGracefulShutdown"</span><span class="p">,</span>
+<span class="w">                    </span><span class="k">new</span><span class="w"> </span><span class="n">WebServerGracefulShutdownLifecycle</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">webServer</span><span class="p">));</span>
+<span class="w">            </span><span class="n">getBeanFactory</span><span class="p">().</span><span class="na">registerSingleton</span><span class="p">(</span><span class="s">"webServerStartStop"</span><span class="p">,</span>
+<span class="w">                    </span><span class="k">new</span><span class="w"> </span><span class="n">WebServerStartStopLifecycle</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">webServer</span><span class="p">));</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">servletContext</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// 外部Servlet容器的情况</span>
+<span class="w">            </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">getSelfInitializer</span><span class="p">().</span><span class="na">onStartup</span><span class="p">(</span><span class="n">servletContext</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">ServletException</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ApplicationContextException</span><span class="p">(</span><span class="s">"Cannot initialize servlet context"</span><span class="p">,</span><span class="w"> </span><span class="n">ex</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">initPropertySources</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="webserver">为什么在这个时机创建WebServer？</h2>
+<ol>
+<li><strong>在普通Bean之前</strong>：WebServer需要在应用Bean实例化前准备好</li>
+<li><strong>BeanFactory已配置</strong>：此时BeanFactory已经准备完毕，可以获取配置Bean</li>
+<li><strong>BeanDefinition已注册</strong>：所有的Bean定义都已经注册，可以查找ServletWebServerFactory</li>
+<li><strong>还未实例化Bean</strong>：WebServer的Servlet初始化器可能需要访问Spring Bean</li>
+</ol>
+<h2 id="_4">其他可能的扩展点</h2>
+<p>不同类型的ApplicationContext可以在onRefresh中做不同的初始化：</p>
+<ul>
+<li><strong>ServletWebServerApplicationContext</strong>：创建嵌入式Web服务器</li>
+<li><strong>ReactiveWebServerApplicationContext</strong>：创建响应式Web服务器</li>
+<li><strong>StaticWebApplicationContext</strong>：可以注册特殊的作用域</li>
+<li><strong>自定义ApplicationContext</strong>：可以初始化任何特定资源</li>
+</ul>
+<h2 id="_5">与其他扩展点的区别</h2>
+<table>
+<thead>
+<tr>
+<th>扩展点</th>
+<th>时机</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>postProcessBeanFactory()</td>
+<td>BeanFactory创建后</td>
+<td>修改BeanFactory配置</td>
+</tr>
+<tr>
+<td>onRefresh()</td>
+<td>BeanPostProcessor注册后</td>
+<td>初始化特殊Bean</td>
+</tr>
+<tr>
+<td>finishRefresh()</td>
+<td>所有Bean实例化后</td>
+<td>发布完成事件</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_6">参考调用栈</h2>
+<div class="hljs"><pre><span></span><code>onRefresh:923, AbstractApplicationContext (org.springframework.context.support)
+refresh:545, AbstractApplicationContext (org.springframework.context.support)
+refresh:143, ServletWebServerApplicationContext (org.springframework.boot.web.servlet.context)
+refresh:755, SpringApplication (org.springframework.boot)
+refreshContext:402, SpringApplication (org.springframework.boot)
+run:312, SpringApplication (org.springframework.boot)
+</code></pre></div>
         </div>
     </div>
 
