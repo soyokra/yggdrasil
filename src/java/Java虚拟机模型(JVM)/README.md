@@ -1,0 +1,781 @@
+# Java虚拟机模型(JVM)
+
+## Java执行流程
+![java_runtime.png](java_runtime.png)
+
+## JVM模型
+![jvm_model.png](jvm_model.png)
+
+## 技术索引
+- 字节码技术
+  - Class文件结构
+    - 魔数与版本
+      - 魔数(0xCAFEBABE)
+      - 主版本号
+      - 次版本号
+    - 常量池
+      - CONSTANT_Utf8_info
+      - CONSTANT_Integer_info
+      - CONSTANT_Float_info
+      - CONSTANT_Long_info
+      - CONSTANT_Double_info
+      - CONSTANT_Class_info
+      - CONSTANT_String_info
+      - CONSTANT_Fieldref_info
+      - CONSTANT_Methodref_info
+      - CONSTANT_InterfaceMethodref_info
+      - CONSTANT_NameAndType_info
+      - CONSTANT_MethodHandle_info
+      - CONSTANT_MethodType_info
+      - CONSTANT_InvokeDynamic_info
+    - 访问标志
+      - ACC_PUBLIC
+      - ACC_FINAL
+      - ACC_SUPER
+      - ACC_INTERFACE
+      - ACC_ABSTRACT
+      - ACC_SYNTHETIC
+      - ACC_ANNOTATION
+      - ACC_ENUM
+    - 类索引、父类索引、接口索引集合
+    - 字段表集合
+      - 字段访问标志
+      - 字段名称索引
+      - 字段描述符索引
+      - 字段属性表集合
+    - 方法表集合
+      - 方法访问标志
+      - 方法名称索引
+      - 方法描述符索引
+      - 方法属性表集合
+    - 属性表集合
+      - Code属性
+      - Exceptions属性
+      - LineNumberTable属性
+      - LocalVariableTable属性
+      - SourceFile属性
+      - ConstantValue属性
+      - InnerClasses属性
+      - Deprecated属性
+      - Synthetic属性
+      - StackMapTable属性
+      - Signature属性
+      - BootstrapMethods属性
+  - 字节码指令集
+    - 加载和存储指令
+      - load系列
+      - store系列
+      - ldc系列
+    - 运算指令
+      - add
+      - sub
+      - mul
+      - div
+      - rem
+      - neg
+      - shl
+      - shr
+      - ushr
+      - and
+      - or
+      - xor
+      - inc
+    - 类型转换指令
+      - i2l、i2f、i2d
+      - l2i、l2f、l2d
+      - f2i、f2l、f2d
+      - d2i、d2l、d2f
+      - i2b、i2c、i2s
+    - 对象创建与访问指令
+      - new
+      - newarray
+      - anewarray
+      - multianewarray
+      - getfield
+      - putfield
+      - getstatic
+      - putstatic
+      - baload
+      - caload
+      - saload
+      - iaload
+      - laload
+      - faload
+      - daload
+      - aaload
+      - bastore
+      - castore
+      - sastore
+      - iastore
+      - lastore
+      - fastore
+      - dastore
+      - aastore
+      - arraylength
+      - instanceof
+      - checkcast
+    - 操作数栈管理指令
+      - pop
+      - pop2
+      - dup
+      - dup_x1
+      - dup_x2
+      - dup2
+      - dup2_x1
+      - dup2_x2
+      - swap
+    - 控制转移指令
+      - ifeq
+      - ifne
+      - iflt
+      - ifle
+      - ifgt
+      - ifge
+      - ifnull
+      - ifnonnull
+      - if_icmpeq
+      - if_icmpne
+      - if_icmplt
+      - if_icmple
+      - if_icmpgt
+      - if_icmpge
+      - if_acmpeq
+      - if_acmpne
+      - goto
+      - jsr
+      - ret
+      - tableswitch
+      - lookupswitch
+    - 方法调用和返回指令
+      - invokevirtual
+      - invokeinterface
+      - invokespecial
+      - invokestatic
+      - invokedynamic
+      - ireturn
+      - lreturn
+      - freturn
+      - dreturn
+      - areturn
+      - return
+    - 异常处理指令
+      - athrow
+    - 同步指令
+      - monitorenter
+      - monitorexit
+  - 字节码工具
+    - javap
+    - ASM
+    - Javassist
+    - ByteBuddy
+    - BCEL
+- 类加载机制
+  - 类加载时机
+    - 遇到new、getstatic、putstatic、invokestatic指令
+    - 使用reflect包方法对类反射调用
+    - 初始化类时父类未初始化
+    - 虚拟机启动时的主类
+    - JDK7动态语言支持
+  - 类加载过程
+    - 加载
+      - 通过类的全限定名获取二进制字节流
+      - 将字节流代表的静态存储结构转化为方法区的运行时数据结构
+      - 在内存中生成Class对象
+    - 验证
+      - 文件格式验证
+      - 元数据验证
+      - 字节码验证
+      - 符号引用验证
+    - 准备
+      - 为类变量分配内存
+      - 设置类变量初始值
+    - 解析
+      - 符号引用替换为直接引用
+      - 类或接口的解析
+      - 字段解析
+      - 类方法解析
+      - 接口方法解析
+    - 初始化
+      - 执行类构造器<clinit>()方法
+  - 类加载器
+    - 启动类加载器(Bootstrap ClassLoader)
+    - 扩展类加载器(Extension ClassLoader)
+    - 应用程序类加载器(Application ClassLoader)
+    - 自定义类加载器
+  - 类加载器特性
+    - 双亲委派模型
+    - 破坏双亲委派模型
+      - JNDI
+      - JDBC
+      - SPI
+      - OSGi
+    - 线程上下文类加载器
+  - 类加载器实践
+    - 热部署
+    - 模块化
+    - 类隔离
+- 运行时数据区
+  - 程序计数器(PC Register)
+    - 当前线程所执行字节码的行号指示器
+    - 线程私有
+    - 唯一不会OutOfMemoryError的区域
+  - Java虚拟机栈(VM Stack)
+    - 线程私有
+    - 生命周期与线程相同
+    - 栈帧(Stack Frame)
+      - 局部变量表
+        - Slot复用
+        - 变量槽
+        - this指针
+      - 操作数栈
+        - 栈深度
+        - 数据类型
+      - 动态链接
+        - 符号引用
+        - 直接引用
+      - 方法返回地址
+        - 正常退出
+        - 异常退出
+    - 异常
+      - StackOverflowError
+      - OutOfMemoryError
+  - 本地方法栈(Native Method Stack)
+    - 线程私有
+    - 为Native方法服务
+    - StackOverflowError
+    - OutOfMemoryError
+  - Java堆(Heap)
+    - 线程共享
+    - 虚拟机启动时创建
+    - 存放对象实例
+    - 垃圾收集的主要区域
+    - 分代设计
+      - 新生代(Young Generation)
+        - Eden空间
+        - From Survivor空间
+        - To Survivor空间
+        - 默认比例8:1:1
+      - 老年代(Old Generation)
+      - 永久代(PermGen, JDK7及之前)
+    - 内存分配
+      - 对象优先在Eden分配
+      - 大对象直接进入老年代
+      - 长期存活对象进入老年代
+      - 动态对象年龄判定
+      - 空间分配担保
+    - 堆参数
+      - -Xms(初始堆大小)
+      - -Xmx(最大堆大小)
+      - -Xmn(新生代大小)
+      - -XX:SurvivorRatio
+      - -XX:MaxTenuringThreshold
+      - -XX:PretenureSizeThreshold
+      - -XX:+UseAdaptiveSizePolicy
+    - OutOfMemoryError
+  - 方法区(Method Area)
+    - 线程共享
+    - 存储类信息、常量、静态变量、即时编译器编译后的代码
+    - 运行时常量池
+      - Class文件常量池
+      - 运行期动态添加
+      - String.intern()
+    - 永久代实现(JDK7及之前)
+      - -XX:PermSize
+      - -XX:MaxPermSize
+      - OutOfMemoryError: PermGen space
+    - 元空间实现(JDK8及之后)
+      - -XX:MetaspaceSize
+      - -XX:MaxMetaspaceSize
+      - 使用本地内存
+      - OutOfMemoryError: Metaspace
+    - 方法区回收
+      - 废弃常量
+      - 无用的类
+  - 直接内存(Direct Memory)
+    - NIO
+    - ByteBuffer.allocateDirect()
+    - -XX:MaxDirectMemorySize
+    - OutOfMemoryError
+- 执行引擎
+  - 解释执行
+    - 逐条解释字节码指令
+    - 启动快
+    - 执行慢
+  - 编译执行
+    - 即时编译器(JIT Compiler)
+      - C1编译器(Client Compiler)
+        - 简单优化
+        - 编译快
+      - C2编译器(Server Compiler)
+        - 激进优化
+        - 编译慢
+        - 性能好
+      - Graal编译器
+    - 分层编译
+      - 0层: 解释执行
+      - 1层: C1编译,无profile
+      - 2层: C1编译,仅方法调用次数profile
+      - 3层: C1编译,完整profile
+      - 4层: C2编译
+    - 编译触发
+      - 方法调用计数器
+      - 回边计数器
+      - -XX:CompileThreshold
+    - 编译优化技术
+      - 方法内联
+      - 逃逸分析
+        - 栈上分配
+        - 标量替换
+        - 同步消除
+      - 公共子表达式消除
+      - 数组边界检查消除
+      - 死代码消除
+      - 循环展开
+      - 循环表达式外提
+      - 空值检查消除
+      - 类型检测优化
+      - 范围检查消除
+  - 编译参数
+    - -XX:+TieredCompilation
+    - -XX:ReservedCodeCacheSize
+    - -XX:+PrintCompilation
+    - -XX:+UnlockDiagnosticVMOptions
+    - -XX:+PrintInlining
+    - -XX:+DoEscapeAnalysis
+- 对象
+  - 对象创建
+    - new指令
+    - 类加载检查
+    - 分配内存
+      - 指针碰撞
+      - 空闲列表
+      - 并发安全
+        - CAS
+        - TLAB(Thread Local Allocation Buffer)
+    - 初始化零值
+    - 设置对象头
+    - 执行<init>方法
+  - 对象内存布局
+    - 对象头(Header)
+      - Mark Word
+        - 哈希码
+        - GC分代年龄
+        - 锁状态标志
+        - 线程持有的锁
+        - 偏向线程ID
+        - 偏向时间戳
+      - 类型指针(Klass Pointer)
+      - 数组长度(仅数组对象)
+    - 实例数据(Instance Data)
+      - 字段内容
+      - 父类字段
+      - 字段对齐
+    - 对齐填充(Padding)
+      - 8字节的整数倍
+  - 对象访问定位
+    - 句柄访问
+    - 直接指针访问
+  - 对象分配
+    - 栈上分配
+    - TLAB分配
+    - Eden区分配
+    - 老年代分配
+- 垃圾收集
+  - 对象存活判定
+    - 引用计数算法
+      - 无法解决循环引用
+    - 可达性分析算法
+      - GC Roots
+        - 虚拟机栈中引用的对象
+        - 方法区中类静态属性引用的对象
+        - 方法区中常量引用的对象
+        - 本地方法栈中JNI引用的对象
+        - JVM内部引用
+        - 被同步锁持有的对象
+  - 引用类型
+    - 强引用(Strong Reference)
+    - 软引用(Soft Reference)
+      - SoftReference
+      - 内存不足时回收
+    - 弱引用(Weak Reference)
+      - WeakReference
+      - GC时回收
+    - 虚引用(Phantom Reference)
+      - PhantomReference
+      - 无法通过虚引用获取对象
+      - 跟踪对象回收
+    - 终结器引用(Finalizer Reference)
+  - 对象回收
+    - finalize()方法
+    - 引用队列
+    - 两次标记
+  - 方法区回收
+    - 废弃常量回收
+    - 类型卸载
+      - 该类所有实例已被回收
+      - 加载该类的ClassLoader已被回收
+      - 该类的Class对象没有被引用
+  - 垃圾收集算法
+    - 标记-清除算法(Mark-Sweep)
+      - 标记阶段
+      - 清除阶段
+      - 产生内存碎片
+      - 效率不稳定
+    - 标记-复制算法(Mark-Copy)
+      - 半区复制
+      - Eden-Survivor设计
+      - 无内存碎片
+      - 空间浪费
+    - 标记-整理算法(Mark-Compact)
+      - 标记阶段
+      - 整理阶段
+      - 无内存碎片
+      - 移动对象成本高
+    - 分代收集理论
+      - 弱分代假说
+      - 强分代假说
+      - 跨代引用假说
+      - 新生代收集(Minor GC/Young GC)
+      - 老年代收集(Major GC/Old GC)
+      - 整堆收集(Full GC)
+      - 混合收集(Mixed GC)
+  - 垃圾收集器
+    - Serial收集器
+      - 单线程
+      - 新生代
+      - 标记-复制算法
+      - Stop The World
+      - -XX:+UseSerialGC
+    - ParNew收集器
+      - Serial的多线程版本
+      - 新生代
+      - 标记-复制算法
+      - -XX:+UseParNewGC
+      - -XX:ParallelGCThreads
+    - Parallel Scavenge收集器
+      - 多线程
+      - 新生代
+      - 标记-复制算法
+      - 吞吐量优先
+      - -XX:+UseParallelGC
+      - -XX:MaxGCPauseMillis
+      - -XX:GCTimeRatio
+      - -XX:+UseAdaptiveSizePolicy
+    - Serial Old收集器
+      - Serial的老年代版本
+      - 单线程
+      - 标记-整理算法
+      - CMS的后备方案
+    - Parallel Old收集器
+      - Parallel Scavenge的老年代版本
+      - 多线程
+      - 标记-整理算法
+      - -XX:+UseParallelOldGC
+    - CMS收集器(Concurrent Mark Sweep)
+      - 老年代
+      - 标记-清除算法
+      - 低停顿
+      - 并发收集
+      - 执行过程
+        - 初始标记(STW)
+        - 并发标记
+        - 重新标记(STW)
+        - 并发清除
+      - 缺点
+        - CPU资源敏感
+        - 无法处理浮动垃圾
+        - 内存碎片
+        - Concurrent Mode Failure
+      - 参数
+        - -XX:+UseConcMarkSweepGC
+        - -XX:CMSInitiatingOccupancyFraction
+        - -XX:+UseCMSCompactAtFullCollection
+        - -XX:CMSFullGCsBeforeCompaction
+        - -XX:+CMSParallelRemarkEnabled
+        - -XX:+CMSScavengeBeforeRemark
+    - G1收集器(Garbage First)
+      - 面向服务端
+      - 并行与并发
+      - 分代收集
+      - 空间整合
+      - 可预测的停顿
+      - Region设计
+        - Eden Region
+        - Survivor Region
+        - Old Region
+        - Humongous Region
+      - 执行过程
+        - 初始标记(STW)
+        - 并发标记
+        - 最终标记(STW)
+        - 筛选回收(STW)
+      - Remembered Set
+      - Collection Set
+      - 写屏障
+      - SATB(Snapshot At The Beginning)
+      - 参数
+        - -XX:+UseG1GC
+        - -XX:G1HeapRegionSize
+        - -XX:MaxGCPauseMillis
+        - -XX:G1NewSizePercent
+        - -XX:G1MaxNewSizePercent
+        - -XX:G1ReservePercent
+        - -XX:InitiatingHeapOccupancyPercent
+        - -XX:ConcGCThreads
+        - -XX:G1MixedGCCountTarget
+        - -XX:G1HeapWastePercent
+    - ZGC收集器(Z Garbage Collector)
+      - JDK11引入
+      - 低延迟
+      - TB级堆
+      - 停顿时间不超过10ms
+      - 并发
+      - 基于Region
+      - 染色指针(Colored Pointer)
+      - 读屏障
+      - 执行过程
+        - 初始标记(STW)
+        - 并发标记
+        - 再标记(STW)
+        - 并发转移准备
+        - 初始转移(STW)
+        - 并发转移
+      - 参数
+        - -XX:+UseZGC
+        - -XX:ZCollectionInterval
+        - -XX:ZAllocationSpikeTolerance
+    - Shenandoah收集器
+      - OpenJDK
+      - 低延迟
+      - 并发整理
+      - 连接矩阵
+      - 转发指针
+      - 读写屏障
+      - 执行过程
+        - 初始标记(STW)
+        - 并发标记
+        - 最终标记(STW)
+        - 并发清理
+        - 并发回收
+        - 初始引用更新(STW)
+        - 并发引用更新
+        - 最终引用更新(STW)
+        - 并发清理
+      - 参数
+        - -XX:+UseShenandoahGC
+    - Epsilon收集器
+      - 无操作收集器
+      - 性能测试
+      - -XX:+UseEpsilonGC
+  - GC日志
+    - -XX:+PrintGC
+    - -XX:+PrintGCDetails
+    - -XX:+PrintGCTimeStamps
+    - -XX:+PrintGCDateStamps
+    - -XX:+PrintHeapAtGC
+    - -XX:+PrintTenuringDistribution
+    - -Xloggc:文件路径
+    - -XX:+UseGCLogFileRotation
+    - -XX:NumberOfGCLogFiles
+    - -XX:GCLogFileSize
+  - 内存分配策略
+    - 对象优先在Eden分配
+    - 大对象直接进入老年代
+    - 长期存活对象进入老年代
+    - 动态对象年龄判定
+    - 空间分配担保
+- JVM调优
+  - 内存调优
+    - 堆大小调整
+    - 新生代老年代比例
+    - Survivor区大小
+    - 永久代/元空间大小
+    - 直接内存大小
+  - GC调优
+    - 选择合适的垃圾收集器
+    - 调整GC触发时机
+    - 减少Full GC
+    - 减少GC停顿时间
+    - 提高GC吞吐量
+  - 线程调优
+    - 线程栈大小
+    - -XX:ThreadStackSize
+    - -Xss
+  - 代码优化
+    - 对象复用
+    - 减少临时对象
+    - 使用原始类型
+    - 延迟初始化
+    - 字符串优化
+  - JVM参数
+    - 标准参数
+      - -version
+      - -help
+      - -server
+      - -client
+    - -X参数
+      - -Xms
+      - -Xmx
+      - -Xmn
+      - -Xss
+      - -Xint
+      - -Xcomp
+      - -Xmixed
+    - -XX参数
+      - Boolean类型
+        - -XX:+<option>
+        - -XX:-<option>
+      - 数值类型
+        - -XX:<option>=<value>
+- 监控与诊断工具
+  - 命令行工具
+    - jps
+      - 查看Java进程
+      - -l, -v, -m参数
+    - jstat
+      - 监控虚拟机统计信息
+      - -gc, -gcutil, -gccause
+      - -class, -compiler
+    - jinfo
+      - 查看和修改JVM参数
+      - -flag, -flags
+      - -sysprops
+    - jmap
+      - 生成堆转储快照
+      - -heap
+      - -histo
+      - -dump
+      - -finalizerinfo
+    - jhat
+      - 分析堆转储快照
+      - 已废弃
+    - jstack
+      - 生成线程快照
+      - -l, -F参数
+      - 死锁检测
+    - jcmd
+      - 多功能命令行工具
+      - VM.flags
+      - VM.system_properties
+      - GC.heap_info
+      - Thread.print
+      - GC.run
+  - 可视化工具
+    - JConsole
+      - 内存监控
+      - 线程监控
+      - 类加载监控
+      - MBean
+    - VisualVM
+      - 监控
+      - 分析
+      - 故障排查
+      - 插件扩展
+    - Java Mission Control
+      - JMC
+      - JFR(Java Flight Recorder)
+      - 事件采样
+      - 性能分析
+    - MAT(Memory Analyzer Tool)
+      - 堆转储分析
+      - 内存泄漏检测
+      - OQL查询
+      - 支配树
+    - GCViewer
+      - GC日志可视化
+    - GCEasy
+      - 在线GC日志分析
+    - Arthas
+      - 阿里开源诊断工具
+      - 在线排查
+      - 动态跟踪
+  - 性能分析
+    - CPU分析
+      - 火焰图
+      - 方法耗时
+    - 内存分析
+      - 堆转储
+      - 内存泄漏
+      - 大对象
+    - 线程分析
+      - 线程状态
+      - 死锁
+      - 阻塞
+    - GC分析
+      - GC频率
+      - GC耗时
+      - GC原因
+- 故障排查
+  - OutOfMemoryError
+    - Java heap space
+    - GC overhead limit exceeded
+    - PermGen space
+    - Metaspace
+    - Unable to create new native thread
+    - Direct buffer memory
+  - StackOverflowError
+    - 栈深度溢出
+    - 递归调用
+  - CPU飙高
+    - 死循环
+    - 频繁GC
+    - 线程竞争
+  - 内存泄漏
+    - 静态集合
+    - 监听器未移除
+    - 资源未关闭
+    - ThreadLocal未清理
+  - 死锁
+    - 线程转储分析
+    - jstack诊断
+  - 响应慢
+    - GC停顿
+    - 锁竞争
+    - IO阻塞
+- 新特性
+  - JDK8
+    - Lambda表达式字节码实现
+    - invokedynamic
+    - 元空间替代永久代
+    - 默认G1收集器
+  - JDK9
+    - 模块化系统
+    - G1成为默认收集器
+    - 统一GC日志
+  - JDK10
+    - 局部变量类型推断
+    - 并行Full GC for G1
+  - JDK11
+    - ZGC(实验性)
+    - Epsilon GC
+    - Flight Recorder开源
+  - JDK12
+    - Shenandoah GC(实验性)
+    - 可中断的G1 Mixed GC
+  - JDK13
+    - ZGC归还未使用内存
+  - JDK14
+    - ZGC on macOS/Windows
+    - 弃用ParallelScavenge + SerialOld组合
+  - JDK15
+    - ZGC正式版
+    - Shenandoah GC正式版
+  - JDK16
+    - ZGC并发线程栈处理
+  - JDK17
+    - LTS版本
+    - 移除实验性AOT和JIT编译器
+  - JDK21
+    - LTS版本
+    - Generational ZGC
+    - 虚拟线程
+- 性能优化
+  - 对象池化
+  - 缓存优化
+  - 批量处理
+  - 异步处理
+  - 资源复用
+  - 减少锁竞争
+  - 无锁编程
+  - 数据结构选择
+  - 算法优化

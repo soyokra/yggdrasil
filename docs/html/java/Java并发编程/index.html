@@ -1,0 +1,2201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java并发编程 - Technology</title>
+    <link rel="stylesheet" href="../../../assets/style.css">
+    <link rel="stylesheet" href="../../../assets/github.min.css">
+    <script src="../../../assets/highlight.min.js"></script>
+    <script src="../../../assets/python.min.js"></script>
+    <script src="../../../assets/java.min.js"></script>
+    <script src="../../../assets/javascript.min.js"></script>
+    <script src="../../../assets/xml.min.js"></script>
+    <script src="../../../assets/css.min.js"></script>
+    <script src="../../../assets/bash.min.js"></script>
+    <script src="../../../assets/sql.min.js"></script>
+</head>
+
+<body>
+    <!-- 顶部导航栏 -->
+    <div class="top-navbar">
+        <div class="site-title">Technology</div>
+    </div>
+
+    <!-- 侧边导航栏 -->
+    <div class="sidebar">
+        <ul class="nav-tree">
+            <li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../html/spring/index.html" class="nav-link-text" data-path="html/spring/index.html">spring</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../html/spring/spring-boot/index.html" class="nav-link-text" data-path="html/spring/spring-boot/index.html">spring-boot</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-boot/actuator.html" class="nav-link-text" data-path="html/spring/spring-boot/actuator.html">actuator</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-boot/autoconfigure.html" class="nav-link-text" data-path="html/spring/spring-boot/autoconfigure.html">autoconfigure</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-boot/EnableConfigurationProperties注解.html" class="nav-link-text" data-path="html/spring/spring-boot/EnableConfigurationProperties注解.html">EnableConfigurationProperties注解</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-cloud/index.html" class="nav-link-text" data-path="html/spring/spring-cloud/index.html">spring-cloud</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-cloud-alibaba/index.html" class="nav-link-text" data-path="html/spring/spring-cloud-alibaba/index.html">spring-cloud-alibaba</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../html/spring/spring-framework/index.html" class="nav-link-text" data-path="html/spring/spring-framework/index.html">spring-framework</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-framework/BeanDefinition.class.graph.html" class="nav-link-text" data-path="html/spring/spring-framework/BeanDefinition.class.graph.html">BeanDefinition.class.graph</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-framework/BeanLifecycle.html" class="nav-link-text" data-path="html/spring/spring-framework/BeanLifecycle.html">BeanLifecycle</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../html/spring/spring-framework-start/index.html" class="nav-link-text" data-path="html/spring/spring-framework-start/index.html">spring-framework-start</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../html/spring/spring-framework-start/src/index.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/index.html">src</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-framework-start/src/AbstractApplicationContext.cancelRefresh.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.cancelRefresh.html">AbstractApplicationContext.cancelRefresh</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-framework-start/src/AbstractApplicationContext.destroyBeans.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.destroyBeans.html">AbstractApplicationContext.destroyBeans</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-framework-start/src/AbstractApplicationContext.finishBeanFactoryInitialization.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.finishBeanFactoryInitialization.html">AbstractApplicationContext.finishBeanFactoryInitialization</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-framework-start/src/AbstractApplicationContext.finishRefresh.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.finishRefresh.html">AbstractApplicationContext.finishRefresh</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-framework-start/src/AbstractApplicationContext.initApplicationEventMulticaster.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.initApplicationEventMulticaster.html">AbstractApplicationContext.initApplicationEventMulticaster</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-framework-start/src/AbstractApplicationContext.initMessageSource.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.initMessageSource.html">AbstractApplicationContext.initMessageSource</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-framework-start/src/AbstractApplicationContext.invokeBeanFactoryPostProcessors.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.invokeBeanFactoryPostProcessors.html">AbstractApplicationContext.invokeBeanFactoryPostProcessors</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-framework-start/src/AbstractApplicationContext.obtainFreshBeanFactory.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.obtainFreshBeanFactory.html">AbstractApplicationContext.obtainFreshBeanFactory</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-framework-start/src/AbstractApplicationContext.onRefresh.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.onRefresh.html">AbstractApplicationContext.onRefresh</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-framework-start/src/AbstractApplicationContext.postProcessBeanFactory.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.postProcessBeanFactory.html">AbstractApplicationContext.postProcessBeanFactory</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-framework-start/src/AbstractApplicationContext.prepareBeanFactory.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.prepareBeanFactory.html">AbstractApplicationContext.prepareBeanFactory</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-framework-start/src/AbstractApplicationContext.prepareRefresh.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.prepareRefresh.html">AbstractApplicationContext.prepareRefresh</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-framework-start/src/AbstractApplicationContext.registerBeanPostProcessors.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.registerBeanPostProcessors.html">AbstractApplicationContext.registerBeanPostProcessors</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-framework-start/src/AbstractApplicationContext.registerListeners.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.registerListeners.html">AbstractApplicationContext.registerListeners</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-framework-start/src/AbstractApplicationContext.resetCommonCaches.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AbstractApplicationContext.resetCommonCaches.html">AbstractApplicationContext.resetCommonCaches</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-framework-start/src/Application.createApplicationContext.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/Application.createApplicationContext.html">Application.createApplicationContext</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-framework-start/src/Application.refreshContext.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/Application.refreshContext.html">Application.refreshContext</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-framework-start/src/Application.run.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/Application.run.html">Application.run</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-framework-start/src/AutoConfigurationImportSelector.getAutoConfigurationEntry.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/AutoConfigurationImportSelector.getAutoConfigurationEntry.html">AutoConfigurationImportSelector.getAutoConfigurationEntry</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-framework-start/src/ClassPathMapperScanner.scan.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/ClassPathMapperScanner.scan.html">ClassPathMapperScanner.scan</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-framework-start/src/ConfigurationClassParser.parse.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/ConfigurationClassParser.parse.html">ConfigurationClassParser.parse</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-framework-start/src/ConfigurationClassPostProcessor.processConfigBeanDefinitions.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/ConfigurationClassPostProcessor.processConfigBeanDefinitions.html">ConfigurationClassPostProcessor.processConfigBeanDefinitions</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-framework-start/src/MapperScannerConfigurer.postProcessBeanDefinitionRegistry.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/MapperScannerConfigurer.postProcessBeanDefinitionRegistry.html">MapperScannerConfigurer.postProcessBeanDefinitionRegistry</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-framework-start/src/ServletWebServerApplicationContext.onRefresh.html" class="nav-link-text" data-path="html/spring/spring-framework-start/src/ServletWebServerApplicationContext.onRefresh.html">ServletWebServerApplicationContext.onRefresh</a>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../html/spring/spring-mysql/index.html" class="nav-link-text" data-path="html/spring/spring-mysql/index.html">spring-mysql</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-mysql/hikari/index.html" class="nav-link-text" data-path="html/spring/spring-mysql/hikari/index.html">hikari</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-mysql/jdbc/index.html" class="nav-link-text" data-path="html/spring/spring-mysql/jdbc/index.html">jdbc</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../html/spring/spring-mysql/mybatis/index.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis/index.html">mybatis</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-mysql/mybatis/Mapper.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis/Mapper.html">Mapper</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-mysql/mybatis/XML.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis/XML.html">XML</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../html/spring/spring-mysql/mybatis-plus/index.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis-plus/index.html">mybatis-plus</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-mysql/mybatis-plus/DataSource.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis-plus/DataSource.html">DataSource</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-mysql/mybatis-plus/Mapper.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis-plus/Mapper.html">Mapper</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-mysql/mybatis-plus/SQL执行.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis-plus/SQL执行.html">SQL执行</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-mysql/mybatis-plus/SQL模板注册.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis-plus/SQL模板注册.html">SQL模板注册</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-mysql/p6spy/index.html" class="nav-link-text" data-path="html/spring/spring-mysql/p6spy/index.html">p6spy</a>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children active">
+<span class="nav-link-icon expanded" data-toggle="collapse"></span>
+<a href="../../../html/java/index.html" class="nav-link-text" data-path="html/java/index.html">java</a>
+</div>
+<ul class="nav-children expanded">
+<li class="nav-item">
+<div class="nav-link has-children active">
+<span class="nav-link-icon expanded" data-toggle="collapse"></span>
+<a href="../../../html/java/Java并发编程/index.html" class="nav-link-text" data-path="html/java/Java并发编程/index.html">Java并发编程</a>
+</div>
+<ul class="nav-children expanded">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java并发编程/Java内存模型(JMM).html" class="nav-link-text" data-path="html/java/Java并发编程/Java内存模型(JMM).html">Java内存模型(JMM)</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java并发编程/线程(Thread).html" class="nav-link-text" data-path="html/java/Java并发编程/线程(Thread).html">线程(Thread)</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../html/java/Java虚拟机模型(JVM)/index.html" class="nav-link-text" data-path="html/java/Java虚拟机模型(JVM)/index.html">Java虚拟机模型(JVM)</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型(JVM)/java类加载机制.html" class="nav-link-text" data-path="html/java/Java虚拟机模型(JVM)/java类加载机制.html">java类加载机制</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型(JVM)/垃圾回收机制.html" class="nav-link-text" data-path="html/java/Java虚拟机模型(JVM)/垃圾回收机制.html">垃圾回收机制</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../html/java/Java虚拟机模型(JVM)/字节码分析/index.html" class="nav-link-text" data-path="html/java/Java虚拟机模型(JVM)/字节码分析/index.html">字节码分析</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-Lambda表达式.html" class="nav-link-text" data-path="html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-Lambda表达式.html">字节码分析-Lambda表达式</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-内部类.html" class="nav-link-text" data-path="html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-内部类.html">字节码分析-内部类</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-可变参数.html" class="nav-link-text" data-path="html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-可变参数.html">字节码分析-可变参数</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-同步.html" class="nav-link-text" data-path="html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-同步.html">字节码分析-同步</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-字段.html" class="nav-link-text" data-path="html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-字段.html">字节码分析-字段</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-异常处理.html" class="nav-link-text" data-path="html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-异常处理.html">字节码分析-异常处理</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-控制流.html" class="nav-link-text" data-path="html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-控制流.html">字节码分析-控制流</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-方法.html" class="nav-link-text" data-path="html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-方法.html">字节码分析-方法</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-方法引用.html" class="nav-link-text" data-path="html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-方法引用.html">字节码分析-方法引用</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-泛型.html" class="nav-link-text" data-path="html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-泛型.html">字节码分析-泛型</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-类加载机制.html" class="nav-link-text" data-path="html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-类加载机制.html">字节码分析-类加载机制</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-继承.html" class="nav-link-text" data-path="html/java/Java虚拟机模型(JVM)/字节码分析/字节码分析-继承.html">字节码分析-继承</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型(JVM)/字节码分析/字节码增强技术.html" class="nav-link-text" data-path="html/java/Java虚拟机模型(JVM)/字节码分析/字节码增强技术.html">字节码增强技术</a>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../html/cloud/index.html" class="nav-link-text" data-path="html/cloud/index.html">cloud</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/cloud/docker/index.html" class="nav-link-text" data-path="html/cloud/docker/index.html">docker</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/cloud/k8s/index.html" class="nav-link-text" data-path="html/cloud/k8s/index.html">k8s</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../html/more/index.html" class="nav-link-text" data-path="html/more/index.html">more</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/more/ai/index.html" class="nav-link-text" data-path="html/more/ai/index.html">ai</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/more/algorithm/index.html" class="nav-link-text" data-path="html/more/algorithm/index.html">algorithm</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/more/clickhouse/index.html" class="nav-link-text" data-path="html/more/clickhouse/index.html">clickhouse</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/more/data-structure/index.html" class="nav-link-text" data-path="html/more/data-structure/index.html">data-structure</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/more/design-pattern/index.html" class="nav-link-text" data-path="html/more/design-pattern/index.html">design-pattern</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/more/diagram/index.html" class="nav-link-text" data-path="html/more/diagram/index.html">diagram</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/more/elasticsearch/index.html" class="nav-link-text" data-path="html/more/elasticsearch/index.html">elasticsearch</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/more/kakfa/index.html" class="nav-link-text" data-path="html/more/kakfa/index.html">kakfa</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/more/mongodb/index.html" class="nav-link-text" data-path="html/more/mongodb/index.html">mongodb</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/more/nginx/index.html" class="nav-link-text" data-path="html/more/nginx/index.html">nginx</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/more/prometheus/index.html" class="nav-link-text" data-path="html/more/prometheus/index.html">prometheus</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/more/rabbitmq/index.html" class="nav-link-text" data-path="html/more/rabbitmq/index.html">rabbitmq</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/more/redis/index.html" class="nav-link-text" data-path="html/more/redis/index.html">redis</a>
+</div>
+</li>
+</ul>
+</li>
+        </ul>
+    </div>
+
+    <!-- 主内容区 -->
+    <div class="main-content">
+        <div class="content-body">
+            <h1 id="java">Java并发编程</h1>
+<h2 id="_1">核心技术关系图</h2>
+<p><img alt="thread_tree" src="thread_tree.png"/></p>
+<h2 id="_2">技术索引</h2>
+<ul>
+<li>线程基础<ul>
+<li>线程概念<ul>
+<li>进程<ul>
+<li>资源分配的基本单位</li>
+<li>独立的地址空间</li>
+<li>进程间通信(IPC)</li>
+</ul>
+</li>
+<li>线程<ul>
+<li>CPU调度的基本单位</li>
+<li>共享进程资源</li>
+<li>轻量级进程</li>
+</ul>
+</li>
+<li>并发<ul>
+<li>多个任务交替执行</li>
+<li>单核CPU</li>
+</ul>
+</li>
+<li>并行<ul>
+<li>多个任务同时执行</li>
+<li>多核CPU</li>
+</ul>
+</li>
+<li>上下文切换<ul>
+<li>保存线程状态</li>
+<li>恢复线程状态</li>
+<li>切换成本</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>线程创建方式<ul>
+<li>继承Thread类<ul>
+<li>重写run方法</li>
+<li>单继承限制</li>
+</ul>
+</li>
+<li>实现Runnable接口<ul>
+<li>函数式接口</li>
+<li>解耦任务与线程</li>
+<li>可多实现</li>
+</ul>
+</li>
+<li>实现Callable接口<ul>
+<li>有返回值</li>
+<li>可抛出异常</li>
+<li>配合FutureTask使用</li>
+</ul>
+</li>
+<li>使用线程池<ul>
+<li>ExecutorService.submit()</li>
+<li>复用线程</li>
+<li>统一管理</li>
+</ul>
+</li>
+<li>使用Lambda表达式</li>
+<li>使用匿名内部类</li>
+</ul>
+</li>
+<li>线程生命周期<ul>
+<li>NEW(新建)<ul>
+<li>创建线程对象</li>
+<li>未调用start()</li>
+</ul>
+</li>
+<li>RUNNABLE(可运行)<ul>
+<li>就绪状态(Ready)</li>
+<li>运行状态(Running)</li>
+<li>操作系统线程状态</li>
+</ul>
+</li>
+<li>BLOCKED(阻塞)<ul>
+<li>等待监视器锁</li>
+<li>synchronized阻塞</li>
+</ul>
+</li>
+<li>WAITING(等待)<ul>
+<li>Object.wait()</li>
+<li>Thread.join()</li>
+<li>LockSupport.park()</li>
+</ul>
+</li>
+<li>TIMED_WAITING(超时等待)<ul>
+<li>Thread.sleep(time)</li>
+<li>Object.wait(time)</li>
+<li>Thread.join(time)</li>
+<li>LockSupport.parkNanos()</li>
+<li>LockSupport.parkUntil()</li>
+</ul>
+</li>
+<li>TERMINATED(终止)<ul>
+<li>run()方法执行完毕</li>
+<li>异常终止</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>线程常用方法<ul>
+<li>start()<ul>
+<li>启动线程</li>
+<li>只能调用一次</li>
+<li>native方法</li>
+</ul>
+</li>
+<li>run()<ul>
+<li>线程执行体</li>
+<li>直接调用不会启动新线程</li>
+</ul>
+</li>
+<li>sleep()<ul>
+<li>线程休眠</li>
+<li>不释放锁</li>
+<li>native方法</li>
+<li>InterruptedException</li>
+</ul>
+</li>
+<li>yield()<ul>
+<li>线程让步</li>
+<li>提示调度器</li>
+<li>不保证一定让步</li>
+</ul>
+</li>
+<li>join()<ul>
+<li>等待线程结束</li>
+<li>join(timeout)</li>
+<li>InterruptedException</li>
+</ul>
+</li>
+<li>interrupt()<ul>
+<li>中断线程</li>
+<li>设置中断标志</li>
+<li>不是强制终止</li>
+</ul>
+</li>
+<li>isInterrupted()<ul>
+<li>检查中断状态</li>
+<li>不清除中断标志</li>
+</ul>
+</li>
+<li>interrupted()<ul>
+<li>检查中断状态</li>
+<li>清除中断标志</li>
+<li>静态方法</li>
+</ul>
+</li>
+<li>setName()/getName()</li>
+<li>setPriority()/getPriority()<ul>
+<li>优先级1-10</li>
+<li>MIN_PRIORITY(1)</li>
+<li>NORM_PRIORITY(5)</li>
+<li>MAX_PRIORITY(10)</li>
+</ul>
+</li>
+<li>setDaemon()/isDaemon()<ul>
+<li>守护线程</li>
+<li>用户线程全部结束则JVM退出</li>
+<li>必须在start()前设置</li>
+</ul>
+</li>
+<li>getState()<ul>
+<li>获取线程状态</li>
+</ul>
+</li>
+<li>isAlive()<ul>
+<li>线程是否存活</li>
+</ul>
+</li>
+<li>currentThread()<ul>
+<li>获取当前线程</li>
+<li>静态方法</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>线程中断<ul>
+<li>中断标志</li>
+<li>中断响应</li>
+<li>InterruptedException处理</li>
+<li>中断策略</li>
+</ul>
+</li>
+<li>线程异常处理<ul>
+<li>UncaughtExceptionHandler</li>
+<li>setDefaultUncaughtExceptionHandler()</li>
+<li>setUncaughtExceptionHandler()</li>
+</ul>
+</li>
+<li>线程组<ul>
+<li>ThreadGroup</li>
+<li>线程的集合</li>
+<li>树形结构</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Java内存模型(JMM)<ul>
+<li>主内存</li>
+<li>工作内存</li>
+<li>内存交互操作<ul>
+<li>lock(锁定)</li>
+<li>unlock(解锁)</li>
+<li>read(读取)</li>
+<li>load(载入)</li>
+<li>use(使用)</li>
+<li>assign(赋值)</li>
+<li>store(存储)</li>
+<li>write(写入)</li>
+</ul>
+</li>
+<li>happens-before原则<ul>
+<li>程序顺序规则</li>
+<li>监视器锁规则</li>
+<li>volatile变量规则</li>
+<li>线程启动规则</li>
+<li>线程终止规则</li>
+<li>线程中断规则</li>
+<li>对象终结规则</li>
+<li>传递性规则</li>
+</ul>
+</li>
+<li>as-if-serial语义</li>
+<li>重排序<ul>
+<li>编译器重排序</li>
+<li>指令级重排序</li>
+<li>内存系统重排序</li>
+</ul>
+</li>
+<li>内存屏障<ul>
+<li>LoadLoad屏障</li>
+<li>StoreStore屏障</li>
+<li>LoadStore屏障</li>
+<li>StoreLoad屏障</li>
+</ul>
+</li>
+<li>并发编程三大特性<ul>
+<li>原子性<ul>
+<li>不可分割的操作</li>
+<li>synchronized</li>
+<li>Lock</li>
+<li>CAS</li>
+</ul>
+</li>
+<li>可见性<ul>
+<li>线程间变量可见</li>
+<li>volatile</li>
+<li>synchronized</li>
+<li>final</li>
+</ul>
+</li>
+<li>有序性<ul>
+<li>指令执行顺序</li>
+<li>volatile</li>
+<li>synchronized</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>synchronized关键字<ul>
+<li>使用方式<ul>
+<li>修饰实例方法<ul>
+<li>锁当前对象</li>
+</ul>
+</li>
+<li>修饰静态方法<ul>
+<li>锁当前类的Class对象</li>
+</ul>
+</li>
+<li>修饰代码块<ul>
+<li>锁指定对象</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>实现原理<ul>
+<li>对象头<ul>
+<li>Mark Word</li>
+<li>类型指针</li>
+</ul>
+</li>
+<li>Monitor<ul>
+<li>监视器锁</li>
+<li>ObjectMonitor</li>
+<li>enter/exit</li>
+</ul>
+</li>
+<li>字节码<ul>
+<li>monitorenter</li>
+<li>monitorexit</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>锁优化<ul>
+<li>偏向锁<ul>
+<li>偏向第一个获取锁的线程</li>
+<li>减少同一线程获取锁的开销</li>
+<li>偏向锁标志</li>
+<li>撤销偏向锁</li>
+</ul>
+</li>
+<li>轻量级锁<ul>
+<li>CAS操作</li>
+<li>Lock Record</li>
+<li>自旋</li>
+</ul>
+</li>
+<li>重量级锁<ul>
+<li>依赖OS的互斥量(Mutex)</li>
+<li>用户态到内核态切换</li>
+</ul>
+</li>
+<li>锁升级<ul>
+<li>无锁 -&gt; 偏向锁 -&gt; 轻量级锁 -&gt; 重量级锁</li>
+<li>不可降级(JDK15后可降级)</li>
+</ul>
+</li>
+<li>自旋锁<ul>
+<li>避免线程阻塞</li>
+<li>适用于锁持有时间短</li>
+<li>自适应自旋</li>
+</ul>
+</li>
+<li>锁粗化<ul>
+<li>扩大锁的范围</li>
+<li>减少加锁解锁次数</li>
+</ul>
+</li>
+<li>锁消除<ul>
+<li>JIT编译优化</li>
+<li>逃逸分析</li>
+<li>删除不必要的同步</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>可重入性<ul>
+<li>同一线程可多次获取同一锁</li>
+<li>重入计数</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>volatile关键字<ul>
+<li>特性<ul>
+<li>保证可见性</li>
+<li>禁止指令重排序</li>
+<li>不保证原子性</li>
+</ul>
+</li>
+<li>实现原理<ul>
+<li>内存屏障</li>
+<li>Lock前缀指令</li>
+<li>缓存一致性协议(MESI)</li>
+</ul>
+</li>
+<li>使用场景<ul>
+<li>状态标志</li>
+<li>双重检查锁定(DCL)</li>
+<li>单例模式</li>
+</ul>
+</li>
+<li>volatile写<ul>
+<li>StoreStore屏障</li>
+<li>volatile写操作</li>
+<li>StoreLoad屏障</li>
+</ul>
+</li>
+<li>volatile读<ul>
+<li>volatile读操作</li>
+<li>LoadLoad屏障</li>
+<li>LoadStore屏障</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>CAS(Compare And Swap)<ul>
+<li>概念<ul>
+<li>比较并交换</li>
+<li>乐观锁</li>
+<li>无锁算法</li>
+</ul>
+</li>
+<li>组成<ul>
+<li>内存位置(V)</li>
+<li>预期值(A)</li>
+<li>新值(B)</li>
+</ul>
+</li>
+<li>实现<ul>
+<li>Unsafe类</li>
+<li>compareAndSwapInt()</li>
+<li>compareAndSwapLong()</li>
+<li>compareAndSwapObject()</li>
+<li>CPU原子指令<ul>
+<li>cmpxchg</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>问题<ul>
+<li>ABA问题<ul>
+<li>AtomicStampedReference</li>
+<li>AtomicMarkableReference</li>
+<li>版本号机制</li>
+</ul>
+</li>
+<li>循环时间长开销大<ul>
+<li>自旋等待</li>
+</ul>
+</li>
+<li>只能保证一个共享变量的原子性<ul>
+<li>AtomicReference</li>
+<li>组合对象</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Lock接口<ul>
+<li>Lock接口方法<ul>
+<li>lock()</li>
+<li>unlock()</li>
+<li>tryLock()</li>
+<li>tryLock(timeout)</li>
+<li>lockInterruptibly()</li>
+<li>newCondition()</li>
+</ul>
+</li>
+<li>Lock vs synchronized<ul>
+<li>灵活性更高</li>
+<li>可中断</li>
+<li>可超时</li>
+<li>可尝试获取锁</li>
+<li>支持多个条件变量</li>
+<li>需要手动释放</li>
+</ul>
+</li>
+<li>ReentrantLock<ul>
+<li>可重入锁</li>
+<li>独占锁</li>
+<li>公平锁/非公平锁<ul>
+<li>公平锁<ul>
+<li>按申请顺序获取锁</li>
+<li>性能较低</li>
+</ul>
+</li>
+<li>非公平锁<ul>
+<li>可插队</li>
+<li>默认实现</li>
+<li>性能较高</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>实现原理<ul>
+<li>基于AQS</li>
+<li>state变量</li>
+<li>同步队列</li>
+</ul>
+</li>
+<li>条件变量<ul>
+<li>Condition</li>
+<li>条件队列</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>ReentrantReadWriteLock<ul>
+<li>读写锁</li>
+<li>读锁(共享锁)<ul>
+<li>多个线程可同时持有</li>
+</ul>
+</li>
+<li>写锁(独占锁)<ul>
+<li>只有一个线程可持有</li>
+</ul>
+</li>
+<li>锁降级<ul>
+<li>写锁降级为读锁</li>
+<li>持有写锁时获取读锁，再释放写锁</li>
+</ul>
+</li>
+<li>锁升级<ul>
+<li>不支持</li>
+</ul>
+</li>
+<li>实现原理<ul>
+<li>基于AQS</li>
+<li>state高16位表示读锁</li>
+<li>state低16位表示写锁</li>
+</ul>
+</li>
+<li>公平性<ul>
+<li>公平模式</li>
+<li>非公平模式</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>StampedLock<ul>
+<li>JDK8引入</li>
+<li>三种模式<ul>
+<li>写锁(独占)</li>
+<li>悲观读锁(共享)</li>
+<li>乐观读(无锁)</li>
+</ul>
+</li>
+<li>乐观读<ul>
+<li>tryOptimisticRead()</li>
+<li>validate()</li>
+<li>不是锁</li>
+</ul>
+</li>
+<li>锁转换<ul>
+<li>tryConvertToWriteLock()</li>
+<li>tryConvertToReadLock()</li>
+<li>tryConvertToOptimisticRead()</li>
+</ul>
+</li>
+<li>不可重入</li>
+<li>不支持Condition</li>
+<li>性能优于ReadWriteLock</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>AQS(AbstractQueuedSynchronizer)<ul>
+<li>抽象队列同步器</li>
+<li>核心组成<ul>
+<li>state变量<ul>
+<li>volatile int</li>
+<li>同步状态</li>
+<li>getState()</li>
+<li>setState()</li>
+<li>compareAndSetState()</li>
+</ul>
+</li>
+<li>FIFO队列<ul>
+<li>CLH队列变体</li>
+<li>双向链表</li>
+<li>Node节点</li>
+</ul>
+</li>
+<li>ConditionObject<ul>
+<li>条件队列</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>同步模式<ul>
+<li>独占模式(Exclusive)<ul>
+<li>只有一个线程可获取</li>
+<li>ReentrantLock</li>
+</ul>
+</li>
+<li>共享模式(Shared)<ul>
+<li>多个线程可同时获取</li>
+<li>Semaphore</li>
+<li>CountDownLatch</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>核心方法<ul>
+<li>acquire()</li>
+<li>release()</li>
+<li>acquireShared()</li>
+<li>releaseShared()</li>
+<li>tryAcquire()</li>
+<li>tryRelease()</li>
+<li>tryAcquireShared()</li>
+<li>tryReleaseShared()</li>
+</ul>
+</li>
+<li>实现原理<ul>
+<li>模板方法模式</li>
+<li>子类实现tryAcquire等方法</li>
+<li>入队</li>
+<li>出队</li>
+<li>自旋</li>
+<li>阻塞</li>
+<li>唤醒</li>
+</ul>
+</li>
+<li>Node节点<ul>
+<li>waitStatus<ul>
+<li>CANCELLED(1)</li>
+<li>SIGNAL(-1)</li>
+<li>CONDITION(-2)</li>
+<li>PROPAGATE(-3)</li>
+<li>0(初始状态)</li>
+</ul>
+</li>
+<li>prev/next</li>
+<li>thread</li>
+<li>nextWaiter</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>线程通信<ul>
+<li>wait()/notify()/notifyAll()<ul>
+<li>Object类方法</li>
+<li>必须在synchronized中使用</li>
+<li>必须持有对象锁</li>
+<li>wait()<ul>
+<li>释放锁</li>
+<li>进入等待队列</li>
+<li>需要被唤醒</li>
+</ul>
+</li>
+<li>notify()<ul>
+<li>唤醒一个等待线程</li>
+<li>随机选择</li>
+</ul>
+</li>
+<li>notifyAll()<ul>
+<li>唤醒所有等待线程</li>
+</ul>
+</li>
+<li>虚假唤醒<ul>
+<li>使用while循环判断条件</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Condition<ul>
+<li>Lock的条件变量</li>
+<li>await()<ul>
+<li>类似wait()</li>
+<li>释放锁</li>
+<li>进入条件队列</li>
+</ul>
+</li>
+<li>signal()<ul>
+<li>类似notify()</li>
+<li>唤醒一个等待线程</li>
+</ul>
+</li>
+<li>signalAll()<ul>
+<li>类似notifyAll()</li>
+</ul>
+</li>
+<li>awaitNanos()</li>
+<li>awaitUntil()</li>
+<li>支持多个条件变量</li>
+<li>实现原理<ul>
+<li>ConditionObject</li>
+<li>条件队列</li>
+<li>与同步队列的转换</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>LockSupport<ul>
+<li>线程阻塞工具类</li>
+<li>park()<ul>
+<li>阻塞当前线程</li>
+<li>不需要获取锁</li>
+</ul>
+</li>
+<li>parkNanos()</li>
+<li>parkUntil()</li>
+<li>unpark(thread)<ul>
+<li>唤醒指定线程</li>
+</ul>
+</li>
+<li>许可机制<ul>
+<li>最多一个许可</li>
+<li>先unpark后park不会阻塞</li>
+</ul>
+</li>
+<li>实现原理<ul>
+<li>Unsafe</li>
+<li>PARK/UNPARK</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>管道通信<ul>
+<li>PipedInputStream</li>
+<li>PipedOutputStream</li>
+<li>PipedReader</li>
+<li>PipedWriter</li>
+</ul>
+</li>
+<li>Thread.join()<ul>
+<li>等待线程结束</li>
+<li>基于wait/notify实现</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>线程池<ul>
+<li>Executor框架<ul>
+<li>Executor<ul>
+<li>execute()</li>
+</ul>
+</li>
+<li>ExecutorService<ul>
+<li>submit()</li>
+<li>shutdown()</li>
+<li>shutdownNow()</li>
+<li>invokeAll()</li>
+<li>invokeAny()</li>
+</ul>
+</li>
+<li>ScheduledExecutorService<ul>
+<li>schedule()</li>
+<li>scheduleAtFixedRate()</li>
+<li>scheduleWithFixedDelay()</li>
+</ul>
+</li>
+<li>AbstractExecutorService</li>
+<li>ThreadPoolExecutor</li>
+<li>ScheduledThreadPoolExecutor</li>
+<li>Executors工具类</li>
+</ul>
+</li>
+<li>ThreadPoolExecutor<ul>
+<li>核心参数<ul>
+<li>corePoolSize<ul>
+<li>核心线程数</li>
+<li>即使空闲也保留</li>
+</ul>
+</li>
+<li>maximumPoolSize<ul>
+<li>最大线程数</li>
+</ul>
+</li>
+<li>keepAliveTime<ul>
+<li>非核心线程空闲存活时间</li>
+</ul>
+</li>
+<li>unit<ul>
+<li>时间单位</li>
+</ul>
+</li>
+<li>workQueue<ul>
+<li>任务队列</li>
+<li>ArrayBlockingQueue</li>
+<li>LinkedBlockingQueue</li>
+<li>SynchronousQueue</li>
+<li>PriorityBlockingQueue</li>
+<li>DelayQueue</li>
+</ul>
+</li>
+<li>threadFactory<ul>
+<li>线程工厂</li>
+<li>创建新线程</li>
+</ul>
+</li>
+<li>handler<ul>
+<li>拒绝策略</li>
+<li>AbortPolicy(默认)</li>
+<li>CallerRunsPolicy</li>
+<li>DiscardPolicy</li>
+<li>DiscardOldestPolicy</li>
+<li>自定义RejectedExecutionHandler</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>工作流程<ul>
+<li>提交任务</li>
+<li>核心线程数判断</li>
+<li>队列判断</li>
+<li>最大线程数判断</li>
+<li>拒绝策略</li>
+</ul>
+</li>
+<li>线程池状态<ul>
+<li>RUNNING</li>
+<li>SHUTDOWN</li>
+<li>STOP</li>
+<li>TIDYING</li>
+<li>TERMINATED</li>
+</ul>
+</li>
+<li>常用方法<ul>
+<li>execute()</li>
+<li>submit()</li>
+<li>shutdown()<ul>
+<li>平滑关闭</li>
+<li>不接受新任务</li>
+<li>等待已有任务完成</li>
+</ul>
+</li>
+<li>shutdownNow()<ul>
+<li>立即关闭</li>
+<li>尝试中断正在执行的任务</li>
+<li>返回未执行的任务列表</li>
+</ul>
+</li>
+<li>isShutdown()</li>
+<li>isTerminated()</li>
+<li>awaitTermination()</li>
+<li>prestartCoreThread()</li>
+<li>prestartAllCoreThreads()</li>
+</ul>
+</li>
+<li>监控方法<ul>
+<li>getTaskCount()</li>
+<li>getCompletedTaskCount()</li>
+<li>getPoolSize()</li>
+<li>getActiveCount()</li>
+<li>getLargestPoolSize()</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>预定义线程池<ul>
+<li>FixedThreadPool<ul>
+<li>Executors.newFixedThreadPool()</li>
+<li>固定大小线程池</li>
+<li>LinkedBlockingQueue</li>
+<li>可能导致OOM</li>
+</ul>
+</li>
+<li>CachedThreadPool<ul>
+<li>Executors.newCachedThreadPool()</li>
+<li>可缓存线程池</li>
+<li>SynchronousQueue</li>
+<li>maximumPoolSize为Integer.MAX_VALUE</li>
+<li>可能创建过多线程</li>
+</ul>
+</li>
+<li>SingleThreadExecutor<ul>
+<li>Executors.newSingleThreadExecutor()</li>
+<li>单线程线程池</li>
+<li>LinkedBlockingQueue</li>
+<li>顺序执行</li>
+</ul>
+</li>
+<li>ScheduledThreadPool<ul>
+<li>Executors.newScheduledThreadPool()</li>
+<li>定时任务线程池</li>
+<li>DelayedWorkQueue</li>
+</ul>
+</li>
+<li>WorkStealingPool<ul>
+<li>Executors.newWorkStealingPool()</li>
+<li>JDK8引入</li>
+<li>基于ForkJoinPool</li>
+<li>工作窃取</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>线程池实践<ul>
+<li>合理配置线程数<ul>
+<li>CPU密集型: CPU核心数+1</li>
+<li>IO密集型: CPU核心数*2</li>
+<li>混合型: 根据实际情况调整</li>
+</ul>
+</li>
+<li>选择合适的队列</li>
+<li>自定义线程工厂<ul>
+<li>命名线程</li>
+<li>设置守护线程</li>
+<li>设置优先级</li>
+</ul>
+</li>
+<li>自定义拒绝策略</li>
+<li>监控线程池</li>
+<li>动态调整<ul>
+<li>setCorePoolSize()</li>
+<li>setMaximumPoolSize()</li>
+<li>setKeepAliveTime()</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>ForkJoin框架<ul>
+<li>分治算法</li>
+<li>工作窃取</li>
+<li>ForkJoinPool<ul>
+<li>线程池实现</li>
+<li>默认并行度为CPU核心数</li>
+</ul>
+</li>
+<li>ForkJoinTask<ul>
+<li>RecursiveTask<ul>
+<li>有返回值</li>
+</ul>
+</li>
+<li>RecursiveAction<ul>
+<li>无返回值</li>
+</ul>
+</li>
+<li>CountedCompleter</li>
+</ul>
+</li>
+<li>fork()<ul>
+<li>异步执行子任务</li>
+</ul>
+</li>
+<li>join()<ul>
+<li>等待子任务完成</li>
+</ul>
+</li>
+<li>invoke()<ul>
+<li>同步执行</li>
+</ul>
+</li>
+<li>工作窃取算法<ul>
+<li>每个线程有自己的双端队列</li>
+<li>从队列头部获取任务</li>
+<li>从其他线程队列尾部窃取任务</li>
+</ul>
+</li>
+<li>适用场景<ul>
+<li>大任务可分解为小任务</li>
+<li>任务之间独立</li>
+<li>递归算法</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>CompletableFuture<ul>
+<li>异步编程</li>
+<li>组合式异步</li>
+<li>创建<ul>
+<li>supplyAsync()</li>
+<li>runAsync()</li>
+<li>completedFuture()</li>
+</ul>
+</li>
+<li>转换<ul>
+<li>thenApply()</li>
+<li>thenApplyAsync()</li>
+</ul>
+</li>
+<li>消费<ul>
+<li>thenAccept()</li>
+<li>thenRun()</li>
+</ul>
+</li>
+<li>组合<ul>
+<li>thenCompose()</li>
+<li>thenCombine()</li>
+</ul>
+</li>
+<li>多个CompletableFuture<ul>
+<li>allOf()</li>
+<li>anyOf()</li>
+</ul>
+</li>
+<li>异常处理<ul>
+<li>exceptionally()</li>
+<li>handle()</li>
+<li>whenComplete()</li>
+</ul>
+</li>
+<li>回调<ul>
+<li>thenAcceptBoth()</li>
+<li>runAfterBoth()</li>
+<li>applyToEither()</li>
+<li>acceptEither()</li>
+<li>runAfterEither()</li>
+</ul>
+</li>
+<li>实现原理<ul>
+<li>基于ForkJoinPool</li>
+<li>责任链模式</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Future模式<ul>
+<li>Future接口<ul>
+<li>get()<ul>
+<li>阻塞获取结果</li>
+<li>get(timeout)</li>
+</ul>
+</li>
+<li>cancel()<ul>
+<li>取消任务</li>
+</ul>
+</li>
+<li>isCancelled()</li>
+<li>isDone()</li>
+</ul>
+</li>
+<li>FutureTask<ul>
+<li>实现RunnableFuture</li>
+<li>既是Runnable又是Future</li>
+<li>状态<ul>
+<li>NEW</li>
+<li>COMPLETING</li>
+<li>NORMAL</li>
+<li>EXCEPTIONAL</li>
+<li>CANCELLED</li>
+<li>INTERRUPTING</li>
+<li>INTERRUPTED</li>
+</ul>
+</li>
+<li>使用场景<ul>
+<li>异步计算</li>
+<li>配合线程池</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>并发工具类<ul>
+<li>CountDownLatch<ul>
+<li>倒计数器</li>
+<li>await()<ul>
+<li>等待计数归零</li>
+</ul>
+</li>
+<li>countDown()<ul>
+<li>计数减一</li>
+</ul>
+</li>
+<li>实现原理<ul>
+<li>基于AQS</li>
+<li>共享模式</li>
+</ul>
+</li>
+<li>使用场景<ul>
+<li>等待多个线程完成</li>
+<li>并发测试</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>CyclicBarrier<ul>
+<li>循环屏障</li>
+<li>await()<ul>
+<li>等待其他线程到达屏障</li>
+</ul>
+</li>
+<li>可重用</li>
+<li>barrierAction<ul>
+<li>所有线程到达后执行</li>
+</ul>
+</li>
+<li>实现原理<ul>
+<li>基于ReentrantLock和Condition</li>
+</ul>
+</li>
+<li>使用场景<ul>
+<li>多线程计算数据最后合并</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Semaphore<ul>
+<li>信号量</li>
+<li>acquire()<ul>
+<li>获取许可</li>
+</ul>
+</li>
+<li>release()<ul>
+<li>释放许可</li>
+</ul>
+</li>
+<li>tryAcquire()</li>
+<li>实现原理<ul>
+<li>基于AQS</li>
+<li>共享模式</li>
+</ul>
+</li>
+<li>公平/非公平</li>
+<li>使用场景<ul>
+<li>限流</li>
+<li>资源池</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Exchanger<ul>
+<li>数据交换</li>
+<li>exchange()<ul>
+<li>交换数据</li>
+<li>阻塞等待</li>
+</ul>
+</li>
+<li>使用场景<ul>
+<li>两个线程间数据交换</li>
+<li>校对工作</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Phaser<ul>
+<li>JDK7引入</li>
+<li>分阶段的栅栏</li>
+<li>register()</li>
+<li>arriveAndAwaitAdvance()</li>
+<li>arriveAndDeregister()</li>
+<li>动态调整参与线程数</li>
+<li>可重用</li>
+<li>使用场景<ul>
+<li>多阶段任务</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>原子类<ul>
+<li>基本类型原子类<ul>
+<li>AtomicBoolean</li>
+<li>AtomicInteger<ul>
+<li>get()</li>
+<li>set()</li>
+<li>getAndSet()</li>
+<li>compareAndSet()</li>
+<li>getAndIncrement()</li>
+<li>getAndDecrement()</li>
+<li>getAndAdd()</li>
+<li>incrementAndGet()</li>
+<li>decrementAndGet()</li>
+<li>addAndGet()</li>
+</ul>
+</li>
+<li>AtomicLong</li>
+</ul>
+</li>
+<li>数组类型原子类<ul>
+<li>AtomicIntegerArray</li>
+<li>AtomicLongArray</li>
+<li>AtomicReferenceArray</li>
+</ul>
+</li>
+<li>引用类型原子类<ul>
+<li>AtomicReference</li>
+<li>AtomicStampedReference<ul>
+<li>版本号</li>
+<li>解决ABA问题</li>
+</ul>
+</li>
+<li>AtomicMarkableReference<ul>
+<li>标记</li>
+<li>解决ABA问题</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>字段更新器<ul>
+<li>AtomicIntegerFieldUpdater</li>
+<li>AtomicLongFieldUpdater</li>
+<li>AtomicReferenceFieldUpdater</li>
+<li>基于反射</li>
+<li>字段必须是volatile</li>
+</ul>
+</li>
+<li>累加器(JDK8)<ul>
+<li>LongAdder<ul>
+<li>比AtomicLong性能更好</li>
+<li>高并发场景</li>
+<li>分段思想</li>
+</ul>
+</li>
+<li>LongAccumulator</li>
+<li>DoubleAdder</li>
+<li>DoubleAccumulator</li>
+</ul>
+</li>
+<li>实现原理<ul>
+<li>基于CAS</li>
+<li>自旋</li>
+<li>Unsafe类</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>并发集合<ul>
+<li>ConcurrentHashMap<ul>
+<li>线程安全的HashMap</li>
+<li>JDK7实现<ul>
+<li>Segment分段锁</li>
+<li>每个Segment一个锁</li>
+<li>继承ReentrantLock</li>
+</ul>
+</li>
+<li>JDK8实现<ul>
+<li>CAS + synchronized</li>
+<li>锁桶(Node数组)</li>
+<li>红黑树</li>
+</ul>
+</li>
+<li>不允许null key和null value</li>
+<li>核心方法<ul>
+<li>put()</li>
+<li>get()</li>
+<li>putIfAbsent()</li>
+<li>remove()</li>
+<li>size()</li>
+</ul>
+</li>
+<li>扩容机制<ul>
+<li>协助扩容</li>
+<li>多线程并发扩容</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>ConcurrentSkipListMap<ul>
+<li>跳表实现</li>
+<li>有序Map</li>
+<li>非阻塞</li>
+</ul>
+</li>
+<li>ConcurrentSkipListSet<ul>
+<li>基于ConcurrentSkipListMap</li>
+<li>有序Set</li>
+</ul>
+</li>
+<li>CopyOnWriteArrayList<ul>
+<li>写时复制</li>
+<li>适用于读多写少</li>
+<li>add()时复制数组</li>
+<li>volatile数组引用</li>
+<li>迭代器弱一致性</li>
+<li>内存占用</li>
+</ul>
+</li>
+<li>CopyOnWriteArraySet<ul>
+<li>基于CopyOnWriteArrayList</li>
+</ul>
+</li>
+<li>ConcurrentLinkedQueue<ul>
+<li>非阻塞队列</li>
+<li>基于CAS</li>
+<li>无界队列</li>
+<li>FIFO</li>
+<li>不允许null元素</li>
+</ul>
+</li>
+<li>ConcurrentLinkedDeque<ul>
+<li>双端队列</li>
+</ul>
+</li>
+<li>BlockingQueue<ul>
+<li>阻塞队列</li>
+<li>生产者-消费者模式</li>
+<li>put()<ul>
+<li>队列满时阻塞</li>
+</ul>
+</li>
+<li>take()<ul>
+<li>队列空时阻塞</li>
+</ul>
+</li>
+<li>offer(timeout)</li>
+<li>poll(timeout)</li>
+<li>ArrayBlockingQueue<ul>
+<li>有界队列</li>
+<li>数组实现</li>
+<li>FIFO</li>
+<li>一把锁</li>
+</ul>
+</li>
+<li>LinkedBlockingQueue<ul>
+<li>可选有界队列</li>
+<li>链表实现</li>
+<li>FIFO</li>
+<li>两把锁(putLock/takeLock)</li>
+</ul>
+</li>
+<li>PriorityBlockingQueue<ul>
+<li>优先级队列</li>
+<li>无界队列</li>
+<li>堆实现</li>
+<li>不允许null元素</li>
+</ul>
+</li>
+<li>DelayQueue<ul>
+<li>延迟队列</li>
+<li>元素实现Delayed接口</li>
+<li>到期才能取出</li>
+<li>无界队列</li>
+</ul>
+</li>
+<li>SynchronousQueue<ul>
+<li>同步队列</li>
+<li>不存储元素</li>
+<li>每个put必须等待take</li>
+<li>公平/非公平</li>
+</ul>
+</li>
+<li>LinkedTransferQueue<ul>
+<li>融合了多种队列特性</li>
+<li>transfer()</li>
+<li>tryTransfer()</li>
+</ul>
+</li>
+<li>LinkedBlockingDeque<ul>
+<li>双端阻塞队列</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>BlockingDeque<ul>
+<li>双端阻塞队列接口</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>ThreadLocal<ul>
+<li>线程本地变量</li>
+<li>get()</li>
+<li>set()</li>
+<li>remove()</li>
+<li>initialValue()</li>
+<li>withInitial()</li>
+<li>实现原理<ul>
+<li>ThreadLocalMap<ul>
+<li>Thread的成员变量</li>
+<li>Entry数组</li>
+<li>Entry继承WeakReference</li>
+</ul>
+</li>
+<li>key是ThreadLocal对象</li>
+<li>value是实际值</li>
+</ul>
+</li>
+<li>内存泄漏<ul>
+<li>key是弱引用</li>
+<li>value是强引用</li>
+<li>ThreadLocal对象被回收后</li>
+<li>必须调用remove()</li>
+</ul>
+</li>
+<li>应用场景<ul>
+<li>线程隔离</li>
+<li>保存上下文信息</li>
+<li>数据库连接</li>
+<li>Session管理</li>
+</ul>
+</li>
+<li>InheritableThreadLocal<ul>
+<li>可继承的ThreadLocal</li>
+<li>子线程可访问父线程的值</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>并发设计模式<ul>
+<li>生产者-消费者模式<ul>
+<li>BlockingQueue实现</li>
+<li>wait/notify实现</li>
+</ul>
+</li>
+<li>读写锁模式<ul>
+<li>ReadWriteLock</li>
+<li>读多写少场景</li>
+</ul>
+</li>
+<li>Future模式<ul>
+<li>异步调用</li>
+<li>获取结果</li>
+</ul>
+</li>
+<li>Master-Worker模式<ul>
+<li>任务分发</li>
+<li>结果汇总</li>
+</ul>
+</li>
+<li>Guarded Suspension模式<ul>
+<li>保护性暂停</li>
+<li>条件满足时执行</li>
+</ul>
+</li>
+<li>Balking模式<ul>
+<li>条件不满足直接返回</li>
+</ul>
+</li>
+<li>Thread-Per-Message模式<ul>
+<li>每个请求一个线程</li>
+</ul>
+</li>
+<li>Worker Thread模式<ul>
+<li>线程池模式</li>
+</ul>
+</li>
+<li>Two-Phase Termination模式<ul>
+<li>两阶段终止</li>
+<li>安全关闭线程</li>
+</ul>
+</li>
+<li>Producer-Consumer模式</li>
+<li>Immutable模式<ul>
+<li>不可变对象</li>
+<li>线程安全</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>并发编程最佳实践<ul>
+<li>减少锁的范围</li>
+<li>减少锁的粒度</li>
+<li>用非阻塞数据结构替代阻塞</li>
+<li>无锁编程<ul>
+<li>CAS</li>
+<li>ThreadLocal</li>
+<li>不可变对象</li>
+</ul>
+</li>
+<li>避免死锁<ul>
+<li>固定加锁顺序</li>
+<li>超时放弃</li>
+<li>死锁检测</li>
+</ul>
+</li>
+<li>性能优化<ul>
+<li>减少上下文切换</li>
+<li>合理设置线程数</li>
+<li>使用合适的并发工具</li>
+<li>减少锁竞争</li>
+</ul>
+</li>
+<li>线程安全<ul>
+<li>无状态</li>
+<li>不可变</li>
+<li>同步</li>
+<li>线程封闭</li>
+</ul>
+</li>
+<li>活跃性问题<ul>
+<li>死锁<ul>
+<li>互斥</li>
+<li>持有并等待</li>
+<li>不可抢占</li>
+<li>循环等待</li>
+</ul>
+</li>
+<li>活锁<ul>
+<li>线程不断重试</li>
+<li>增加随机性</li>
+</ul>
+</li>
+<li>饥饿<ul>
+<li>线程无法获取资源</li>
+<li>优先级问题</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>对象发布与逸出<ul>
+<li>安全发布</li>
+<li>防止this逸出</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>并发工具与框架<ul>
+<li>Disruptor<ul>
+<li>高性能队列</li>
+<li>环形缓冲区</li>
+<li>无锁设计</li>
+</ul>
+</li>
+<li>Akka<ul>
+<li>Actor模型</li>
+<li>消息传递</li>
+</ul>
+</li>
+<li>RxJava<ul>
+<li>响应式编程</li>
+<li>观察者模式</li>
+</ul>
+</li>
+<li>Reactor<ul>
+<li>响应式编程</li>
+</ul>
+</li>
+<li>Netty<ul>
+<li>高性能网络框架</li>
+<li>EventLoop</li>
+</ul>
+</li>
+<li>Guava并发工具<ul>
+<li>ListenableFuture</li>
+<li>RateLimiter</li>
+<li>Striped</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>并发问题排查<ul>
+<li>死锁排查<ul>
+<li>jstack</li>
+<li>jvisualvm</li>
+<li>JConsole</li>
+<li>线程dump</li>
+</ul>
+</li>
+<li>CPU占用高<ul>
+<li>top -H</li>
+<li>jstack</li>
+<li>定位线程</li>
+</ul>
+</li>
+<li>线程状态分析<ul>
+<li>RUNNABLE</li>
+<li>BLOCKED</li>
+<li>WAITING</li>
+<li>TIMED_WAITING</li>
+</ul>
+</li>
+<li>活锁检测</li>
+<li>饥饿检测</li>
+<li>性能分析<ul>
+<li>JProfiler</li>
+<li>YourKit</li>
+<li>Arthas</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>JDK并发新特性<ul>
+<li>JDK5<ul>
+<li>java.util.concurrent包</li>
+<li>Lock</li>
+<li>Executor框架</li>
+<li>并发集合</li>
+<li>原子类</li>
+</ul>
+</li>
+<li>JDK6<ul>
+<li>ConcurrentSkipListMap</li>
+<li>ConcurrentSkipListSet</li>
+</ul>
+</li>
+<li>JDK7<ul>
+<li>ForkJoinPool</li>
+<li>Phaser</li>
+<li>TransferQueue</li>
+</ul>
+</li>
+<li>JDK8<ul>
+<li>CompletableFuture</li>
+<li>StampedLock</li>
+<li>LongAdder</li>
+<li>并行流</li>
+</ul>
+</li>
+<li>JDK9<ul>
+<li>Flow API</li>
+<li>响应式流</li>
+</ul>
+</li>
+<li>JDK10<ul>
+<li>局部变量类型推断</li>
+</ul>
+</li>
+<li>JDK11<ul>
+<li>Epsilon GC</li>
+</ul>
+</li>
+<li>JDK12-17<ul>
+<li>持续改进</li>
+</ul>
+</li>
+<li>JDK19<ul>
+<li>虚拟线程(预览)</li>
+</ul>
+</li>
+<li>JDK21<ul>
+<li>虚拟线程(正式)</li>
+<li>结构化并发</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>虚拟线程(JDK21)<ul>
+<li>轻量级线程</li>
+<li>用户态线程</li>
+<li>M:N调度</li>
+<li>高并发场景</li>
+<li>Thread.ofVirtual()</li>
+<li>Thread.startVirtualThread()</li>
+<li>Executors.newVirtualThreadPerTaskExecutor()</li>
+<li>优势<ul>
+<li>创建成本低</li>
+<li>内存占用小</li>
+<li>数百万级并发</li>
+</ul>
+</li>
+<li>限制<ul>
+<li>不适合CPU密集型</li>
+<li>synchronized会固定(pinning)</li>
+</ul>
+</li>
+<li>结构化并发<ul>
+<li>StructuredTaskScope</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+        </div>
+    </div>
+
+    <script src="../../../assets/script.js"></script>
+    <script>
+        // 初始化代码高亮
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
+        });
+    </script>
+</body>
+
+</html>
