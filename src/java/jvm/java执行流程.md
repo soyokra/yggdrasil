@@ -1,0 +1,40 @@
+
+### 编译
+.java文件编译为.class的字节码文件
+
+```
+hello.java --> 编译 ---> hello.class 
+```
+
+### 类加载
+
+#### 加载
+读取hello.class文件，类元信息加载到jvm方法区
+
+#### 链接 - 验证
+校验字节码合法性（如格式、安全规则）
+
+#### 链接 - 准备
+为静态变量分配内存（方法区），设置默认值（如 0、false）
+
+#### 链接 - 解析
+将符号引用（如类名、方法名）转为直接引用（内存地址）
+
+#### 初始化
+执行静态代码块、静态变量显式初始化（赋具体值）
+
+### 类执行
+执行引擎执行将方法区的代码放到栈上执行，并且通过堆管理对象
+
+类加载后，其元信息（含字节码）存于方法区；执行引擎读取方法区的字节码，通过 “虚拟机栈” 创建栈帧来执行方法；对象实例及成员变量存于堆，通过栈中的引用访问堆对象
+
+![java_runtime.png](java_runtime.png)
+
+![java_runtime_jvm.png](java_runtime_jvm.png)
+
+![jvm_model.png](jvm_model.png)!
+
+![jdk_8_jvm.png](jdk_8_jvm.png)
+
+## JDK, JRE, JVM
+![jdk_jre_jvm.png](jdk_jre_jvm.png)
