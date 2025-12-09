@@ -169,16 +169,40 @@
 <li class="nav-item">
 <div class="nav-link has-children">
 <span class="nav-link-icon" data-toggle="collapse"></span>
-<a href="../../../html/spring/spring-framework/index.html" class="nav-link-text" data-path="html/spring/spring-framework/index.html">spring-framework</a>
+<a href="../../../html/spring/spring-boot/index.html" class="nav-link-text" data-path="html/spring/spring-boot/index.html">spring-boot</a>
 </div>
 <ul class="nav-children">
 <li class="nav-item">
 <div class="nav-link">
 <span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
-<a href="../../../html/spring/spring-framework/BeanLifecycle.html" class="nav-link-text" data-path="html/spring/spring-framework/BeanLifecycle.html">BeanLifecycle</a>
+<a href="../../../html/spring/spring-boot/BeanLifecycle.html" class="nav-link-text" data-path="html/spring/spring-boot/BeanLifecycle.html">BeanLifecycle</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-boot/SpringBoot事件流程.html" class="nav-link-text" data-path="html/spring/spring-boot/SpringBoot事件流程.html">SpringBoot事件流程</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-boot/SpringBoot启动流程.html" class="nav-link-text" data-path="html/spring/spring-boot/SpringBoot启动流程.html">SpringBoot启动流程</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-boot/SpringBoot自动装配.html" class="nav-link-text" data-path="html/spring/spring-boot/SpringBoot自动装配.html">SpringBoot自动装配</a>
 </div>
 </li>
 </ul>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-framework/index.html" class="nav-link-text" data-path="html/spring/spring-framework/index.html">spring-framework</a>
+</div>
 </li>
 <li class="nav-item">
 <div class="nav-link has-children">
@@ -381,19 +405,7 @@
 <li class="nav-item">
 <div class="nav-link">
 <span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
-<a href="../../../html/spring/spring启动源码分析/refresh-sequence-diagram.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/refresh-sequence-diagram.html">refresh-sequence-diagram</a>
-</div>
-</li>
-<li class="nav-item">
-<div class="nav-link">
-<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
 <a href="../../../html/spring/spring启动源码分析/ServletWebServerApplicationContext.onRefresh.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/ServletWebServerApplicationContext.onRefresh.html">ServletWebServerApplicationContext.onRefresh</a>
-</div>
-</li>
-<li class="nav-item">
-<div class="nav-link">
-<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
-<a href="../../../html/spring/spring启动源码分析/spring-boot-startup-flow.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/spring-boot-startup-flow.html">spring-boot-startup-flow</a>
 </div>
 </li>
 </ul>
@@ -500,186 +512,7 @@
     <!-- 主内容区 -->
     <div class="main-content">
         <div class="content-body">
-            <h1 id="spring-boot">Spring Boot 启动源码分析</h1>
-<h2 id="_1">概述</h2>
-<p>本文档深入分析Spring Boot应用的启动过程，从<code>SpringApplication.run()</code>方法开始，到ApplicationContext完全初始化完成。</p>
-<p>Spring Boot的启动过程本质上是<strong>创建并初始化一个ApplicationContext</strong>的过程，这个过程可以分为三个主要阶段：</p>
-<h3 id="_2">三大阶段</h3>
-<ol>
-<li><strong>准备阶段</strong>：创建SpringApplication实例，加载配置</li>
-<li><strong>创建阶段</strong>：创建ApplicationContext实例</li>
-<li><strong>刷新阶段</strong>：初始化ApplicationContext（refresh方法的13个步骤）</li>
-</ol>
-<h3 id="_3">核心职责</h3>
-<table>
-<thead>
-<tr>
-<th>阶段</th>
-<th>核心职责</th>
-<th>关键步骤</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>准备阶段</strong></td>
-<td>环境准备、监听器初始化</td>
-<td>推断应用类型、加载初始化器和监听器</td>
-</tr>
-<tr>
-<td><strong>创建阶段</strong></td>
-<td>创建Context实例</td>
-<td>根据应用类型创建对应的ApplicationContext</td>
-</tr>
-<tr>
-<td><strong>刷新阶段</strong></td>
-<td>Bean定义注册和实例化</td>
-<td>13个步骤完成容器初始化</td>
-</tr>
-</tbody>
-</table>
-<h2 id="refresh13">refresh方法的13个步骤</h2>
-<p>refresh()是ApplicationContext初始化的核心方法，包含13个步骤：</p>
-<table>
-<thead>
-<tr>
-<th>步骤</th>
-<th>方法</th>
-<th>重要性</th>
-<th>主要职责</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>prepareRefresh</td>
-<td>⭐</td>
-<td>准备刷新，初始化环境</td>
-</tr>
-<tr>
-<td>2</td>
-<td>obtainFreshBeanFactory</td>
-<td>⭐⭐</td>
-<td>获取BeanFactory</td>
-</tr>
-<tr>
-<td>3</td>
-<td>prepareBeanFactory</td>
-<td>⭐⭐</td>
-<td>配置BeanFactory的标准特性</td>
-</tr>
-<tr>
-<td>4</td>
-<td>postProcessBeanFactory</td>
-<td>⭐</td>
-<td>子类扩展点（Web应用添加作用域）</td>
-</tr>
-<tr>
-<td>5</td>
-<td>invokeBeanFactoryPostProcessors</td>
-<td>⭐⭐⭐</td>
-<td><strong>处理配置类，注册BeanDefinition</strong></td>
-</tr>
-<tr>
-<td>6</td>
-<td>registerBeanPostProcessors</td>
-<td>⭐⭐⭐</td>
-<td><strong>注册Bean后置处理器</strong></td>
-</tr>
-<tr>
-<td>7</td>
-<td>initMessageSource</td>
-<td>⭐</td>
-<td>初始化国际化消息源</td>
-</tr>
-<tr>
-<td>8</td>
-<td>initApplicationEventMulticaster</td>
-<td>⭐⭐</td>
-<td>初始化事件多播器</td>
-</tr>
-<tr>
-<td>9</td>
-<td>onRefresh</td>
-<td>⭐⭐</td>
-<td>子类扩展点（<strong>创建WebServer</strong>）</td>
-</tr>
-<tr>
-<td>10</td>
-<td>registerListeners</td>
-<td>⭐⭐</td>
-<td>注册监听器</td>
-</tr>
-<tr>
-<td>11</td>
-<td>finishBeanFactoryInitialization</td>
-<td>⭐⭐⭐</td>
-<td><strong>实例化所有单例Bean</strong></td>
-</tr>
-<tr>
-<td>12</td>
-<td>finishRefresh</td>
-<td>⭐⭐⭐</td>
-<td>完成刷新（<strong>启动WebServer</strong>）</td>
-</tr>
-<tr>
-<td>13</td>
-<td>resetCommonCaches</td>
-<td>⭐</td>
-<td>清理缓存</td>
-</tr>
-</tbody>
-</table>
-<p><strong>注</strong>：标记⭐⭐⭐的步骤是最核心的步骤，建议优先阅读。</p>
-<h2 id="_4">关键概念</h2>
-<h3 id="beandefinition5">BeanDefinition注册（步骤5）</h3>
-<p>在invokeBeanFactoryPostProcessors阶段，Spring会：<br/>
-- 扫描包路径，查找@Component等注解的类<br/>
-- 处理@Configuration配置类<br/>
-- 处理@Import和@ImportResource<br/>
-- 执行SpringBoot自动配置（AutoConfiguration）<br/>
-- 将所有Bean定义注册到BeanFactory</p>
-<h3 id="bean11">Bean实例化（步骤11）</h3>
-<p>在finishBeanFactoryInitialization阶段，Spring会：<br/>
-- 按依赖关系顺序实例化Bean<br/>
-- 处理Bean的生命周期回调<br/>
-- 执行依赖注入<br/>
-- 应用AOP代理</p>
-<h3 id="webserver912">WebServer启动（步骤9和12）</h3>
-<ul>
-<li><strong>步骤9 (onRefresh)</strong>：创建WebServer实例（Tomcat/Jetty/Undertow）</li>
-<li><strong>步骤12 (finishRefresh)</strong>：启动WebServer，开始接受请求</li>
-</ul>
-<h2 id="_5">阅读建议</h2>
-<h3 id="_6">按重要性阅读（推荐）</h3>
-<p><strong>核心流程（必读）</strong>：<br/>
-1. <a href="Application.run.html">Application.run</a> - 启动入口<br/>
-2. <a href="Application.refreshContext.html">Application.refreshContext</a> - refresh方法总览<br/>
-3. <a href="AbstractApplicationContext.invokeBeanFactoryPostProcessors.html">invokeBeanFactoryPostProcessors</a> - BeanDefinition注册<br/>
-4. <a href="AbstractApplicationContext.finishBeanFactoryInitialization.html">finishBeanFactoryInitialization</a> - Bean实例化<br/>
-5. <a href="AbstractApplicationContext.finishRefresh.html">finishRefresh</a> - 完成刷新和WebServer启动</p>
-<p><strong>重要扩展点</strong>：<br/>
-- <a href="ConfigurationClassPostProcessor.processConfigBeanDefinitions.html">ConfigurationClassPostProcessor</a> - 配置类处理<br/>
-- <a href="ConfigurationClassParser.parse.html">ConfigurationClassParser</a> - 注解解析<br/>
-- <a href="ServletWebServerApplicationContext.onRefresh.html">ServletWebServerApplicationContext.onRefresh</a> - WebServer创建</p>
-<p><strong>基础设施</strong>：<br/>
-- <a href="AbstractApplicationContext.prepareBeanFactory.html">prepareBeanFactory</a> - BeanFactory配置<br/>
-- <a href="AbstractApplicationContext.registerBeanPostProcessors.html">registerBeanPostProcessors</a> - 后置处理器<br/>
-- <a href="AbstractApplicationContext.initApplicationEventMulticaster.html">initApplicationEventMulticaster</a> - 事件机制</p>
-<p><strong>其他步骤</strong>：<br/>
-- <a href="AbstractApplicationContext.prepareRefresh.html">prepareRefresh</a><br/>
-- <a href="AbstractApplicationContext.obtainFreshBeanFactory.html">obtainFreshBeanFactory</a><br/>
-- <a href="AbstractApplicationContext.postProcessBeanFactory.html">postProcessBeanFactory</a><br/>
-- <a href="AbstractApplicationContext.initMessageSource.html">initMessageSource</a><br/>
-- <a href="AbstractApplicationContext.onRefresh.html">onRefresh</a><br/>
-- <a href="AbstractApplicationContext.registerListeners.html">registerListeners</a></p>
-<p><strong>异常处理</strong>：<br/>
-- <a href="AbstractApplicationContext.destroyBeans.html">destroyBeans</a><br/>
-- <a href="AbstractApplicationContext.cancelRefresh.html">cancelRefresh</a><br/>
-- <a href="AbstractApplicationContext.resetCommonCaches.html">resetCommonCaches</a></p>
-<h3 id="_7">按流程顺序阅读</h3>
-<p>如果想完整了解启动流程，可以按照以下顺序阅读：</p>
-<h1 id="_8">目录</h1>
-<ul>
+            <ul>
 <li><a href="Application.run.html">Application.run</a><ul>
 <li><a href="Application.createApplicationContext.html">Application.createApplicationContext</a></li>
 <li><a href="Application.refreshContext.html">Application.refreshContext</a><ul>
@@ -718,16 +551,6 @@
 </li>
 </ul>
 </li>
-</ul>
-<h2 id="_9">流程图</h2>
-<ul>
-<li><a href="spring-boot-startup-flow.html">Spring Boot启动流程图</a></li>
-<li><a href="refresh-sequence-diagram.html">refresh方法时序图</a></li>
-</ul>
-<h2 id="_10">辅助图片</h2>
-<ul>
-<li><a href="bean_lifecycle_001.png">Bean生命周期图（简化版）</a></li>
-<li><a href="bean_lifecycle_002.png">Bean生命周期图（详细版）</a></li>
 </ul>
         </div>
     </div>
