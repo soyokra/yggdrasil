@@ -56,3 +56,4 @@ Thumbs.db
 configs/local_*.json
 configs/prod_*.json
 
+java/target

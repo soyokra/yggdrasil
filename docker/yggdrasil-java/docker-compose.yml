@@ -1,0 +1,51 @@
+services:
+  java8:
+    build:
+      context: ./java8
+      dockerfile: Dockerfile
+    image: yggdrasil/java8:latest
+    container_name: yggdrasil-java8-dev
+    
+    # 端口映射
+    ports:
+      - "8182:80"   # 主应用端口
+      - "5005:5005"   # Java 远程调试端口
+    
+    # 卷挂载
+    volumes:
+      # 挂载 java 目录到工作目录
+      - ../../java:/workspace
+      # 持久化 Maven 本地仓库
+      - maven-repo:/root/.m2
+      # 持久化 Bash 历史记录
+      - bash-history:/root/.bash_history
+    
+    # 环境变量
+    environment:
+      - JAVA_OPTS=-Xmx512m -Xms256m
+      - MAVEN_OPTS=-Xmx512m
+      - TZ=Asia/Shanghai
+    
+    # 保持容器运行
+    stdin_open: true
+    tty: true
+    
+    # 网络配置
+    networks:
+      - yggdrasil-network
+    
+    # 重启策略
+    restart: unless-stopped
+
+# 定义卷
+volumes:
+  maven-repo:
+    driver: local
+  bash-history:
+    driver: local
+
+# 定义网络
+networks:
+  yggdrasil-network:
+    driver: bridge
+
