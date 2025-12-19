@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>字节码分析-Lambda表达式 - Technology</title>
+    <link rel="stylesheet" href="../../../../assets/style.css">
+    <link rel="stylesheet" href="../../../../assets/github.min.css">
+    <script src="../../../../assets/highlight.min.js"></script>
+    <script src="../../../../assets/python.min.js"></script>
+    <script src="../../../../assets/java.min.js"></script>
+    <script src="../../../../assets/javascript.min.js"></script>
+    <script src="../../../../assets/xml.min.js"></script>
+    <script src="../../../../assets/css.min.js"></script>
+    <script src="../../../../assets/bash.min.js"></script>
+    <script src="../../../../assets/sql.min.js"></script>
+</head>
+
+<body>
+    <!-- 顶部导航栏 -->
+    <div class="top-navbar">
+        <div class="site-title">Technology</div>
+    </div>
+
+    <!-- 侧边导航栏 -->
+    <div class="sidebar">
+        <ul class="nav-tree">
+            <li class="nav-item">
+<div class="nav-link has-children active">
+<span class="nav-link-icon expanded" data-toggle="collapse"></span>
+<a href="../../../../html/java/index.html" class="nav-link-text" data-path="html/java/index.html">java</a>
+</div>
+<ul class="nav-children expanded">
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/java/Java并发编程/index.html" class="nav-link-text" data-path="html/java/Java并发编程/index.html">Java并发编程</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java并发编程/Java内存模型(JMM).html" class="nav-link-text" data-path="html/java/Java并发编程/Java内存模型(JMM).html">Java内存模型(JMM)</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java并发编程/线程(Thread).html" class="nav-link-text" data-path="html/java/Java并发编程/线程(Thread).html">线程(Thread)</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children active">
+<span class="nav-link-icon expanded" data-toggle="collapse"></span>
+<a href="../../../../html/java/Java虚拟机模型/index.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/index.html">Java虚拟机模型</a>
+</div>
+<ul class="nav-children expanded">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/内存分析工具.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/内存分析工具.html">内存分析工具</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/垃圾回收机制.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/垃圾回收机制.html">垃圾回收机制</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/堆.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/堆.html">堆</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children active">
+<span class="nav-link-icon expanded" data-toggle="collapse"></span>
+<a href="../../../../html/java/Java虚拟机模型/字节码分析/index.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/index.html">字节码分析</a>
+</div>
+<ul class="nav-children expanded">
+<li class="nav-item">
+<div class="nav-link active">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/字节码分析/字节码分析-Lambda表达式.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-Lambda表达式.html">字节码分析-Lambda表达式</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/字节码分析/字节码分析-内部类.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-内部类.html">字节码分析-内部类</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/字节码分析/字节码分析-可变参数.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-可变参数.html">字节码分析-可变参数</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/字节码分析/字节码分析-同步.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-同步.html">字节码分析-同步</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/字节码分析/字节码分析-字段.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-字段.html">字节码分析-字段</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/字节码分析/字节码分析-异常处理.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-异常处理.html">字节码分析-异常处理</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/字节码分析/字节码分析-控制流.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-控制流.html">字节码分析-控制流</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/字节码分析/字节码分析-方法.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-方法.html">字节码分析-方法</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/字节码分析/字节码分析-方法引用.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-方法引用.html">字节码分析-方法引用</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/字节码分析/字节码分析-泛型.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-泛型.html">字节码分析-泛型</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/字节码分析/字节码分析-类加载机制.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-类加载机制.html">字节码分析-类加载机制</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/字节码分析/字节码分析-继承.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-继承.html">字节码分析-继承</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/字节码分析/字节码增强技术.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码增强技术.html">字节码增强技术</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/执行引擎.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/执行引擎.html">执行引擎</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/方法区.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/方法区.html">方法区</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/类加载机制.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/类加载机制.html">类加载机制</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/虚拟机栈.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/虚拟机栈.html">虚拟机栈</a>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/spring/index.html" class="nav-link-text" data-path="html/spring/index.html">spring</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/spring/spring-boot/index.html" class="nav-link-text" data-path="html/spring/spring-boot/index.html">spring-boot</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-boot/SpringBoot事件机制.html" class="nav-link-text" data-path="html/spring/spring-boot/SpringBoot事件机制.html">SpringBoot事件机制</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-boot/SpringBoot启动流程.html" class="nav-link-text" data-path="html/spring/spring-boot/SpringBoot启动流程.html">SpringBoot启动流程</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-boot/SpringBoot日志体系.html" class="nav-link-text" data-path="html/spring/spring-boot/SpringBoot日志体系.html">SpringBoot日志体系</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-boot/SpringBoot自动装配.html" class="nav-link-text" data-path="html/spring/spring-boot/SpringBoot自动装配.html">SpringBoot自动装配</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/spring/spring-framework/index.html" class="nav-link-text" data-path="html/spring/spring-framework/index.html">spring-framework</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework/BeanDefinition创建流程.html" class="nav-link-text" data-path="html/spring/spring-framework/BeanDefinition创建流程.html">BeanDefinition创建流程</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework/BeanLifecycle.html" class="nav-link-text" data-path="html/spring/spring-framework/BeanLifecycle.html">BeanLifecycle</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework/Bean创建流程.html" class="nav-link-text" data-path="html/spring/spring-framework/Bean创建流程.html">Bean创建流程</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/spring/spring-mysql/index.html" class="nav-link-text" data-path="html/spring/spring-mysql/index.html">spring-mysql</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/spring/spring-mysql/mybatis/index.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis/index.html">mybatis</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-mysql/mybatis/Mapper源码分析.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis/Mapper源码分析.html">Mapper源码分析</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/spring/spring-mysql/mybatis-plus/index.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis-plus/index.html">mybatis-plus</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-mysql/mybatis-plus/DataSource源码分析.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis-plus/DataSource源码分析.html">DataSource源码分析</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-mysql/mybatis-plus/Mapper源码分析.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis-plus/Mapper源码分析.html">Mapper源码分析</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-mysql/mybatis-plus/SQL执行源码分析.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis-plus/SQL执行源码分析.html">SQL执行源码分析</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-mysql/mybatis-plus/SQL模板注册源码分析.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis-plus/SQL模板注册源码分析.html">SQL模板注册源码分析</a>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/spring/spring启动源码分析/index.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/index.html">spring启动源码分析</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AbstractApplicationContext.cancelRefresh.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.cancelRefresh.html">AbstractApplicationContext.cancelRefresh</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AbstractApplicationContext.destroyBeans.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.destroyBeans.html">AbstractApplicationContext.destroyBeans</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AbstractApplicationContext.finishBeanFactoryInitialization.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.finishBeanFactoryInitialization.html">AbstractApplicationContext.finishBeanFactoryInitialization</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AbstractApplicationContext.finishRefresh.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.finishRefresh.html">AbstractApplicationContext.finishRefresh</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AbstractApplicationContext.initApplicationEventMulticaster.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.initApplicationEventMulticaster.html">AbstractApplicationContext.initApplicationEventMulticaster</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AbstractApplicationContext.initMessageSource.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.initMessageSource.html">AbstractApplicationContext.initMessageSource</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AbstractApplicationContext.invokeBeanFactoryPostProcessors.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.invokeBeanFactoryPostProcessors.html">AbstractApplicationContext.invokeBeanFactoryPostProcessors</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AbstractApplicationContext.obtainFreshBeanFactory.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.obtainFreshBeanFactory.html">AbstractApplicationContext.obtainFreshBeanFactory</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AbstractApplicationContext.onRefresh.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.onRefresh.html">AbstractApplicationContext.onRefresh</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AbstractApplicationContext.postProcessBeanFactory.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.postProcessBeanFactory.html">AbstractApplicationContext.postProcessBeanFactory</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AbstractApplicationContext.prepareBeanFactory.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.prepareBeanFactory.html">AbstractApplicationContext.prepareBeanFactory</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AbstractApplicationContext.prepareRefresh.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.prepareRefresh.html">AbstractApplicationContext.prepareRefresh</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AbstractApplicationContext.registerBeanPostProcessors.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.registerBeanPostProcessors.html">AbstractApplicationContext.registerBeanPostProcessors</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AbstractApplicationContext.registerListeners.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.registerListeners.html">AbstractApplicationContext.registerListeners</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AbstractApplicationContext.resetCommonCaches.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.resetCommonCaches.html">AbstractApplicationContext.resetCommonCaches</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/Application.createApplicationContext.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/Application.createApplicationContext.html">Application.createApplicationContext</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/Application.refreshContext.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/Application.refreshContext.html">Application.refreshContext</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/Application.run.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/Application.run.html">Application.run</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AutoConfigurationImportSelector.getAutoConfigurationEntry.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AutoConfigurationImportSelector.getAutoConfigurationEntry.html">AutoConfigurationImportSelector.getAutoConfigurationEntry</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/ClassPathMapperScanner.scan.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/ClassPathMapperScanner.scan.html">ClassPathMapperScanner.scan</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/ConfigurationClassParser.parse.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/ConfigurationClassParser.parse.html">ConfigurationClassParser.parse</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/ConfigurationClassPostProcessor.processConfigBeanDefinitions.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/ConfigurationClassPostProcessor.processConfigBeanDefinitions.html">ConfigurationClassPostProcessor.processConfigBeanDefinitions</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/MapperScannerConfigurer.postProcessBeanDefinitionRegistry.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/MapperScannerConfigurer.postProcessBeanDefinitionRegistry.html">MapperScannerConfigurer.postProcessBeanDefinitionRegistry</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/ServletWebServerApplicationContext.onRefresh.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/ServletWebServerApplicationContext.onRefresh.html">ServletWebServerApplicationContext.onRefresh</a>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/云原生/index.html" class="nav-link-text" data-path="html/云原生/index.html">云原生</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/云原生/docker/index.html" class="nav-link-text" data-path="html/云原生/docker/index.html">docker</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/云原生/k8s/index.html" class="nav-link-text" data-path="html/云原生/k8s/index.html">k8s</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/云原生/k8s/K8S网络架构.html" class="nav-link-text" data-path="html/云原生/k8s/K8S网络架构.html">K8S网络架构</a>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/中间件/index.html" class="nav-link-text" data-path="html/中间件/index.html">中间件</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/中间件/clickhouse/index.html" class="nav-link-text" data-path="html/中间件/clickhouse/index.html">clickhouse</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/中间件/elasticsearch/index.html" class="nav-link-text" data-path="html/中间件/elasticsearch/index.html">elasticsearch</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/中间件/kakfa/index.html" class="nav-link-text" data-path="html/中间件/kakfa/index.html">kakfa</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/中间件/mongodb/index.html" class="nav-link-text" data-path="html/中间件/mongodb/index.html">mongodb</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/中间件/rabbitmq/index.html" class="nav-link-text" data-path="html/中间件/rabbitmq/index.html">rabbitmq</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/中间件/redis/index.html" class="nav-link-text" data-path="html/中间件/redis/index.html">redis</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/监控/index.html" class="nav-link-text" data-path="html/监控/index.html">监控</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/监控/prometheus/index.html" class="nav-link-text" data-path="html/监控/prometheus/index.html">prometheus</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/基础/index.html" class="nav-link-text" data-path="html/基础/index.html">基础</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/基础/数据结构/index.html" class="nav-link-text" data-path="html/基础/数据结构/index.html">数据结构</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/基础/画图/index.html" class="nav-link-text" data-path="html/基础/画图/index.html">画图</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/基础/算法/index.html" class="nav-link-text" data-path="html/基础/算法/index.html">算法</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/基础/设计模式/index.html" class="nav-link-text" data-path="html/基础/设计模式/index.html">设计模式</a>
+</div>
+</li>
+</ul>
+</li>
+        </ul>
+    </div>
+
+    <!-- 主内容区 -->
+    <div class="main-content">
+        <div class="content-body">
+            <h1 id="-lambda">字节码分析-Lambda表达式</h1>
+<h2 id="_1">源码</h2>
+<div class="hljs"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nn">java.bytecode</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">java.util.function.Function</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">java.util.function.Predicate</span><span class="p">;</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Lambda表达式示例 - 演示Java 8 Lambda表达式</span>
+<span class="cm"> */</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">LambdaExample</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="c1">// Lambda表达式示例</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">lambdaExample</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Function</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span><span class="w"> </span><span class="n">Integer</span><span class="o">&gt;</span><span class="w"> </span><span class="n">func</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="na">length</span><span class="p">();</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">length</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">func</span><span class="p">.</span><span class="na">apply</span><span class="p">(</span><span class="s">"Hello"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Length: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">length</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Lambda表达式 - 多行</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">lambdaMultiLineExample</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Function</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">func</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">String</span><span class="w"> </span><span class="n">upper</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="na">toUpperCase</span><span class="p">();</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">upper</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">"!"</span><span class="p">;</span>
+<span class="w">        </span><span class="p">};</span>
+<span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">func</span><span class="p">.</span><span class="na">apply</span><span class="p">(</span><span class="s">"hello"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">result</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Lambda表达式 - Predicate</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">lambdaPredicateExample</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Predicate</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span><span class="w"> </span><span class="n">isEven</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">boolean</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">isEven</span><span class="p">.</span><span class="na">test</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Is 10 even? "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">result</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="_2">结构化反解析</h2>
+<div class="hljs"><pre><span></span><code><span class="w">  </span><span class="n">Classfile</span><span class="w"> </span><span class="o">/</span><span class="n">D</span><span class="p">:</span><span class="o">/</span><span class="n">zcp</span><span class="o">/</span><span class="n">github</span><span class="o">/</span><span class="n">yggdrasil</span><span class="o">/</span><span class="n">java</span><span class="o">/</span><span class="n">bytecode</span><span class="o">/</span><span class="n">LambdaExample</span><span class="o">.</span><span class="k">class</span>
+<span class="w">  </span><span class="n">Last</span><span class="w"> </span><span class="n">modified</span><span class="w"> </span><span class="mi">2025</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">3</span><span class="p">;</span><span class="w"> </span><span class="n">size</span><span class="w"> </span><span class="mi">2289</span><span class="w"> </span><span class="n">bytes</span>
+<span class="w">  </span><span class="n">MD5</span><span class="w"> </span><span class="n">checksum</span><span class="w"> </span><span class="mi">27</span><span class="n">bce9a64729abd62aadd3d8a9346099</span>
+<span class="w">  </span><span class="n">Compiled</span><span class="w"> </span><span class="n">from</span><span class="w"> </span><span class="s2">"LambdaExample.java"</span>
+<span class="n">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="n">java</span><span class="o">.</span><span class="n">bytecode</span><span class="o">.</span><span class="n">LambdaExample</span>
+<span class="w">  </span><span class="n">minor</span><span class="w"> </span><span class="n">version</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">  </span><span class="n">major</span><span class="w"> </span><span class="n">version</span><span class="p">:</span><span class="w"> </span><span class="mi">52</span>
+<span class="w">  </span><span class="n">flags</span><span class="p">:</span><span class="w"> </span><span class="n">ACC_PUBLIC</span><span class="p">,</span><span class="w"> </span><span class="n">ACC_SUPER</span>
+<span class="n">Constant</span><span class="w"> </span><span class="n">pool</span><span class="p">:</span>
+<span class="w">    </span><span class="c1">#1 = Methodref          #2.#3         // java/lang/Object."&lt;init&gt;":()V</span>
+<span class="w">    </span><span class="c1">#2 = Class              #4            // java/lang/Object</span>
+<span class="w">    </span><span class="c1">#3 = NameAndType        #5:#6         // "&lt;init&gt;":()V</span>
+<span class="w">    </span><span class="c1">#4 = Utf8               java/lang/Object</span>
+<span class="w">    </span><span class="c1">#5 = Utf8               &lt;init&gt;</span>
+<span class="w">    </span><span class="c1">#6 = Utf8               ()V</span>
+<span class="w">    </span><span class="c1">#7 = InvokeDynamic      #0:#8         // #0:apply:()Ljava/util/function/Function;</span>
+<span class="w">    </span><span class="c1">#8 = NameAndType        #9:#10        // apply:()Ljava/util/function/Function;</span>
+<span class="w">    </span><span class="c1">#9 = Utf8               apply</span>
+<span class="w">   </span><span class="c1">#10 = Utf8               ()Ljava/util/function/Function;</span>
+<span class="w">   </span><span class="c1">#11 = String             #12           // Hello</span>
+<span class="w">   </span><span class="c1">#12 = Utf8               Hello</span>
+<span class="w">   </span><span class="c1">#13 = InterfaceMethodref #14.#15       // java/util/function/Function.apply:(Ljava/lang/Object;)Ljava/lang/Object;</span>
+<span class="w">   </span><span class="c1">#14 = Class              #16           // java/util/function/Function</span>
+<span class="w">   </span><span class="c1">#15 = NameAndType        #9:#17        // apply:(Ljava/lang/Object;)Ljava/lang/Object;</span>
+<span class="w">   </span><span class="c1">#16 = Utf8               java/util/function/Function</span>
+<span class="w">   </span><span class="c1">#17 = Utf8               (Ljava/lang/Object;)Ljava/lang/Object;</span>
+<span class="w">   </span><span class="c1">#18 = Class              #19           // java/lang/Integer</span>
+<span class="w">   </span><span class="c1">#19 = Utf8               java/lang/Integer</span>
+<span class="w">   </span><span class="c1">#20 = Methodref          #18.#21       // java/lang/Integer.intValue:()I</span>
+<span class="w">   </span><span class="c1">#21 = NameAndType        #22:#23       // intValue:()I</span>
+<span class="w">   </span><span class="c1">#22 = Utf8               intValue</span>
+<span class="w">   </span><span class="c1">#23 = Utf8               ()I</span>
+<span class="w">   </span><span class="c1">#24 = Fieldref           #25.#26       // java/lang/System.out:Ljava/io/PrintStream;</span>
+<span class="w">   </span><span class="c1">#25 = Class              #27           // java/lang/System</span>
+<span class="w">   </span><span class="c1">#26 = NameAndType        #28:#29       // out:Ljava/io/PrintStream;</span>
+<span class="w">   </span><span class="c1">#27 = Utf8               java/lang/System</span>
+<span class="w">   </span><span class="c1">#28 = Utf8               out</span>
+<span class="w">   </span><span class="c1">#29 = Utf8               Ljava/io/PrintStream;</span>
+<span class="w">   </span><span class="c1">#30 = Class              #31           // java/lang/StringBuilder</span>
+<span class="w">   </span><span class="c1">#31 = Utf8               java/lang/StringBuilder</span>
+<span class="w">   </span><span class="c1">#32 = Methodref          #30.#3        // java/lang/StringBuilder."&lt;init&gt;":()V</span>
+<span class="w">   </span><span class="c1">#33 = String             #34           // Length:</span>
+<span class="w">   </span><span class="c1">#34 = Utf8               Length:</span>
+<span class="w">   </span><span class="c1">#35 = Methodref          #30.#36       // java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span>
+<span class="w">   </span><span class="c1">#36 = NameAndType        #37:#38       // append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span>
+<span class="w">   </span><span class="c1">#37 = Utf8               append</span>
+<span class="w">   </span><span class="c1">#38 = Utf8               (Ljava/lang/String;)Ljava/lang/StringBuilder;</span>
+<span class="w">   </span><span class="c1">#39 = Methodref          #30.#40       // java/lang/StringBuilder.append:(I)Ljava/lang/StringBuilder;</span>
+<span class="w">   </span><span class="c1">#40 = NameAndType        #37:#41       // append:(I)Ljava/lang/StringBuilder;</span>
+<span class="w">   </span><span class="c1">#41 = Utf8               (I)Ljava/lang/StringBuilder;</span>
+<span class="w">   </span><span class="c1">#42 = Methodref          #30.#43       // java/lang/StringBuilder.toString:()Ljava/lang/String;</span>
+<span class="w">   </span><span class="c1">#43 = NameAndType        #44:#45       // toString:()Ljava/lang/String;</span>
+<span class="w">   </span><span class="c1">#44 = Utf8               toString</span>
+<span class="w">   </span><span class="c1">#45 = Utf8               ()Ljava/lang/String;</span>
+<span class="w">   </span><span class="c1">#46 = Methodref          #47.#48       // java/io/PrintStream.println:(Ljava/lang/String;)V</span>
+<span class="w">   </span><span class="c1">#47 = Class              #49           // java/io/PrintStream</span>
+<span class="w">   </span><span class="c1">#48 = NameAndType        #50:#51       // println:(Ljava/lang/String;)V</span>
+<span class="w">   </span><span class="c1">#49 = Utf8               java/io/PrintStream</span>
+<span class="w">   </span><span class="c1">#50 = Utf8               println</span>
+<span class="w">   </span><span class="c1">#51 = Utf8               (Ljava/lang/String;)V</span>
+<span class="w">   </span><span class="c1">#52 = InvokeDynamic      #1:#8         // #1:apply:()Ljava/util/function/Function;</span>
+<span class="w">   </span><span class="c1">#53 = String             #54           // hello</span>
+<span class="w">   </span><span class="c1">#54 = Utf8               hello</span>
+<span class="w">   </span><span class="c1">#55 = Class              #56           // java/lang/String</span>
+<span class="w">   </span><span class="c1">#56 = Utf8               java/lang/String</span>
+<span class="w">   </span><span class="c1">#57 = InvokeDynamic      #2:#58        // #2:test:()Ljava/util/function/Predicate;</span>
+<span class="w">   </span><span class="c1">#58 = NameAndType        #59:#60       // test:()Ljava/util/function/Predicate;</span>
+<span class="w">   </span><span class="c1">#59 = Utf8               test</span>
+<span class="w">   </span><span class="c1">#60 = Utf8               ()Ljava/util/function/Predicate;</span>
+<span class="w">   </span><span class="c1">#61 = Methodref          #18.#62       // java/lang/Integer.valueOf:(I)Ljava/lang/Integer;</span>
+<span class="w">   </span><span class="c1">#62 = NameAndType        #63:#64       // valueOf:(I)Ljava/lang/Integer;</span>
+<span class="w">   </span><span class="c1">#63 = Utf8               valueOf</span>
+<span class="w">   </span><span class="c1">#64 = Utf8               (I)Ljava/lang/Integer;</span>
+<span class="w">   </span><span class="c1">#65 = InterfaceMethodref #66.#67       // java/util/function/Predicate.test:(Ljava/lang/Object;)Z</span>
+<span class="w">   </span><span class="c1">#66 = Class              #68           // java/util/function/Predicate</span>
+<span class="w">   </span><span class="c1">#67 = NameAndType        #59:#69       // test:(Ljava/lang/Object;)Z</span>
+<span class="w">   </span><span class="c1">#68 = Utf8               java/util/function/Predicate</span>
+<span class="w">   </span><span class="c1">#69 = Utf8               (Ljava/lang/Object;)Z</span>
+<span class="w">   </span><span class="c1">#70 = String             #71           // Is 10 even?</span>
+<span class="w">   </span><span class="c1">#71 = Utf8               Is 10 even?</span>
+<span class="w">   </span><span class="c1">#72 = Methodref          #30.#73       // java/lang/StringBuilder.append:(Z)Ljava/lang/StringBuilder;</span>
+<span class="w">   </span><span class="c1">#73 = NameAndType        #37:#74       // append:(Z)Ljava/lang/StringBuilder;</span>
+<span class="w">   </span><span class="c1">#74 = Utf8               (Z)Ljava/lang/StringBuilder;</span>
+<span class="w">   </span><span class="c1">#75 = Methodref          #55.#76       // java/lang/String.toUpperCase:()Ljava/lang/String;</span>
+<span class="w">   </span><span class="c1">#76 = NameAndType        #77:#45       // toUpperCase:()Ljava/lang/String;</span>
+<span class="w">   </span><span class="c1">#77 = Utf8               toUpperCase</span>
+<span class="w">   </span><span class="c1">#78 = String             #79           // !</span>
+<span class="w">   </span><span class="c1">#79 = Utf8               !</span>
+<span class="w">   </span><span class="c1">#80 = Methodref          #55.#81       // java/lang/String.length:()I</span>
+<span class="w">   </span><span class="c1">#81 = NameAndType        #82:#23       // length:()I</span>
+<span class="w">   </span><span class="c1">#82 = Utf8               length</span>
+<span class="w">   </span><span class="c1">#83 = Class              #84           // java/bytecode/LambdaExample</span>
+<span class="w">   </span><span class="c1">#84 = Utf8               java/bytecode/LambdaExample</span>
+<span class="w">   </span><span class="c1">#85 = Utf8               Code</span>
+<span class="w">   </span><span class="c1">#86 = Utf8               LineNumberTable</span>
+<span class="w">   </span><span class="c1">#87 = Utf8               lambdaExample</span>
+<span class="w">   </span><span class="c1">#88 = Utf8               lambdaMultiLineExample</span>
+<span class="w">   </span><span class="c1">#89 = Utf8               lambdaPredicateExample</span>
+<span class="w">   </span><span class="c1">#90 = Utf8               lambda$lambdaPredicateExample$0</span>
+<span class="w">   </span><span class="c1">#91 = Utf8               (Ljava/lang/Integer;)Z</span>
+<span class="w">   </span><span class="c1">#92 = Utf8               StackMapTable</span>
+<span class="w">   </span><span class="c1">#93 = Utf8               lambda$lambdaMultiLineExample$0</span>
+<span class="w">   </span><span class="c1">#94 = Utf8               (Ljava/lang/String;)Ljava/lang/String;</span>
+<span class="w">   </span><span class="c1">#95 = Utf8               lambda$lambdaExample$0</span>
+<span class="w">   </span><span class="c1">#96 = Utf8               (Ljava/lang/String;)Ljava/lang/Integer;</span>
+<span class="w">   </span><span class="c1">#97 = Utf8               SourceFile</span>
+<span class="w">   </span><span class="c1">#98 = Utf8               LambdaExample.java</span>
+<span class="w">   </span><span class="c1">#99 = Utf8               BootstrapMethods</span>
+<span class="w">  </span><span class="c1">#100 = MethodType         #17           //  (Ljava/lang/Object;)Ljava/lang/Object;</span>
+<span class="w">  </span><span class="c1">#101 = MethodHandle       #6:#102       // invokestatic java/bytecode/LambdaExample.lambda$lambdaExample$0:(Ljava/lang/String;)Ljava/lang/Integer;</span>
+<span class="w">  </span><span class="c1">#102 = Methodref          #83.#103      // java/bytecode/LambdaExample.lambda$lambdaExample$0:(Ljava/lang/String;)Ljava/lang/Integer;</span>
+<span class="w">  </span><span class="c1">#103 = NameAndType        #95:#96       // lambda$lambdaExample$0:(Ljava/lang/String;)Ljava/lang/Integer;</span>
+<span class="w">  </span><span class="c1">#104 = MethodType         #96           //  (Ljava/lang/String;)Ljava/lang/Integer;</span>
+<span class="w">  </span><span class="c1">#105 = MethodHandle       #6:#106       // invokestatic java/bytecode/LambdaExample.lambda$lambdaMultiLineExample$0:(Ljava/lang/String;)Ljava/lang/String;</span>
+<span class="w">  </span><span class="c1">#106 = Methodref          #83.#107      // java/bytecode/LambdaExample.lambda$lambdaMultiLineExample$0:(Ljava/lang/String;)Ljava/lang/String;</span>
+<span class="w">  </span><span class="c1">#107 = NameAndType        #93:#94       // lambda$lambdaMultiLineExample$0:(Ljava/lang/String;)Ljava/lang/String;</span>
+<span class="w">  </span><span class="c1">#108 = MethodType         #94           //  (Ljava/lang/String;)Ljava/lang/String;</span>
+<span class="w">  </span><span class="c1">#109 = MethodType         #69           //  (Ljava/lang/Object;)Z</span>
+<span class="w">  </span><span class="c1">#110 = MethodHandle       #6:#111       // invokestatic java/bytecode/LambdaExample.lambda$lambdaPredicateExample$0:(Ljava/lang/Integer;)Z</span>
+<span class="w">  </span><span class="c1">#111 = Methodref          #83.#112      // java/bytecode/LambdaExample.lambda$lambdaPredicateExample$0:(Ljava/lang/Integer;)Z</span>
+<span class="w">  </span><span class="c1">#112 = NameAndType        #90:#91       // lambda$lambdaPredicateExample$0:(Ljava/lang/Integer;)Z</span>
+<span class="w">  </span><span class="c1">#113 = MethodType         #91           //  (Ljava/lang/Integer;)Z</span>
+<span class="w">  </span><span class="c1">#114 = MethodHandle       #6:#115       // invokestatic java/lang/invoke/LambdaMetafactory.metafactory:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;</span>
+<span class="w">  </span><span class="c1">#115 = Methodref          #116.#117     // java/lang/invoke/LambdaMetafactory.metafactory:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;</span>
+<span class="w">  </span><span class="c1">#116 = Class              #118          // java/lang/invoke/LambdaMetafactory</span>
+<span class="w">  </span><span class="c1">#117 = NameAndType        #119:#120     // metafactory:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;</span>
+<span class="w">  </span><span class="c1">#118 = Utf8               java/lang/invoke/LambdaMetafactory</span>
+<span class="w">  </span><span class="c1">#119 = Utf8               metafactory</span>
+<span class="w">  </span><span class="c1">#120 = Utf8               (Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;</span>
+<span class="w">  </span><span class="c1">#121 = Utf8               InnerClasses</span>
+<span class="w">  </span><span class="c1">#122 = Class              #123          // java/lang/invoke/MethodHandles$Lookup</span>
+<span class="w">  </span><span class="c1">#123 = Utf8               java/lang/invoke/MethodHandles$Lookup</span>
+<span class="w">  </span><span class="c1">#124 = Class              #125          // java/lang/invoke/MethodHandles</span>
+<span class="w">  </span><span class="c1">#125 = Utf8               java/lang/invoke/MethodHandles</span>
+<span class="w">  </span><span class="c1">#126 = Utf8               Lookup</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="n">public</span><span class="w"> </span><span class="n">java</span><span class="o">.</span><span class="n">bytecode</span><span class="o">.</span><span class="n">LambdaExample</span><span class="p">();</span>
+<span class="w">    </span><span class="n">descriptor</span><span class="p">:</span><span class="w"> </span><span class="p">()</span><span class="n">V</span>
+<span class="w">    </span><span class="n">flags</span><span class="p">:</span><span class="w"> </span><span class="n">ACC_PUBLIC</span>
+<span class="w">    </span><span class="n">Code</span><span class="p">:</span>
+<span class="w">      </span><span class="n">stack</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">locals</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">args_size</span><span class="o">=</span><span class="mi">1</span>
+<span class="w">         </span><span class="mi">0</span><span class="p">:</span><span class="w"> </span><span class="n">aload_0</span>
+<span class="w">         </span><span class="mi">1</span><span class="p">:</span><span class="w"> </span><span class="n">invokespecial</span><span class="w"> </span><span class="c1">#1                  // Method java/lang/Object."&lt;init&gt;":()V</span>
+<span class="w">         </span><span class="mi">4</span><span class="p">:</span><span class="w"> </span><span class="k">return</span>
+<span class="w">      </span><span class="n">LineNumberTable</span><span class="p">:</span>
+<span class="w">        </span><span class="n">line</span><span class="w"> </span><span class="mi">9</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span>
+
+<span class="w">  </span><span class="n">public</span><span class="w"> </span><span class="nb nb-Type">void</span><span class="w"> </span><span class="n">lambdaExample</span><span class="p">();</span>
+<span class="w">    </span><span class="n">descriptor</span><span class="p">:</span><span class="w"> </span><span class="p">()</span><span class="n">V</span>
+<span class="w">    </span><span class="n">flags</span><span class="p">:</span><span class="w"> </span><span class="n">ACC_PUBLIC</span>
+<span class="w">    </span><span class="n">Code</span><span class="p">:</span>
+<span class="w">      </span><span class="n">stack</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="n">locals</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="n">args_size</span><span class="o">=</span><span class="mi">1</span>
+<span class="w">         </span><span class="mi">0</span><span class="p">:</span><span class="w"> </span><span class="n">invokedynamic</span><span class="w"> </span><span class="c1">#7,  0              // InvokeDynamic #0:apply:()Ljava/util/function/Function;</span>
+<span class="w">         </span><span class="mi">5</span><span class="p">:</span><span class="w"> </span><span class="n">astore_1</span>
+<span class="w">         </span><span class="mi">6</span><span class="p">:</span><span class="w"> </span><span class="n">aload_1</span>
+<span class="w">         </span><span class="mi">7</span><span class="p">:</span><span class="w"> </span><span class="n">ldc</span><span class="w">           </span><span class="c1">#11                 // String Hello</span>
+<span class="w">         </span><span class="mi">9</span><span class="p">:</span><span class="w"> </span><span class="n">invokeinterface</span><span class="w"> </span><span class="c1">#13,  2           // InterfaceMethod java/util/function/Function.apply:(Ljava/lang/Object;)Ljava/lang/Object;</span>
+<span class="w">        </span><span class="mi">14</span><span class="p">:</span><span class="w"> </span><span class="n">checkcast</span><span class="w">     </span><span class="c1">#18                 // class java/lang/Integer</span>
+<span class="w">        </span><span class="mi">17</span><span class="p">:</span><span class="w"> </span><span class="n">invokevirtual</span><span class="w"> </span><span class="c1">#20                 // Method java/lang/Integer.intValue:()I</span>
+<span class="w">        </span><span class="mi">20</span><span class="p">:</span><span class="w"> </span><span class="n">istore_2</span>
+<span class="w">        </span><span class="mi">21</span><span class="p">:</span><span class="w"> </span><span class="n">getstatic</span><span class="w">     </span><span class="c1">#24                 // Field java/lang/System.out:Ljava/io/PrintStream;</span>
+<span class="w">        </span><span class="mi">24</span><span class="p">:</span><span class="w"> </span><span class="n">new</span><span class="w">           </span><span class="c1">#30                 // class java/lang/StringBuilder</span>
+<span class="w">        </span><span class="mi">27</span><span class="p">:</span><span class="w"> </span><span class="n">dup</span>
+<span class="w">        </span><span class="mi">28</span><span class="p">:</span><span class="w"> </span><span class="n">invokespecial</span><span class="w"> </span><span class="c1">#32                 // Method java/lang/StringBuilder."&lt;init&gt;":()V</span>
+<span class="w">        </span><span class="mi">31</span><span class="p">:</span><span class="w"> </span><span class="n">ldc</span><span class="w">           </span><span class="c1">#33                 // String Length:</span>
+<span class="w">        </span><span class="mi">33</span><span class="p">:</span><span class="w"> </span><span class="n">invokevirtual</span><span class="w"> </span><span class="c1">#35                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span>
+<span class="w">        </span><span class="mi">36</span><span class="p">:</span><span class="w"> </span><span class="n">iload_2</span>
+<span class="w">        </span><span class="mi">37</span><span class="p">:</span><span class="w"> </span><span class="n">invokevirtual</span><span class="w"> </span><span class="c1">#39                 // Method java/lang/StringBuilder.append:(I)Ljava/lang/StringBuilder;</span>
+<span class="w">        </span><span class="mi">40</span><span class="p">:</span><span class="w"> </span><span class="n">invokevirtual</span><span class="w"> </span><span class="c1">#42                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;</span>
+<span class="w">        </span><span class="mi">43</span><span class="p">:</span><span class="w"> </span><span class="n">invokevirtual</span><span class="w"> </span><span class="c1">#46                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V</span>
+<span class="w">        </span><span class="mi">46</span><span class="p">:</span><span class="w"> </span><span class="k">return</span>
+<span class="w">      </span><span class="n">LineNumberTable</span><span class="p">:</span>
+<span class="w">        </span><span class="n">line</span><span class="w"> </span><span class="mi">13</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">        </span><span class="n">line</span><span class="w"> </span><span class="mi">14</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span>
+<span class="w">        </span><span class="n">line</span><span class="w"> </span><span class="mi">15</span><span class="p">:</span><span class="w"> </span><span class="mi">21</span>
+<span class="w">        </span><span class="n">line</span><span class="w"> </span><span class="mi">16</span><span class="p">:</span><span class="w"> </span><span class="mi">46</span>
+
+<span class="w">  </span><span class="n">public</span><span class="w"> </span><span class="nb nb-Type">void</span><span class="w"> </span><span class="n">lambdaMultiLineExample</span><span class="p">();</span>
+<span class="w">    </span><span class="n">descriptor</span><span class="p">:</span><span class="w"> </span><span class="p">()</span><span class="n">V</span>
+<span class="w">    </span><span class="n">flags</span><span class="p">:</span><span class="w"> </span><span class="n">ACC_PUBLIC</span>
+<span class="w">    </span><span class="n">Code</span><span class="p">:</span>
+<span class="w">      </span><span class="n">stack</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">locals</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="n">args_size</span><span class="o">=</span><span class="mi">1</span>
+<span class="w">         </span><span class="mi">0</span><span class="p">:</span><span class="w"> </span><span class="n">invokedynamic</span><span class="w"> </span><span class="c1">#52,  0             // InvokeDynamic #1:apply:()Ljava/util/function/Function;</span>
+<span class="w">         </span><span class="mi">5</span><span class="p">:</span><span class="w"> </span><span class="n">astore_1</span>
+<span class="w">         </span><span class="mi">6</span><span class="p">:</span><span class="w"> </span><span class="n">aload_1</span>
+<span class="w">         </span><span class="mi">7</span><span class="p">:</span><span class="w"> </span><span class="n">ldc</span><span class="w">           </span><span class="c1">#53                 // String hello</span>
+<span class="w">         </span><span class="mi">9</span><span class="p">:</span><span class="w"> </span><span class="n">invokeinterface</span><span class="w"> </span><span class="c1">#13,  2           // InterfaceMethod java/util/function/Function.apply:(Ljava/lang/Object;)Ljava/lang/Object;</span>
+<span class="w">        </span><span class="mi">14</span><span class="p">:</span><span class="w"> </span><span class="n">checkcast</span><span class="w">     </span><span class="c1">#55                 // class java/lang/String</span>
+<span class="w">        </span><span class="mi">17</span><span class="p">:</span><span class="w"> </span><span class="n">astore_2</span>
+<span class="w">        </span><span class="mi">18</span><span class="p">:</span><span class="w"> </span><span class="n">getstatic</span><span class="w">     </span><span class="c1">#24                 // Field java/lang/System.out:Ljava/io/PrintStream;</span>
+<span class="w">        </span><span class="mi">21</span><span class="p">:</span><span class="w"> </span><span class="n">aload_2</span>
+<span class="w">        </span><span class="mi">22</span><span class="p">:</span><span class="w"> </span><span class="n">invokevirtual</span><span class="w"> </span><span class="c1">#46                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V</span>
+<span class="w">        </span><span class="mi">25</span><span class="p">:</span><span class="w"> </span><span class="k">return</span>
+<span class="w">      </span><span class="n">LineNumberTable</span><span class="p">:</span>
+<span class="w">        </span><span class="n">line</span><span class="w"> </span><span class="mi">20</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">        </span><span class="n">line</span><span class="w"> </span><span class="mi">24</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span>
+<span class="w">        </span><span class="n">line</span><span class="w"> </span><span class="mi">25</span><span class="p">:</span><span class="w"> </span><span class="mi">18</span>
+<span class="w">        </span><span class="n">line</span><span class="w"> </span><span class="mi">26</span><span class="p">:</span><span class="w"> </span><span class="mi">25</span>
+
+<span class="w">  </span><span class="n">public</span><span class="w"> </span><span class="nb nb-Type">void</span><span class="w"> </span><span class="n">lambdaPredicateExample</span><span class="p">();</span>
+<span class="w">    </span><span class="n">descriptor</span><span class="p">:</span><span class="w"> </span><span class="p">()</span><span class="n">V</span>
+<span class="w">    </span><span class="n">flags</span><span class="p">:</span><span class="w"> </span><span class="n">ACC_PUBLIC</span>
+<span class="w">    </span><span class="n">Code</span><span class="p">:</span>
+<span class="w">      </span><span class="n">stack</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="n">locals</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="n">args_size</span><span class="o">=</span><span class="mi">1</span>
+<span class="w">         </span><span class="mi">0</span><span class="p">:</span><span class="w"> </span><span class="n">invokedynamic</span><span class="w"> </span><span class="c1">#57,  0             // InvokeDynamic #2:test:()Ljava/util/function/Predicate;</span>
+<span class="w">         </span><span class="mi">5</span><span class="p">:</span><span class="w"> </span><span class="n">astore_1</span>
+<span class="w">         </span><span class="mi">6</span><span class="p">:</span><span class="w"> </span><span class="n">aload_1</span>
+<span class="w">         </span><span class="mi">7</span><span class="p">:</span><span class="w"> </span><span class="n">bipush</span><span class="w">        </span><span class="mi">10</span>
+<span class="w">         </span><span class="mi">9</span><span class="p">:</span><span class="w"> </span><span class="n">invokestatic</span><span class="w">  </span><span class="c1">#61                 // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;</span>
+<span class="w">        </span><span class="mi">12</span><span class="p">:</span><span class="w"> </span><span class="n">invokeinterface</span><span class="w"> </span><span class="c1">#65,  2           // InterfaceMethod java/util/function/Predicate.test:(Ljava/lang/Object;)Z</span>
+<span class="w">        </span><span class="mi">17</span><span class="p">:</span><span class="w"> </span><span class="n">istore_2</span>
+<span class="w">        </span><span class="mi">18</span><span class="p">:</span><span class="w"> </span><span class="n">getstatic</span><span class="w">     </span><span class="c1">#24                 // Field java/lang/System.out:Ljava/io/PrintStream;</span>
+<span class="w">        </span><span class="mi">21</span><span class="p">:</span><span class="w"> </span><span class="n">new</span><span class="w">           </span><span class="c1">#30                 // class java/lang/StringBuilder</span>
+<span class="w">        </span><span class="mi">24</span><span class="p">:</span><span class="w"> </span><span class="n">dup</span>
+<span class="w">        </span><span class="mi">25</span><span class="p">:</span><span class="w"> </span><span class="n">invokespecial</span><span class="w"> </span><span class="c1">#32                 // Method java/lang/StringBuilder."&lt;init&gt;":()V</span>
+<span class="w">        </span><span class="mi">28</span><span class="p">:</span><span class="w"> </span><span class="n">ldc</span><span class="w">           </span><span class="c1">#70                 // String Is 10 even?</span>
+<span class="w">        </span><span class="mi">30</span><span class="p">:</span><span class="w"> </span><span class="n">invokevirtual</span><span class="w"> </span><span class="c1">#35                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span>
+<span class="w">        </span><span class="mi">33</span><span class="p">:</span><span class="w"> </span><span class="n">iload_2</span>
+<span class="w">        </span><span class="mi">34</span><span class="p">:</span><span class="w"> </span><span class="n">invokevirtual</span><span class="w"> </span><span class="c1">#72                 // Method java/lang/StringBuilder.append:(Z)Ljava/lang/StringBuilder;</span>
+<span class="w">        </span><span class="mi">37</span><span class="p">:</span><span class="w"> </span><span class="n">invokevirtual</span><span class="w"> </span><span class="c1">#42                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;</span>
+<span class="w">        </span><span class="mi">40</span><span class="p">:</span><span class="w"> </span><span class="n">invokevirtual</span><span class="w"> </span><span class="c1">#46                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V</span>
+<span class="w">        </span><span class="mi">43</span><span class="p">:</span><span class="w"> </span><span class="k">return</span>
+<span class="w">      </span><span class="n">LineNumberTable</span><span class="p">:</span>
+<span class="w">        </span><span class="n">line</span><span class="w"> </span><span class="mi">30</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">        </span><span class="n">line</span><span class="w"> </span><span class="mi">31</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span>
+<span class="w">        </span><span class="n">line</span><span class="w"> </span><span class="mi">32</span><span class="p">:</span><span class="w"> </span><span class="mi">18</span>
+<span class="w">        </span><span class="n">line</span><span class="w"> </span><span class="mi">33</span><span class="p">:</span><span class="w"> </span><span class="mi">43</span>
+
+<span class="w">  </span><span class="n">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="n">boolean</span><span class="w"> </span><span class="n">lambda</span><span class="o">$</span><span class="n">lambdaPredicateExample</span><span class="o">$</span><span class="mi">0</span><span class="p">(</span><span class="n">java</span><span class="o">.</span><span class="n">lang</span><span class="o">.</span><span class="n">Integer</span><span class="p">);</span>
+<span class="w">    </span><span class="n">descriptor</span><span class="p">:</span><span class="w"> </span><span class="p">(</span><span class="n">Ljava</span><span class="o">/</span><span class="n">lang</span><span class="o">/</span><span class="n">Integer</span><span class="p">;)</span><span class="n">Z</span>
+<span class="w">    </span><span class="n">flags</span><span class="p">:</span><span class="w"> </span><span class="n">ACC_PRIVATE</span><span class="p">,</span><span class="w"> </span><span class="n">ACC_STATIC</span><span class="p">,</span><span class="w"> </span><span class="n">ACC_SYNTHETIC</span>
+<span class="w">    </span><span class="n">Code</span><span class="p">:</span>
+<span class="w">      </span><span class="n">stack</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">locals</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">args_size</span><span class="o">=</span><span class="mi">1</span>
+<span class="w">         </span><span class="mi">0</span><span class="p">:</span><span class="w"> </span><span class="n">aload_0</span>
+<span class="w">         </span><span class="mi">1</span><span class="p">:</span><span class="w"> </span><span class="n">invokevirtual</span><span class="w"> </span><span class="c1">#20                 // Method java/lang/Integer.intValue:()I</span>
+<span class="w">         </span><span class="mi">4</span><span class="p">:</span><span class="w"> </span><span class="n">iconst_2</span>
+<span class="w">         </span><span class="mi">5</span><span class="p">:</span><span class="w"> </span><span class="n">irem</span>
+<span class="w">         </span><span class="mi">6</span><span class="p">:</span><span class="w"> </span><span class="n">ifne</span><span class="w">          </span><span class="mi">13</span>
+<span class="w">         </span><span class="mi">9</span><span class="p">:</span><span class="w"> </span><span class="n">iconst_1</span>
+<span class="w">        </span><span class="mi">10</span><span class="p">:</span><span class="w"> </span><span class="n">goto</span><span class="w">          </span><span class="mi">14</span>
+<span class="w">        </span><span class="mi">13</span><span class="p">:</span><span class="w"> </span><span class="n">iconst_0</span>
+<span class="w">        </span><span class="mi">14</span><span class="p">:</span><span class="w"> </span><span class="n">ireturn</span>
+<span class="w">      </span><span class="n">LineNumberTable</span><span class="p">:</span>
+<span class="w">        </span><span class="n">line</span><span class="w"> </span><span class="mi">30</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">      </span><span class="n">StackMapTable</span><span class="p">:</span><span class="w"> </span><span class="n">number_of_entries</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span>
+<span class="w">        </span><span class="n">frame_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">13</span><span class="w"> </span><span class="o">/*</span><span class="w"> </span><span class="n">same</span><span class="w"> </span><span class="o">*/</span>
+<span class="w">        </span><span class="n">frame_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">64</span><span class="w"> </span><span class="o">/*</span><span class="w"> </span><span class="n">same_locals_1_stack_item</span><span class="w"> </span><span class="o">*/</span>
+<span class="w">          </span><span class="n">stack</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="nb nb-Type">int</span><span class="w"> </span><span class="p">]</span>
+
+<span class="w">  </span><span class="n">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="n">java</span><span class="o">.</span><span class="n">lang</span><span class="o">.</span><span class="n">String</span><span class="w"> </span><span class="n">lambda</span><span class="o">$</span><span class="n">lambdaMultiLineExample</span><span class="o">$</span><span class="mi">0</span><span class="p">(</span><span class="n">java</span><span class="o">.</span><span class="n">lang</span><span class="o">.</span><span class="n">String</span><span class="p">);</span>
+<span class="w">    </span><span class="n">descriptor</span><span class="p">:</span><span class="w"> </span><span class="p">(</span><span class="n">Ljava</span><span class="o">/</span><span class="n">lang</span><span class="o">/</span><span class="nb nb-Type">String</span><span class="p">;)</span><span class="n">Ljava</span><span class="o">/</span><span class="n">lang</span><span class="o">/</span><span class="nb nb-Type">String</span><span class="p">;</span>
+<span class="w">    </span><span class="n">flags</span><span class="p">:</span><span class="w"> </span><span class="n">ACC_PRIVATE</span><span class="p">,</span><span class="w"> </span><span class="n">ACC_STATIC</span><span class="p">,</span><span class="w"> </span><span class="n">ACC_SYNTHETIC</span>
+<span class="w">    </span><span class="n">Code</span><span class="p">:</span>
+<span class="w">      </span><span class="n">stack</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">locals</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">args_size</span><span class="o">=</span><span class="mi">1</span>
+<span class="w">         </span><span class="mi">0</span><span class="p">:</span><span class="w"> </span><span class="n">aload_0</span>
+<span class="w">         </span><span class="mi">1</span><span class="p">:</span><span class="w"> </span><span class="n">invokevirtual</span><span class="w"> </span><span class="c1">#75                 // Method java/lang/String.toUpperCase:()Ljava/lang/String;</span>
+<span class="w">         </span><span class="mi">4</span><span class="p">:</span><span class="w"> </span><span class="n">astore_1</span>
+<span class="w">         </span><span class="mi">5</span><span class="p">:</span><span class="w"> </span><span class="n">new</span><span class="w">           </span><span class="c1">#30                 // class java/lang/StringBuilder</span>
+<span class="w">         </span><span class="mi">8</span><span class="p">:</span><span class="w"> </span><span class="n">dup</span>
+<span class="w">         </span><span class="mi">9</span><span class="p">:</span><span class="w"> </span><span class="n">invokespecial</span><span class="w"> </span><span class="c1">#32                 // Method java/lang/StringBuilder."&lt;init&gt;":()V</span>
+<span class="w">        </span><span class="mi">12</span><span class="p">:</span><span class="w"> </span><span class="n">aload_1</span>
+<span class="w">        </span><span class="mi">13</span><span class="p">:</span><span class="w"> </span><span class="n">invokevirtual</span><span class="w"> </span><span class="c1">#35                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span>
+<span class="w">        </span><span class="mi">16</span><span class="p">:</span><span class="w"> </span><span class="n">ldc</span><span class="w">           </span><span class="c1">#78                 // String !</span>
+<span class="w">        </span><span class="mi">18</span><span class="p">:</span><span class="w"> </span><span class="n">invokevirtual</span><span class="w"> </span><span class="c1">#35                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span>
+<span class="w">        </span><span class="mi">21</span><span class="p">:</span><span class="w"> </span><span class="n">invokevirtual</span><span class="w"> </span><span class="c1">#42                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;</span>
+<span class="w">        </span><span class="mi">24</span><span class="p">:</span><span class="w"> </span><span class="n">areturn</span>
+<span class="w">      </span><span class="n">LineNumberTable</span><span class="p">:</span>
+<span class="w">        </span><span class="n">line</span><span class="w"> </span><span class="mi">21</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">        </span><span class="n">line</span><span class="w"> </span><span class="mi">22</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span>
+
+<span class="w">  </span><span class="n">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="n">java</span><span class="o">.</span><span class="n">lang</span><span class="o">.</span><span class="n">Integer</span><span class="w"> </span><span class="n">lambda</span><span class="o">$</span><span class="n">lambdaExample</span><span class="o">$</span><span class="mi">0</span><span class="p">(</span><span class="n">java</span><span class="o">.</span><span class="n">lang</span><span class="o">.</span><span class="n">String</span><span class="p">);</span>
+<span class="w">    </span><span class="n">descriptor</span><span class="p">:</span><span class="w"> </span><span class="p">(</span><span class="n">Ljava</span><span class="o">/</span><span class="n">lang</span><span class="o">/</span><span class="nb nb-Type">String</span><span class="p">;)</span><span class="n">Ljava</span><span class="o">/</span><span class="n">lang</span><span class="o">/</span><span class="n">Integer</span><span class="p">;</span>
+<span class="w">    </span><span class="n">flags</span><span class="p">:</span><span class="w"> </span><span class="n">ACC_PRIVATE</span><span class="p">,</span><span class="w"> </span><span class="n">ACC_STATIC</span><span class="p">,</span><span class="w"> </span><span class="n">ACC_SYNTHETIC</span>
+<span class="w">    </span><span class="n">Code</span><span class="p">:</span>
+<span class="w">      </span><span class="n">stack</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">locals</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">args_size</span><span class="o">=</span><span class="mi">1</span>
+<span class="w">         </span><span class="mi">0</span><span class="p">:</span><span class="w"> </span><span class="n">aload_0</span>
+<span class="w">         </span><span class="mi">1</span><span class="p">:</span><span class="w"> </span><span class="n">invokevirtual</span><span class="w"> </span><span class="c1">#80                 // Method java/lang/String.length:()I</span>
+<span class="w">         </span><span class="mi">4</span><span class="p">:</span><span class="w"> </span><span class="n">invokestatic</span><span class="w">  </span><span class="c1">#61                 // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;</span>
+<span class="w">         </span><span class="mi">7</span><span class="p">:</span><span class="w"> </span><span class="n">areturn</span>
+<span class="w">      </span><span class="n">LineNumberTable</span><span class="p">:</span>
+<span class="w">        </span><span class="n">line</span><span class="w"> </span><span class="mi">13</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span>
+<span class="p">}</span>
+<span class="n">SourceFile</span><span class="p">:</span><span class="w"> </span><span class="s2">"LambdaExample.java"</span>
+<span class="n">BootstrapMethods</span><span class="p">:</span>
+<span class="w">  </span><span class="mi">0</span><span class="p">:</span><span class="w"> </span><span class="c1">#114 invokestatic java/lang/invoke/LambdaMetafactory.metafactory:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;</span>
+<span class="w">    </span><span class="n">Method</span><span class="w"> </span><span class="n">arguments</span><span class="p">:</span>
+<span class="w">      </span><span class="c1">#100 (Ljava/lang/Object;)Ljava/lang/Object;</span>
+<span class="w">      </span><span class="c1">#101 invokestatic java/bytecode/LambdaExample.lambda$lambdaExample$0:(Ljava/lang/String;)Ljava/lang/Integer;</span>
+<span class="w">      </span><span class="c1">#104 (Ljava/lang/String;)Ljava/lang/Integer;</span>
+<span class="w">  </span><span class="mi">1</span><span class="p">:</span><span class="w"> </span><span class="c1">#114 invokestatic java/lang/invoke/LambdaMetafactory.metafactory:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;</span>
+<span class="w">    </span><span class="n">Method</span><span class="w"> </span><span class="n">arguments</span><span class="p">:</span>
+<span class="w">      </span><span class="c1">#100 (Ljava/lang/Object;)Ljava/lang/Object;</span>
+<span class="w">      </span><span class="c1">#105 invokestatic java/bytecode/LambdaExample.lambda$lambdaMultiLineExample$0:(Ljava/lang/String;)Ljava/lang/String;</span>
+<span class="w">      </span><span class="c1">#108 (Ljava/lang/String;)Ljava/lang/String;</span>
+<span class="w">  </span><span class="mi">2</span><span class="p">:</span><span class="w"> </span><span class="c1">#114 invokestatic java/lang/invoke/LambdaMetafactory.metafactory:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;</span>
+<span class="w">    </span><span class="n">Method</span><span class="w"> </span><span class="n">arguments</span><span class="p">:</span>
+<span class="w">      </span><span class="c1">#109 (Ljava/lang/Object;)Z</span>
+<span class="w">      </span><span class="c1">#110 invokestatic java/bytecode/LambdaExample.lambda$lambdaPredicateExample$0:(Ljava/lang/Integer;)Z</span>
+<span class="w">      </span><span class="c1">#113 (Ljava/lang/Integer;)Z</span>
+<span class="n">InnerClasses</span><span class="p">:</span>
+<span class="w">     </span><span class="n">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="n">final</span><span class="w"> </span><span class="c1">#126= #122 of #124; //Lookup=class java/lang/invoke/MethodHandles$Lookup of class java/lang/invoke/MethodHandles</span>
+</code></pre></div>
+<h2 id="_3">详细说明</h2>
+<h3 id="invokedynamic">invokedynamic指令</h3>
+<p>Java 8 Lambda表达式使用<code>invokedynamic</code>指令实现，这是Java 7引入的动态调用机制：</p>
+<div class="hljs"><pre><span></span><code><span class="mi">0</span><span class="o">:</span><span class="w"> </span><span class="n">invokedynamic</span><span class="w"> </span><span class="err">#</span><span class="mi">7</span><span class="o">,</span><span class="w">  </span><span class="mi">0</span><span class="w">  </span><span class="c1">// InvokeDynamic #0:apply:()Ljava/util/function/Function;</span>
+</code></pre></div>
+<h3 id="lambda">Lambda方法</h3>
+<p>编译器会为每个Lambda表达式生成一个私有静态方法（synthetic方法）：</p>
+<div class="hljs"><pre><span></span><code>private static java.lang.Integer lambda$lambdaExample$0(java.lang.String);
+  flags: ACC_PRIVATE, ACC_STATIC, ACC_SYNTHETIC
+</code></pre></div>
+<p>方法命名格式：<code>lambda$方法名$序号</code></p>
+<h3 id="bootstrapmethods">BootstrapMethods</h3>
+<p><code>BootstrapMethods</code>属性存储引导方法信息，用于在运行时动态生成Lambda实现类：</p>
+<div class="hljs"><pre><span></span><code><span class="n">BootstrapMethods</span><span class="o">:</span>
+<span class="w">  </span><span class="mi">0</span><span class="o">:</span><span class="w"> </span><span class="err">#</span><span class="mi">114</span><span class="w"> </span><span class="n">invokestatic</span><span class="w"> </span><span class="n">java</span><span class="sr">/lang/invoke/</span><span class="n">LambdaMetafactory</span><span class="o">.</span><span class="na">metafactory</span><span class="o">:(...)</span>
+<span class="w">    </span><span class="n">Method</span><span class="w"> </span><span class="k">arguments</span><span class="o">:</span>
+<span class="w">      </span><span class="err">#</span><span class="mi">100</span><span class="w"> </span><span class="o">(</span><span class="n">Ljava</span><span class="sr">/lang/Object;)Ljava/lang/</span><span class="n">Object</span><span class="o">;</span>
+<span class="w">      </span><span class="err">#</span><span class="mi">101</span><span class="w"> </span><span class="n">invokestatic</span><span class="w"> </span><span class="n">java</span><span class="sr">/bytecode/</span><span class="n">LambdaExample</span><span class="o">.</span><span class="na">lambda</span><span class="n">$lambdaExample$0</span><span class="o">:(...)</span>
+<span class="w">      </span><span class="err">#</span><span class="mi">104</span><span class="w"> </span><span class="o">(</span><span class="n">Ljava</span><span class="sr">/lang/String;)Ljava/lang/</span><span class="n">Integer</span><span class="o">;</span>
+</code></pre></div>
+<h3 id="lambdametafactory">LambdaMetafactory</h3>
+<p><code>LambdaMetafactory.metafactory</code>是引导方法，在运行时：<br/>
+1. 创建Lambda实现类<br/>
+2. 将Lambda方法绑定到函数式接口<br/>
+3. 返回<code>CallSite</code>对象</p>
+<h3 id="lambda_1">Lambda实现机制</h3>
+<ol>
+<li><strong>编译时</strong>：编译器生成Lambda方法（如<code>lambda$lambdaExample$0</code>）</li>
+<li><strong>运行时</strong>：<code>invokedynamic</code>调用引导方法</li>
+<li><strong>引导方法</strong>：使用<code>LambdaMetafactory</code>动态生成实现类</li>
+<li><strong>调用</strong>：通过函数式接口调用Lambda方法</li>
+</ol>
+<h3 id="_4">优势</h3>
+<ul>
+<li><strong>延迟绑定</strong>：Lambda实现类在运行时生成，而不是编译时</li>
+<li><strong>性能优化</strong>：JVM可以优化Lambda调用</li>
+<li><strong>代码简洁</strong>：不需要为每个Lambda创建匿名内部类</li>
+</ul>
+        </div>
+    </div>
+
+    <script src="../../../../assets/script.js"></script>
+    <script>
+        // 初始化代码高亮
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>字节码分析-可变参数 - Technology</title>
+    <link rel="stylesheet" href="../../../../assets/style.css">
+    <link rel="stylesheet" href="../../../../assets/github.min.css">
+    <script src="../../../../assets/highlight.min.js"></script>
+    <script src="../../../../assets/python.min.js"></script>
+    <script src="../../../../assets/java.min.js"></script>
+    <script src="../../../../assets/javascript.min.js"></script>
+    <script src="../../../../assets/xml.min.js"></script>
+    <script src="../../../../assets/css.min.js"></script>
+    <script src="../../../../assets/bash.min.js"></script>
+    <script src="../../../../assets/sql.min.js"></script>
+</head>
+
+<body>
+    <!-- 顶部导航栏 -->
+    <div class="top-navbar">
+        <div class="site-title">Technology</div>
+    </div>
+
+    <!-- 侧边导航栏 -->
+    <div class="sidebar">
+        <ul class="nav-tree">
+            <li class="nav-item">
+<div class="nav-link has-children active">
+<span class="nav-link-icon expanded" data-toggle="collapse"></span>
+<a href="../../../../html/java/index.html" class="nav-link-text" data-path="html/java/index.html">java</a>
+</div>
+<ul class="nav-children expanded">
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/java/Java并发编程/index.html" class="nav-link-text" data-path="html/java/Java并发编程/index.html">Java并发编程</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java并发编程/Java内存模型(JMM).html" class="nav-link-text" data-path="html/java/Java并发编程/Java内存模型(JMM).html">Java内存模型(JMM)</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java并发编程/线程(Thread).html" class="nav-link-text" data-path="html/java/Java并发编程/线程(Thread).html">线程(Thread)</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children active">
+<span class="nav-link-icon expanded" data-toggle="collapse"></span>
+<a href="../../../../html/java/Java虚拟机模型/index.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/index.html">Java虚拟机模型</a>
+</div>
+<ul class="nav-children expanded">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/内存分析工具.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/内存分析工具.html">内存分析工具</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/垃圾回收机制.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/垃圾回收机制.html">垃圾回收机制</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/堆.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/堆.html">堆</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children active">
+<span class="nav-link-icon expanded" data-toggle="collapse"></span>
+<a href="../../../../html/java/Java虚拟机模型/字节码分析/index.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/index.html">字节码分析</a>
+</div>
+<ul class="nav-children expanded">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/字节码分析/字节码分析-Lambda表达式.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-Lambda表达式.html">字节码分析-Lambda表达式</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/字节码分析/字节码分析-内部类.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-内部类.html">字节码分析-内部类</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link active">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/字节码分析/字节码分析-可变参数.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-可变参数.html">字节码分析-可变参数</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/字节码分析/字节码分析-同步.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-同步.html">字节码分析-同步</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/字节码分析/字节码分析-字段.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-字段.html">字节码分析-字段</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/字节码分析/字节码分析-异常处理.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-异常处理.html">字节码分析-异常处理</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/字节码分析/字节码分析-控制流.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-控制流.html">字节码分析-控制流</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/字节码分析/字节码分析-方法.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-方法.html">字节码分析-方法</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/字节码分析/字节码分析-方法引用.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-方法引用.html">字节码分析-方法引用</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/字节码分析/字节码分析-泛型.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-泛型.html">字节码分析-泛型</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/字节码分析/字节码分析-类加载机制.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-类加载机制.html">字节码分析-类加载机制</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/字节码分析/字节码分析-继承.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-继承.html">字节码分析-继承</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/字节码分析/字节码增强技术.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码增强技术.html">字节码增强技术</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/执行引擎.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/执行引擎.html">执行引擎</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/方法区.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/方法区.html">方法区</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/类加载机制.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/类加载机制.html">类加载机制</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/虚拟机栈.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/虚拟机栈.html">虚拟机栈</a>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/spring/index.html" class="nav-link-text" data-path="html/spring/index.html">spring</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/spring/spring-boot/index.html" class="nav-link-text" data-path="html/spring/spring-boot/index.html">spring-boot</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-boot/SpringBoot事件机制.html" class="nav-link-text" data-path="html/spring/spring-boot/SpringBoot事件机制.html">SpringBoot事件机制</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-boot/SpringBoot启动流程.html" class="nav-link-text" data-path="html/spring/spring-boot/SpringBoot启动流程.html">SpringBoot启动流程</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-boot/SpringBoot日志体系.html" class="nav-link-text" data-path="html/spring/spring-boot/SpringBoot日志体系.html">SpringBoot日志体系</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-boot/SpringBoot自动装配.html" class="nav-link-text" data-path="html/spring/spring-boot/SpringBoot自动装配.html">SpringBoot自动装配</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/spring/spring-framework/index.html" class="nav-link-text" data-path="html/spring/spring-framework/index.html">spring-framework</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework/BeanDefinition创建流程.html" class="nav-link-text" data-path="html/spring/spring-framework/BeanDefinition创建流程.html">BeanDefinition创建流程</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework/BeanLifecycle.html" class="nav-link-text" data-path="html/spring/spring-framework/BeanLifecycle.html">BeanLifecycle</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework/Bean创建流程.html" class="nav-link-text" data-path="html/spring/spring-framework/Bean创建流程.html">Bean创建流程</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/spring/spring-mysql/index.html" class="nav-link-text" data-path="html/spring/spring-mysql/index.html">spring-mysql</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/spring/spring-mysql/mybatis/index.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis/index.html">mybatis</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-mysql/mybatis/Mapper源码分析.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis/Mapper源码分析.html">Mapper源码分析</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/spring/spring-mysql/mybatis-plus/index.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis-plus/index.html">mybatis-plus</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-mysql/mybatis-plus/DataSource源码分析.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis-plus/DataSource源码分析.html">DataSource源码分析</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-mysql/mybatis-plus/Mapper源码分析.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis-plus/Mapper源码分析.html">Mapper源码分析</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-mysql/mybatis-plus/SQL执行源码分析.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis-plus/SQL执行源码分析.html">SQL执行源码分析</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-mysql/mybatis-plus/SQL模板注册源码分析.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis-plus/SQL模板注册源码分析.html">SQL模板注册源码分析</a>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/spring/spring启动源码分析/index.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/index.html">spring启动源码分析</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AbstractApplicationContext.cancelRefresh.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.cancelRefresh.html">AbstractApplicationContext.cancelRefresh</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AbstractApplicationContext.destroyBeans.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.destroyBeans.html">AbstractApplicationContext.destroyBeans</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AbstractApplicationContext.finishBeanFactoryInitialization.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.finishBeanFactoryInitialization.html">AbstractApplicationContext.finishBeanFactoryInitialization</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AbstractApplicationContext.finishRefresh.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.finishRefresh.html">AbstractApplicationContext.finishRefresh</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AbstractApplicationContext.initApplicationEventMulticaster.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.initApplicationEventMulticaster.html">AbstractApplicationContext.initApplicationEventMulticaster</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AbstractApplicationContext.initMessageSource.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.initMessageSource.html">AbstractApplicationContext.initMessageSource</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AbstractApplicationContext.invokeBeanFactoryPostProcessors.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.invokeBeanFactoryPostProcessors.html">AbstractApplicationContext.invokeBeanFactoryPostProcessors</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AbstractApplicationContext.obtainFreshBeanFactory.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.obtainFreshBeanFactory.html">AbstractApplicationContext.obtainFreshBeanFactory</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AbstractApplicationContext.onRefresh.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.onRefresh.html">AbstractApplicationContext.onRefresh</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AbstractApplicationContext.postProcessBeanFactory.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.postProcessBeanFactory.html">AbstractApplicationContext.postProcessBeanFactory</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AbstractApplicationContext.prepareBeanFactory.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.prepareBeanFactory.html">AbstractApplicationContext.prepareBeanFactory</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AbstractApplicationContext.prepareRefresh.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.prepareRefresh.html">AbstractApplicationContext.prepareRefresh</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AbstractApplicationContext.registerBeanPostProcessors.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.registerBeanPostProcessors.html">AbstractApplicationContext.registerBeanPostProcessors</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AbstractApplicationContext.registerListeners.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.registerListeners.html">AbstractApplicationContext.registerListeners</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AbstractApplicationContext.resetCommonCaches.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.resetCommonCaches.html">AbstractApplicationContext.resetCommonCaches</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/Application.createApplicationContext.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/Application.createApplicationContext.html">Application.createApplicationContext</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/Application.refreshContext.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/Application.refreshContext.html">Application.refreshContext</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/Application.run.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/Application.run.html">Application.run</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AutoConfigurationImportSelector.getAutoConfigurationEntry.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AutoConfigurationImportSelector.getAutoConfigurationEntry.html">AutoConfigurationImportSelector.getAutoConfigurationEntry</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/ClassPathMapperScanner.scan.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/ClassPathMapperScanner.scan.html">ClassPathMapperScanner.scan</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/ConfigurationClassParser.parse.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/ConfigurationClassParser.parse.html">ConfigurationClassParser.parse</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/ConfigurationClassPostProcessor.processConfigBeanDefinitions.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/ConfigurationClassPostProcessor.processConfigBeanDefinitions.html">ConfigurationClassPostProcessor.processConfigBeanDefinitions</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/MapperScannerConfigurer.postProcessBeanDefinitionRegistry.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/MapperScannerConfigurer.postProcessBeanDefinitionRegistry.html">MapperScannerConfigurer.postProcessBeanDefinitionRegistry</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/ServletWebServerApplicationContext.onRefresh.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/ServletWebServerApplicationContext.onRefresh.html">ServletWebServerApplicationContext.onRefresh</a>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/云原生/index.html" class="nav-link-text" data-path="html/云原生/index.html">云原生</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/云原生/docker/index.html" class="nav-link-text" data-path="html/云原生/docker/index.html">docker</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/云原生/k8s/index.html" class="nav-link-text" data-path="html/云原生/k8s/index.html">k8s</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/云原生/k8s/K8S网络架构.html" class="nav-link-text" data-path="html/云原生/k8s/K8S网络架构.html">K8S网络架构</a>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/中间件/index.html" class="nav-link-text" data-path="html/中间件/index.html">中间件</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/中间件/clickhouse/index.html" class="nav-link-text" data-path="html/中间件/clickhouse/index.html">clickhouse</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/中间件/elasticsearch/index.html" class="nav-link-text" data-path="html/中间件/elasticsearch/index.html">elasticsearch</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/中间件/kakfa/index.html" class="nav-link-text" data-path="html/中间件/kakfa/index.html">kakfa</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/中间件/mongodb/index.html" class="nav-link-text" data-path="html/中间件/mongodb/index.html">mongodb</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/中间件/rabbitmq/index.html" class="nav-link-text" data-path="html/中间件/rabbitmq/index.html">rabbitmq</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/中间件/redis/index.html" class="nav-link-text" data-path="html/中间件/redis/index.html">redis</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/监控/index.html" class="nav-link-text" data-path="html/监控/index.html">监控</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/监控/prometheus/index.html" class="nav-link-text" data-path="html/监控/prometheus/index.html">prometheus</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/基础/index.html" class="nav-link-text" data-path="html/基础/index.html">基础</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/基础/数据结构/index.html" class="nav-link-text" data-path="html/基础/数据结构/index.html">数据结构</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/基础/画图/index.html" class="nav-link-text" data-path="html/基础/画图/index.html">画图</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/基础/算法/index.html" class="nav-link-text" data-path="html/基础/算法/index.html">算法</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/基础/设计模式/index.html" class="nav-link-text" data-path="html/基础/设计模式/index.html">设计模式</a>
+</div>
+</li>
+</ul>
+</li>
+        </ul>
+    </div>
+
+    <!-- 主内容区 -->
+    <div class="main-content">
+        <div class="content-body">
+            <h1 id="-">字节码分析-可变参数</h1>
+<h2 id="_1">源码</h2>
+<div class="hljs"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nn">java.bytecode</span><span class="p">;</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * 可变参数示例 - 演示可变参数方法</span>
+<span class="cm"> */</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">VarargsExample</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="c1">// 可变参数示例</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">varargsExample</span><span class="p">(</span><span class="n">String</span><span class="p">...</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">arg</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">arg</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// 可变参数与其他参数组合</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">varargsWithOtherParams</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">prefix</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="p">...</span><span class="w"> </span><span class="n">numbers</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Prefix: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">prefix</span><span class="p">);</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">num</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">numbers</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">num</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// 可变参数 - 数组形式</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">varargsArrayExample</span><span class="p">(</span><span class="kt">int</span><span class="o">[]</span><span class="w"> </span><span class="n">numbers</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">num</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">numbers</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">num</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="_2">结构化反解析</h2>
+<div class="hljs"><pre><span></span><code><span class="n">Classfile</span><span class="w"> </span><span class="o">/</span><span class="n">D</span><span class="p">:</span><span class="o">/</span><span class="n">zcp</span><span class="o">/</span><span class="n">github</span><span class="o">/</span><span class="n">yggdrasil</span><span class="o">/</span><span class="n">java</span><span class="o">/</span><span class="n">bytecode</span><span class="o">/</span><span class="n">VarargsExample</span><span class="o">.</span><span class="k">class</span>
+<span class="w">  </span><span class="o">...</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="n">public</span><span class="w"> </span><span class="nb nb-Type">void</span><span class="w"> </span><span class="n">varargsExample</span><span class="p">(</span><span class="n">java</span><span class="o">.</span><span class="n">lang</span><span class="o">.</span><span class="n">String</span><span class="o">...</span><span class="p">);</span>
+<span class="w">    </span><span class="n">descriptor</span><span class="p">:</span><span class="w"> </span><span class="p">([</span><span class="n">Ljava</span><span class="o">/</span><span class="n">lang</span><span class="o">/</span><span class="nb nb-Type">String</span><span class="p">;)</span><span class="n">V</span>
+<span class="w">    </span><span class="n">flags</span><span class="p">:</span><span class="w"> </span><span class="n">ACC_PUBLIC</span><span class="p">,</span><span class="w"> </span><span class="n">ACC_VARARGS</span>
+<span class="w">    </span><span class="n">Code</span><span class="p">:</span>
+<span class="w">      </span><span class="n">stack</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">locals</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="n">args_size</span><span class="o">=</span><span class="mi">2</span>
+<span class="w">         </span><span class="mi">0</span><span class="p">:</span><span class="w"> </span><span class="n">aload_1</span>
+<span class="w">         </span><span class="mi">1</span><span class="p">:</span><span class="w"> </span><span class="n">astore_2</span>
+<span class="w">         </span><span class="mi">2</span><span class="p">:</span><span class="w"> </span><span class="n">aload_2</span>
+<span class="w">         </span><span class="mi">3</span><span class="p">:</span><span class="w"> </span><span class="n">arraylength</span>
+<span class="w">         </span><span class="mi">4</span><span class="p">:</span><span class="w"> </span><span class="n">istore_3</span>
+<span class="w">         </span><span class="mi">5</span><span class="p">:</span><span class="w"> </span><span class="n">iconst_0</span>
+<span class="w">         </span><span class="mi">6</span><span class="p">:</span><span class="w"> </span><span class="n">istore</span><span class="w">        </span><span class="mi">4</span>
+<span class="w">         </span><span class="mi">8</span><span class="p">:</span><span class="w"> </span><span class="n">iload</span><span class="w">         </span><span class="mi">4</span>
+<span class="w">        </span><span class="mi">10</span><span class="p">:</span><span class="w"> </span><span class="n">iload_3</span>
+<span class="w">        </span><span class="mi">11</span><span class="p">:</span><span class="w"> </span><span class="n">if_icmpge</span><span class="w">     </span><span class="mi">34</span>
+<span class="w">        </span><span class="mi">14</span><span class="p">:</span><span class="w"> </span><span class="n">aload_2</span>
+<span class="w">        </span><span class="mi">15</span><span class="p">:</span><span class="w"> </span><span class="n">iload</span><span class="w">         </span><span class="mi">4</span>
+<span class="w">        </span><span class="mi">17</span><span class="p">:</span><span class="w"> </span><span class="n">aaload</span>
+<span class="w">        </span><span class="mi">18</span><span class="p">:</span><span class="w"> </span><span class="n">astore</span><span class="w">        </span><span class="mi">5</span>
+<span class="w">        </span><span class="mi">20</span><span class="p">:</span><span class="w"> </span><span class="n">getstatic</span><span class="w">     </span><span class="c1">#7                  // Field java/lang/System.out:Ljava/io/PrintStream;</span>
+<span class="w">        </span><span class="mi">23</span><span class="p">:</span><span class="w"> </span><span class="n">aload</span><span class="w">         </span><span class="mi">5</span>
+<span class="w">        </span><span class="mi">25</span><span class="p">:</span><span class="w"> </span><span class="n">invokevirtual</span><span class="w"> </span><span class="c1">#13                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V</span>
+<span class="w">        </span><span class="mi">28</span><span class="p">:</span><span class="w"> </span><span class="n">iinc</span><span class="w">          </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">        </span><span class="mi">31</span><span class="p">:</span><span class="w"> </span><span class="n">goto</span><span class="w">          </span><span class="mi">8</span>
+<span class="w">        </span><span class="mi">34</span><span class="p">:</span><span class="w"> </span><span class="k">return</span>
+
+<span class="w">  </span><span class="n">public</span><span class="w"> </span><span class="nb nb-Type">void</span><span class="w"> </span><span class="n">varargsWithOtherParams</span><span class="p">(</span><span class="n">java</span><span class="o">.</span><span class="n">lang</span><span class="o">.</span><span class="n">String</span><span class="p">,</span><span class="w"> </span><span class="nb nb-Type">int</span><span class="o">...</span><span class="p">);</span>
+<span class="w">    </span><span class="n">descriptor</span><span class="p">:</span><span class="w"> </span><span class="p">(</span><span class="n">Ljava</span><span class="o">/</span><span class="n">lang</span><span class="o">/</span><span class="nb nb-Type">String</span><span class="p">;[</span><span class="n">I</span><span class="p">)</span><span class="n">V</span>
+<span class="w">    </span><span class="n">flags</span><span class="p">:</span><span class="w"> </span><span class="n">ACC_PUBLIC</span><span class="p">,</span><span class="w"> </span><span class="n">ACC_VARARGS</span>
+<span class="w">    </span><span class="n">Code</span><span class="p">:</span>
+<span class="w">      </span><span class="o">...</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="_3">详细说明</h2>
+<h3 id="acc_varargs">ACC_VARARGS标志</h3>
+<p>可变参数方法使用<code>ACC_VARARGS</code>标志：</p>
+<div class="hljs"><pre><span></span><code><span class="n">public</span><span class="w"> </span><span class="nb nb-Type">void</span><span class="w"> </span><span class="n">varargsExample</span><span class="p">(</span><span class="nb nb-Type">String</span><span class="o">...</span><span class="p">);</span>
+<span class="w">  </span><span class="n">descriptor</span><span class="p">:</span><span class="w"> </span><span class="p">([</span><span class="n">Ljava</span><span class="o">/</span><span class="n">lang</span><span class="o">/</span><span class="nb nb-Type">String</span><span class="p">;)</span><span class="n">V</span>
+<span class="w">  </span><span class="n">flags</span><span class="p">:</span><span class="w"> </span><span class="n">ACC_PUBLIC</span><span class="p">,</span><span class="w"> </span><span class="n">ACC_VARARGS</span>
+</code></pre></div>
+<h3 id="_4">数组参数</h3>
+<p>可变参数在字节码中被转换为数组参数：</p>
+<ul>
+<li><code>String... args</code> → <code>[Ljava/lang/String;</code></li>
+<li><code>int... numbers</code> → <code>[I</code></li>
+</ul>
+<h3 id="_5">方法描述符</h3>
+<p>可变参数方法的描述符使用数组类型：</p>
+<div class="hljs"><pre><span></span><code><span class="n">varargsExample</span><span class="p">(</span><span class="nb nb-Type">String</span><span class="o">...</span><span class="p">)</span>
+<span class="w">  </span><span class="n">descriptor</span><span class="p">:</span><span class="w"> </span><span class="p">([</span><span class="n">Ljava</span><span class="o">/</span><span class="n">lang</span><span class="o">/</span><span class="nb nb-Type">String</span><span class="p">;)</span><span class="n">V</span>
+
+<span class="n">varargsWithOtherParams</span><span class="p">(</span><span class="nb nb-Type">String</span><span class="p">,</span><span class="w"> </span><span class="nb nb-Type">int</span><span class="o">...</span><span class="p">)</span>
+<span class="w">  </span><span class="n">descriptor</span><span class="p">:</span><span class="w"> </span><span class="p">(</span><span class="n">Ljava</span><span class="o">/</span><span class="n">lang</span><span class="o">/</span><span class="nb nb-Type">String</span><span class="p">;[</span><span class="n">I</span><span class="p">)</span><span class="n">V</span>
+</code></pre></div>
+<h3 id="_6">调用方式</h3>
+<p>可变参数方法可以：<br/>
+1. 传入多个参数：<code>varargsExample("a", "b", "c")</code><br/>
+2. 传入数组：<code>varargsExample(new String[]{"a", "b"})</code><br/>
+3. 不传参数：<code>varargsExample()</code>（传入空数组）</p>
+<h3 id="for">增强for循环</h3>
+<p>可变参数在方法内部被当作数组处理，增强for循环转换为传统索引循环：</p>
+<div class="hljs"><pre><span></span><code><span class="k">for</span><span class="w"> </span><span class="ss">(</span><span class="nv">String</span><span class="w"> </span><span class="nv">arg</span><span class="w"> </span>:<span class="w"> </span><span class="nv">args</span><span class="ss">)</span><span class="w"> </span>{
+<span class="w">    </span><span class="nv">System</span>.<span class="nv">out</span>.<span class="nv">println</span><span class="ss">(</span><span class="nv">arg</span><span class="ss">)</span><span class="c1">;</span>
+}
+</code></pre></div>
+<p>字节码实现：</p>
+<div class="hljs"><pre><span></span><code><span class="mi">0</span><span class="p">:</span><span class="w"> </span><span class="n">aload_1</span><span class="w">          </span><span class="o">//</span><span class="w"> </span><span class="err">加载数组</span>
+<span class="mi">1</span><span class="p">:</span><span class="w"> </span><span class="n">astore_2</span><span class="w">         </span><span class="o">//</span><span class="w"> </span><span class="err">存储到局部变量</span><span class="mi">2</span>
+<span class="mi">2</span><span class="p">:</span><span class="w"> </span><span class="n">aload_2</span><span class="w">          </span><span class="o">//</span><span class="w"> </span><span class="err">加载数组</span>
+<span class="mi">3</span><span class="p">:</span><span class="w"> </span><span class="n">arraylength</span><span class="w">      </span><span class="o">//</span><span class="w"> </span><span class="err">获取长度</span>
+<span class="mi">4</span><span class="p">:</span><span class="w"> </span><span class="n">istore_3</span><span class="w">         </span><span class="o">//</span><span class="w"> </span><span class="err">存储长度</span>
+<span class="mi">5</span><span class="p">:</span><span class="w"> </span><span class="n">iconst_0</span><span class="w">         </span><span class="o">//</span><span class="w"> </span><span class="err">初始化索引</span>
+<span class="mi">6</span><span class="p">:</span><span class="w"> </span><span class="n">istore</span><span class="w">        </span><span class="mi">4</span><span class="w">  </span><span class="o">//</span><span class="w"> </span><span class="err">存储索引</span>
+<span class="mi">8</span><span class="p">:</span><span class="w"> </span><span class="n">iload</span><span class="w">         </span><span class="mi">4</span><span class="w">  </span><span class="o">//</span><span class="w"> </span><span class="err">加载索引</span>
+<span class="mi">10</span><span class="p">:</span><span class="w"> </span><span class="n">iload_3</span><span class="w">         </span><span class="o">//</span><span class="w"> </span><span class="err">加载长度</span>
+<span class="mi">11</span><span class="p">:</span><span class="w"> </span><span class="n">if_icmpge</span><span class="w">     </span><span class="mi">34</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="err">如果索引</span><span class="o">&gt;=</span><span class="err">长度，跳转</span>
+<span class="mi">14</span><span class="p">:</span><span class="w"> </span><span class="n">aload_2</span><span class="w">         </span><span class="o">//</span><span class="w"> </span><span class="err">加载数组</span>
+<span class="mi">15</span><span class="p">:</span><span class="w"> </span><span class="n">iload</span><span class="w">         </span><span class="mi">4</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="err">加载索引</span>
+<span class="mi">17</span><span class="p">:</span><span class="w"> </span><span class="n">aaload</span><span class="w">          </span><span class="o">//</span><span class="w"> </span><span class="err">获取</span><span class="n">array</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+<span class="mi">18</span><span class="p">:</span><span class="w"> </span><span class="n">astore</span><span class="w">        </span><span class="mi">5</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="err">存储到</span><span class="n">arg</span>
+<span class="mi">20</span><span class="p">:</span><span class="w"> </span><span class="o">...</span><span class="w">             </span><span class="o">//</span><span class="w"> </span><span class="err">循环体</span>
+<span class="mi">28</span><span class="p">:</span><span class="w"> </span><span class="n">iinc</span><span class="w">          </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="w">  </span><span class="o">//</span><span class="w"> </span><span class="err">索引</span><span class="o">++</span>
+<span class="mi">31</span><span class="p">:</span><span class="w"> </span><span class="n">goto</span><span class="w">          </span><span class="mi">8</span><span class="w">  </span><span class="o">//</span><span class="w"> </span><span class="err">跳转到条件判断</span>
+</code></pre></div>
+<h3 id="_7">与其他参数组合</h3>
+<p>可变参数必须放在参数列表的最后：</p>
+<div class="hljs"><pre><span></span><code><span class="n">public</span><span class="w"> </span><span class="nb nb-Type">void</span><span class="w"> </span><span class="n">varargsWithOtherParams</span><span class="p">(</span><span class="nb nb-Type">String</span><span class="w"> </span><span class="n">prefix</span><span class="p">,</span><span class="w"> </span><span class="nb nb-Type">int</span><span class="o">...</span><span class="w"> </span><span class="n">numbers</span><span class="p">)</span>
+<span class="w">  </span><span class="n">descriptor</span><span class="p">:</span><span class="w"> </span><span class="p">(</span><span class="n">Ljava</span><span class="o">/</span><span class="n">lang</span><span class="o">/</span><span class="nb nb-Type">String</span><span class="p">;[</span><span class="n">I</span><span class="p">)</span><span class="n">V</span>
+</code></pre></div>
+<h3 id="_8">性能考虑</h3>
+<ul>
+<li>可变参数会创建数组，可能产生额外的内存分配</li>
+<li>对于频繁调用的方法，考虑使用重载方法避免数组创建</li>
+</ul>
+<h3 id="_9">注意事项</h3>
+<ul>
+<li>一个方法只能有一个可变参数</li>
+<li>可变参数必须是最后一个参数</li>
+<li>可变参数在方法内部被当作数组处理</li>
+</ul>
+        </div>
+    </div>
+
+    <script src="../../../../assets/script.js"></script>
+    <script>
+        // 初始化代码高亮
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
+        });
+    </script>
+</body>
+
+</html>

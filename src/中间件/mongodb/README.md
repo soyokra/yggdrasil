@@ -1,8 +1,9 @@
 # mongodb
 
-## 集群架构
-- 副本集
-- 分片
+## 架构
+
+mongodb有三种架构方案，单点(Standalone)，副本集(Replica Set)，
+
 
 ### 三节点副本集
 副本集的最小推荐架构

@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>字节码分析-控制流 - Technology</title>
+    <link rel="stylesheet" href="../../../../assets/style.css">
+    <link rel="stylesheet" href="../../../../assets/github.min.css">
+    <script src="../../../../assets/highlight.min.js"></script>
+    <script src="../../../../assets/python.min.js"></script>
+    <script src="../../../../assets/java.min.js"></script>
+    <script src="../../../../assets/javascript.min.js"></script>
+    <script src="../../../../assets/xml.min.js"></script>
+    <script src="../../../../assets/css.min.js"></script>
+    <script src="../../../../assets/bash.min.js"></script>
+    <script src="../../../../assets/sql.min.js"></script>
+</head>
+
+<body>
+    <!-- 顶部导航栏 -->
+    <div class="top-navbar">
+        <div class="site-title">Technology</div>
+    </div>
+
+    <!-- 侧边导航栏 -->
+    <div class="sidebar">
+        <ul class="nav-tree">
+            <li class="nav-item">
+<div class="nav-link has-children active">
+<span class="nav-link-icon expanded" data-toggle="collapse"></span>
+<a href="../../../../html/java/index.html" class="nav-link-text" data-path="html/java/index.html">java</a>
+</div>
+<ul class="nav-children expanded">
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/java/Java并发编程/index.html" class="nav-link-text" data-path="html/java/Java并发编程/index.html">Java并发编程</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java并发编程/Java内存模型(JMM).html" class="nav-link-text" data-path="html/java/Java并发编程/Java内存模型(JMM).html">Java内存模型(JMM)</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java并发编程/线程(Thread).html" class="nav-link-text" data-path="html/java/Java并发编程/线程(Thread).html">线程(Thread)</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children active">
+<span class="nav-link-icon expanded" data-toggle="collapse"></span>
+<a href="../../../../html/java/Java虚拟机模型/index.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/index.html">Java虚拟机模型</a>
+</div>
+<ul class="nav-children expanded">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/内存分析工具.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/内存分析工具.html">内存分析工具</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/垃圾回收机制.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/垃圾回收机制.html">垃圾回收机制</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/堆.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/堆.html">堆</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children active">
+<span class="nav-link-icon expanded" data-toggle="collapse"></span>
+<a href="../../../../html/java/Java虚拟机模型/字节码分析/index.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/index.html">字节码分析</a>
+</div>
+<ul class="nav-children expanded">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/字节码分析/字节码分析-Lambda表达式.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-Lambda表达式.html">字节码分析-Lambda表达式</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/字节码分析/字节码分析-内部类.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-内部类.html">字节码分析-内部类</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/字节码分析/字节码分析-可变参数.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-可变参数.html">字节码分析-可变参数</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/字节码分析/字节码分析-同步.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-同步.html">字节码分析-同步</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/字节码分析/字节码分析-字段.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-字段.html">字节码分析-字段</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/字节码分析/字节码分析-异常处理.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-异常处理.html">字节码分析-异常处理</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link active">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/字节码分析/字节码分析-控制流.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-控制流.html">字节码分析-控制流</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/字节码分析/字节码分析-方法.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-方法.html">字节码分析-方法</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/字节码分析/字节码分析-方法引用.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-方法引用.html">字节码分析-方法引用</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/字节码分析/字节码分析-泛型.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-泛型.html">字节码分析-泛型</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/字节码分析/字节码分析-类加载机制.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-类加载机制.html">字节码分析-类加载机制</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/字节码分析/字节码分析-继承.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-继承.html">字节码分析-继承</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/字节码分析/字节码增强技术.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码增强技术.html">字节码增强技术</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/执行引擎.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/执行引擎.html">执行引擎</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/方法区.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/方法区.html">方法区</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/类加载机制.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/类加载机制.html">类加载机制</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/java/Java虚拟机模型/虚拟机栈.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/虚拟机栈.html">虚拟机栈</a>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/spring/index.html" class="nav-link-text" data-path="html/spring/index.html">spring</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/spring/spring-boot/index.html" class="nav-link-text" data-path="html/spring/spring-boot/index.html">spring-boot</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-boot/SpringBoot事件机制.html" class="nav-link-text" data-path="html/spring/spring-boot/SpringBoot事件机制.html">SpringBoot事件机制</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-boot/SpringBoot启动流程.html" class="nav-link-text" data-path="html/spring/spring-boot/SpringBoot启动流程.html">SpringBoot启动流程</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-boot/SpringBoot日志体系.html" class="nav-link-text" data-path="html/spring/spring-boot/SpringBoot日志体系.html">SpringBoot日志体系</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-boot/SpringBoot自动装配.html" class="nav-link-text" data-path="html/spring/spring-boot/SpringBoot自动装配.html">SpringBoot自动装配</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/spring/spring-framework/index.html" class="nav-link-text" data-path="html/spring/spring-framework/index.html">spring-framework</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework/BeanDefinition创建流程.html" class="nav-link-text" data-path="html/spring/spring-framework/BeanDefinition创建流程.html">BeanDefinition创建流程</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework/BeanLifecycle.html" class="nav-link-text" data-path="html/spring/spring-framework/BeanLifecycle.html">BeanLifecycle</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-framework/Bean创建流程.html" class="nav-link-text" data-path="html/spring/spring-framework/Bean创建流程.html">Bean创建流程</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/spring/spring-mysql/index.html" class="nav-link-text" data-path="html/spring/spring-mysql/index.html">spring-mysql</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/spring/spring-mysql/mybatis/index.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis/index.html">mybatis</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-mysql/mybatis/Mapper源码分析.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis/Mapper源码分析.html">Mapper源码分析</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/spring/spring-mysql/mybatis-plus/index.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis-plus/index.html">mybatis-plus</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-mysql/mybatis-plus/DataSource源码分析.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis-plus/DataSource源码分析.html">DataSource源码分析</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-mysql/mybatis-plus/Mapper源码分析.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis-plus/Mapper源码分析.html">Mapper源码分析</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-mysql/mybatis-plus/SQL执行源码分析.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis-plus/SQL执行源码分析.html">SQL执行源码分析</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring-mysql/mybatis-plus/SQL模板注册源码分析.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis-plus/SQL模板注册源码分析.html">SQL模板注册源码分析</a>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/spring/spring启动源码分析/index.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/index.html">spring启动源码分析</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AbstractApplicationContext.cancelRefresh.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.cancelRefresh.html">AbstractApplicationContext.cancelRefresh</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AbstractApplicationContext.destroyBeans.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.destroyBeans.html">AbstractApplicationContext.destroyBeans</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AbstractApplicationContext.finishBeanFactoryInitialization.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.finishBeanFactoryInitialization.html">AbstractApplicationContext.finishBeanFactoryInitialization</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AbstractApplicationContext.finishRefresh.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.finishRefresh.html">AbstractApplicationContext.finishRefresh</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AbstractApplicationContext.initApplicationEventMulticaster.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.initApplicationEventMulticaster.html">AbstractApplicationContext.initApplicationEventMulticaster</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AbstractApplicationContext.initMessageSource.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.initMessageSource.html">AbstractApplicationContext.initMessageSource</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AbstractApplicationContext.invokeBeanFactoryPostProcessors.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.invokeBeanFactoryPostProcessors.html">AbstractApplicationContext.invokeBeanFactoryPostProcessors</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AbstractApplicationContext.obtainFreshBeanFactory.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.obtainFreshBeanFactory.html">AbstractApplicationContext.obtainFreshBeanFactory</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AbstractApplicationContext.onRefresh.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.onRefresh.html">AbstractApplicationContext.onRefresh</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AbstractApplicationContext.postProcessBeanFactory.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.postProcessBeanFactory.html">AbstractApplicationContext.postProcessBeanFactory</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AbstractApplicationContext.prepareBeanFactory.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.prepareBeanFactory.html">AbstractApplicationContext.prepareBeanFactory</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AbstractApplicationContext.prepareRefresh.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.prepareRefresh.html">AbstractApplicationContext.prepareRefresh</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AbstractApplicationContext.registerBeanPostProcessors.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.registerBeanPostProcessors.html">AbstractApplicationContext.registerBeanPostProcessors</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AbstractApplicationContext.registerListeners.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.registerListeners.html">AbstractApplicationContext.registerListeners</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AbstractApplicationContext.resetCommonCaches.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.resetCommonCaches.html">AbstractApplicationContext.resetCommonCaches</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/Application.createApplicationContext.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/Application.createApplicationContext.html">Application.createApplicationContext</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/Application.refreshContext.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/Application.refreshContext.html">Application.refreshContext</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/Application.run.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/Application.run.html">Application.run</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/AutoConfigurationImportSelector.getAutoConfigurationEntry.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AutoConfigurationImportSelector.getAutoConfigurationEntry.html">AutoConfigurationImportSelector.getAutoConfigurationEntry</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/ClassPathMapperScanner.scan.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/ClassPathMapperScanner.scan.html">ClassPathMapperScanner.scan</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/ConfigurationClassParser.parse.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/ConfigurationClassParser.parse.html">ConfigurationClassParser.parse</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/ConfigurationClassPostProcessor.processConfigBeanDefinitions.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/ConfigurationClassPostProcessor.processConfigBeanDefinitions.html">ConfigurationClassPostProcessor.processConfigBeanDefinitions</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/MapperScannerConfigurer.postProcessBeanDefinitionRegistry.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/MapperScannerConfigurer.postProcessBeanDefinitionRegistry.html">MapperScannerConfigurer.postProcessBeanDefinitionRegistry</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/spring/spring启动源码分析/ServletWebServerApplicationContext.onRefresh.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/ServletWebServerApplicationContext.onRefresh.html">ServletWebServerApplicationContext.onRefresh</a>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/云原生/index.html" class="nav-link-text" data-path="html/云原生/index.html">云原生</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/云原生/docker/index.html" class="nav-link-text" data-path="html/云原生/docker/index.html">docker</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/云原生/k8s/index.html" class="nav-link-text" data-path="html/云原生/k8s/index.html">k8s</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/云原生/k8s/K8S网络架构.html" class="nav-link-text" data-path="html/云原生/k8s/K8S网络架构.html">K8S网络架构</a>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/中间件/index.html" class="nav-link-text" data-path="html/中间件/index.html">中间件</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/中间件/clickhouse/index.html" class="nav-link-text" data-path="html/中间件/clickhouse/index.html">clickhouse</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/中间件/elasticsearch/index.html" class="nav-link-text" data-path="html/中间件/elasticsearch/index.html">elasticsearch</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/中间件/kakfa/index.html" class="nav-link-text" data-path="html/中间件/kakfa/index.html">kakfa</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/中间件/mongodb/index.html" class="nav-link-text" data-path="html/中间件/mongodb/index.html">mongodb</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/中间件/rabbitmq/index.html" class="nav-link-text" data-path="html/中间件/rabbitmq/index.html">rabbitmq</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/中间件/redis/index.html" class="nav-link-text" data-path="html/中间件/redis/index.html">redis</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/监控/index.html" class="nav-link-text" data-path="html/监控/index.html">监控</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/监控/prometheus/index.html" class="nav-link-text" data-path="html/监控/prometheus/index.html">prometheus</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../../html/基础/index.html" class="nav-link-text" data-path="html/基础/index.html">基础</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/基础/数据结构/index.html" class="nav-link-text" data-path="html/基础/数据结构/index.html">数据结构</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/基础/画图/index.html" class="nav-link-text" data-path="html/基础/画图/index.html">画图</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/基础/算法/index.html" class="nav-link-text" data-path="html/基础/算法/index.html">算法</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../../html/基础/设计模式/index.html" class="nav-link-text" data-path="html/基础/设计模式/index.html">设计模式</a>
+</div>
+</li>
+</ul>
+</li>
+        </ul>
+    </div>
+
+    <!-- 主内容区 -->
+    <div class="main-content">
+        <div class="content-body">
+            <h1 id="-">字节码分析-控制流</h1>
+<h2 id="_1">源码</h2>
+<div class="hljs"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nn">java.bytecode</span><span class="p">;</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * 控制流示例 - 演示if-else、switch、for循环、while循环、增强for循环</span>
+<span class="cm"> */</span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ControlFlowExample</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="c1">// if-else示例</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">ifElseExample</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">value</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Positive"</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">value</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Negative"</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Zero"</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// switch示例</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">switchExample</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="mi">1</span><span class="p">:</span>
+<span class="w">                </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"One"</span><span class="p">);</span>
+<span class="w">                </span><span class="k">break</span><span class="p">;</span>
+<span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="mi">2</span><span class="p">:</span>
+<span class="w">                </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Two"</span><span class="p">);</span>
+<span class="w">                </span><span class="k">break</span><span class="p">;</span>
+<span class="w">            </span><span class="k">default</span><span class="p">:</span>
+<span class="w">                </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Other"</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// for循环示例</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">forLoopExample</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// 增强for循环示例</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">enhancedForLoopExample</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">array</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">array</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">item</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// while循环示例</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">whileLoopExample</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+<span class="w">            </span><span class="n">i</span><span class="o">++</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="_2">结构化反解析</h2>
+<div class="hljs"><pre><span></span><code><span class="n">Classfile</span><span class="w"> </span><span class="o">/</span><span class="n">D</span><span class="p">:</span><span class="o">/</span><span class="n">zcp</span><span class="o">/</span><span class="n">github</span><span class="o">/</span><span class="n">yggdrasil</span><span class="o">/</span><span class="n">java</span><span class="o">/</span><span class="n">bytecode</span><span class="o">/</span><span class="n">ControlFlowExample</span><span class="o">.</span><span class="k">class</span>
+<span class="w">  </span><span class="n">Last</span><span class="w"> </span><span class="n">modified</span><span class="w"> </span><span class="mi">2025</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">3</span><span class="p">;</span><span class="w"> </span><span class="n">size</span><span class="w"> </span><span class="mi">1119</span><span class="w"> </span><span class="n">bytes</span>
+<span class="w">  </span><span class="n">MD5</span><span class="w"> </span><span class="n">checksum</span><span class="w"> </span><span class="mi">838814412</span><span class="n">d6efb6ccb3fbd152537cd4e</span>
+<span class="w">  </span><span class="n">Compiled</span><span class="w"> </span><span class="n">from</span><span class="w"> </span><span class="s2">"ControlFlowExample.java"</span>
+<span class="n">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="n">java</span><span class="o">.</span><span class="n">bytecode</span><span class="o">.</span><span class="n">ControlFlowExample</span>
+<span class="w">  </span><span class="n">minor</span><span class="w"> </span><span class="n">version</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">  </span><span class="n">major</span><span class="w"> </span><span class="n">version</span><span class="p">:</span><span class="w"> </span><span class="mi">52</span>
+<span class="w">  </span><span class="n">flags</span><span class="p">:</span><span class="w"> </span><span class="n">ACC_PUBLIC</span><span class="p">,</span><span class="w"> </span><span class="n">ACC_SUPER</span>
+<span class="n">Constant</span><span class="w"> </span><span class="n">pool</span><span class="p">:</span>
+<span class="w">   </span><span class="c1">#1 = Methodref          #2.#3          // java/lang/Object."&lt;init&gt;":()V</span>
+<span class="w">   </span><span class="c1">#2 = Class              #4             // java/lang/Object</span>
+<span class="w">   </span><span class="c1">#3 = NameAndType        #5.#6          // "&lt;init&gt;":()V</span>
+<span class="w">   </span><span class="c1">#4 = Utf8               java/lang/Object</span>
+<span class="w">   </span><span class="c1">#5 = Utf8               &lt;init&gt;</span>
+<span class="w">   </span><span class="c1">#6 = Utf8               ()V</span>
+<span class="w">   </span><span class="c1">#7 = Fieldref           #8.#9          // java/lang/System.out:Ljava/io/PrintStream;</span>
+<span class="w">   </span><span class="c1">#8 = Class              #10            // java/lang/System</span>
+<span class="w">   </span><span class="c1">#9 = NameAndType        #11:#12        // out:Ljava/io/PrintStream;</span>
+<span class="w">  </span><span class="c1">#10 = Utf8               java/lang/System</span>
+<span class="w">  </span><span class="c1">#11 = Utf8               out</span>
+<span class="w">  </span><span class="c1">#12 = Utf8               Ljava/io/PrintStream;</span>
+<span class="w">  </span><span class="c1">#13 = String             #14            // Positive</span>
+<span class="w">  </span><span class="c1">#14 = Utf8               Positive</span>
+<span class="w">  </span><span class="c1">#15 = Methodref          #16.#17        // java/io/PrintStream.println:(Ljava/lang/String;)V</span>
+<span class="w">  </span><span class="c1">#16 = Class              #18            // java/io/PrintStream</span>
+<span class="w">  </span><span class="c1">#17 = NameAndType        #19:#20        // println:(Ljava/lang/String;)V</span>
+<span class="w">  </span><span class="c1">#18 = Utf8               java/io/PrintStream</span>
+<span class="w">  </span><span class="c1">#19 = Utf8               println</span>
+<span class="w">  </span><span class="c1">#20 = Utf8               (Ljava/lang/String;)V</span>
+<span class="w">  </span><span class="c1">#21 = String             #22            // Negative</span>
+<span class="w">  </span><span class="c1">#22 = Utf8               Negative</span>
+<span class="w">  </span><span class="c1">#23 = String             #24            // Zero</span>
+<span class="w">  </span><span class="c1">#24 = Utf8               Zero</span>
+<span class="w">  </span><span class="c1">#25 = String             #26            // One</span>
+<span class="w">  </span><span class="c1">#26 = Utf8               One</span>
+<span class="w">  </span><span class="c1">#27 = String             #28            // Two</span>
+<span class="w">  </span><span class="c1">#28 = Utf8               Two</span>
+<span class="w">  </span><span class="c1">#29 = String             #30            // Other</span>
+<span class="w">  </span><span class="c1">#30 = Utf8               Other</span>
+<span class="w">  </span><span class="c1">#31 = Methodref          #16.#32        // java/io/PrintStream.println:(I)V</span>
+<span class="w">  </span><span class="c1">#32 = NameAndType        #19:#33        // println:(I)V</span>
+<span class="w">  </span><span class="c1">#33 = Utf8               (I)V</span>
+<span class="w">  </span><span class="c1">#34 = Class              #35            // java/bytecode/ControlFlowExample</span>
+<span class="w">  </span><span class="c1">#35 = Utf8               java/bytecode/ControlFlowExample</span>
+<span class="w">  </span><span class="c1">#36 = Utf8               Code</span>
+<span class="w">  </span><span class="c1">#37 = Utf8               LineNumberTable</span>
+<span class="w">  </span><span class="c1">#38 = Utf8               ifElseExample</span>
+<span class="w">  </span><span class="c1">#39 = Utf8               StackMapTable</span>
+<span class="w">  </span><span class="c1">#40 = Utf8               switchExample</span>
+<span class="w">  </span><span class="c1">#41 = Utf8               forLoopExample</span>
+<span class="w">  </span><span class="c1">#42 = Utf8               enhancedForLoopExample</span>
+<span class="w">  </span><span class="c1">#43 = Utf8               ([Ljava/lang/String;)V</span>
+<span class="w">  </span><span class="c1">#44 = Class              #45            // "[Ljava/lang/String;"</span>
+<span class="w">  </span><span class="c1">#45 = Utf8               [Ljava/lang/String;</span>
+<span class="w">  </span><span class="c1">#46 = Utf8               whileLoopExample</span>
+<span class="w">  </span><span class="c1">#47 = Utf8               SourceFile</span>
+<span class="w">  </span><span class="c1">#48 = Utf8               ControlFlowExample.java</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="n">public</span><span class="w"> </span><span class="nb nb-Type">void</span><span class="w"> </span><span class="n">ifElseExample</span><span class="p">(</span><span class="nb nb-Type">int</span><span class="p">);</span>
+<span class="w">    </span><span class="n">descriptor</span><span class="p">:</span><span class="w"> </span><span class="p">(</span><span class="n">I</span><span class="p">)</span><span class="n">V</span>
+<span class="w">    </span><span class="n">flags</span><span class="p">:</span><span class="w"> </span><span class="n">ACC_PUBLIC</span>
+<span class="w">    </span><span class="n">Code</span><span class="p">:</span>
+<span class="w">      </span><span class="n">stack</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">locals</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">args_size</span><span class="o">=</span><span class="mi">2</span>
+<span class="w">         </span><span class="mi">0</span><span class="p">:</span><span class="w"> </span><span class="n">iload_1</span>
+<span class="w">         </span><span class="mi">1</span><span class="p">:</span><span class="w"> </span><span class="n">ifle</span><span class="w">          </span><span class="mi">15</span>
+<span class="w">         </span><span class="mi">4</span><span class="p">:</span><span class="w"> </span><span class="n">getstatic</span><span class="w">     </span><span class="c1">#7                  // Field java/lang/System.out:Ljava/io/PrintStream;</span>
+<span class="w">         </span><span class="mi">7</span><span class="p">:</span><span class="w"> </span><span class="n">ldc</span><span class="w">           </span><span class="c1">#13                 // String Positive</span>
+<span class="w">         </span><span class="mi">9</span><span class="p">:</span><span class="w"> </span><span class="n">invokevirtual</span><span class="w"> </span><span class="c1">#15                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V</span>
+<span class="w">        </span><span class="mi">12</span><span class="p">:</span><span class="w"> </span><span class="n">goto</span><span class="w">          </span><span class="mi">38</span>
+<span class="w">        </span><span class="mi">15</span><span class="p">:</span><span class="w"> </span><span class="n">iload_1</span>
+<span class="w">        </span><span class="mi">16</span><span class="p">:</span><span class="w"> </span><span class="n">ifge</span><span class="w">          </span><span class="mi">30</span>
+<span class="w">        </span><span class="mi">19</span><span class="p">:</span><span class="w"> </span><span class="n">getstatic</span><span class="w">     </span><span class="c1">#7                  // Field java/lang/System.out:Ljava/io/PrintStream;</span>
+<span class="w">        </span><span class="mi">22</span><span class="p">:</span><span class="w"> </span><span class="n">ldc</span><span class="w">           </span><span class="c1">#21                 // String Negative</span>
+<span class="w">        </span><span class="mi">24</span><span class="p">:</span><span class="w"> </span><span class="n">invokevirtual</span><span class="w"> </span><span class="c1">#15                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V</span>
+<span class="w">        </span><span class="mi">27</span><span class="p">:</span><span class="w"> </span><span class="n">goto</span><span class="w">          </span><span class="mi">38</span>
+<span class="w">        </span><span class="mi">30</span><span class="p">:</span><span class="w"> </span><span class="n">getstatic</span><span class="w">     </span><span class="c1">#7                  // Field java/lang/System.out:Ljava/io/PrintStream;</span>
+<span class="w">        </span><span class="mi">33</span><span class="p">:</span><span class="w"> </span><span class="n">ldc</span><span class="w">           </span><span class="c1">#23                 // String Zero</span>
+<span class="w">        </span><span class="mi">35</span><span class="p">:</span><span class="w"> </span><span class="n">invokevirtual</span><span class="w"> </span><span class="c1">#15                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V</span>
+<span class="w">        </span><span class="mi">38</span><span class="p">:</span><span class="w"> </span><span class="k">return</span>
+<span class="w">      </span><span class="n">LineNumberTable</span><span class="p">:</span>
+<span class="w">        </span><span class="n">line</span><span class="w"> </span><span class="mi">10</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">        </span><span class="n">line</span><span class="w"> </span><span class="mi">11</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span>
+<span class="w">        </span><span class="n">line</span><span class="w"> </span><span class="mi">12</span><span class="p">:</span><span class="w"> </span><span class="mi">15</span>
+<span class="w">        </span><span class="n">line</span><span class="w"> </span><span class="mi">13</span><span class="p">:</span><span class="w"> </span><span class="mi">19</span>
+<span class="w">        </span><span class="n">line</span><span class="w"> </span><span class="mi">15</span><span class="p">:</span><span class="w"> </span><span class="mi">30</span>
+<span class="w">        </span><span class="n">line</span><span class="w"> </span><span class="mi">17</span><span class="p">:</span><span class="w"> </span><span class="mi">38</span>
+
+<span class="w">  </span><span class="n">public</span><span class="w"> </span><span class="nb nb-Type">void</span><span class="w"> </span><span class="n">switchExample</span><span class="p">(</span><span class="nb nb-Type">int</span><span class="p">);</span>
+<span class="w">    </span><span class="n">descriptor</span><span class="p">:</span><span class="w"> </span><span class="p">(</span><span class="n">I</span><span class="p">)</span><span class="n">V</span>
+<span class="w">    </span><span class="n">flags</span><span class="p">:</span><span class="w"> </span><span class="n">ACC_PUBLIC</span>
+<span class="w">    </span><span class="n">Code</span><span class="p">:</span>
+<span class="w">      </span><span class="n">stack</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">locals</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">args_size</span><span class="o">=</span><span class="mi">2</span>
+<span class="w">         </span><span class="mi">0</span><span class="p">:</span><span class="w"> </span><span class="n">iload_1</span>
+<span class="w">         </span><span class="mi">1</span><span class="p">:</span><span class="w"> </span><span class="n">lookupswitch</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="mi">2</span>
+<span class="w">                       </span><span class="mi">1</span><span class="p">:</span><span class="w"> </span><span class="mi">28</span>
+<span class="w">                       </span><span class="mi">2</span><span class="p">:</span><span class="w"> </span><span class="mi">39</span>
+<span class="w">                 </span><span class="n">default</span><span class="p">:</span><span class="w"> </span><span class="mi">50</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="mi">28</span><span class="p">:</span><span class="w"> </span><span class="n">getstatic</span><span class="w">     </span><span class="c1">#7                  // Field java/lang/System.out:Ljava/io/PrintStream;</span>
+<span class="w">        </span><span class="mi">31</span><span class="p">:</span><span class="w"> </span><span class="n">ldc</span><span class="w">           </span><span class="c1">#25                 // String One</span>
+<span class="w">        </span><span class="mi">33</span><span class="p">:</span><span class="w"> </span><span class="n">invokevirtual</span><span class="w"> </span><span class="c1">#15                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V</span>
+<span class="w">        </span><span class="mi">36</span><span class="p">:</span><span class="w"> </span><span class="n">goto</span><span class="w">          </span><span class="mi">58</span>
+<span class="w">        </span><span class="mi">39</span><span class="p">:</span><span class="w"> </span><span class="n">getstatic</span><span class="w">     </span><span class="c1">#7                  // Field java/lang/System.out:Ljava/io/PrintStream;</span>
+<span class="w">        </span><span class="mi">42</span><span class="p">:</span><span class="w"> </span><span class="n">ldc</span><span class="w">           </span><span class="c1">#27                 // String Two</span>
+<span class="w">        </span><span class="mi">44</span><span class="p">:</span><span class="w"> </span><span class="n">invokevirtual</span><span class="w"> </span><span class="c1">#15                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V</span>
+<span class="w">        </span><span class="mi">47</span><span class="p">:</span><span class="w"> </span><span class="n">goto</span><span class="w">          </span><span class="mi">58</span>
+<span class="w">        </span><span class="mi">50</span><span class="p">:</span><span class="w"> </span><span class="n">getstatic</span><span class="w">     </span><span class="c1">#7                  // Field java/lang/System.out:Ljava/io/PrintStream;</span>
+<span class="w">        </span><span class="mi">53</span><span class="p">:</span><span class="w"> </span><span class="n">ldc</span><span class="w">           </span><span class="c1">#29                 // String Other</span>
+<span class="w">        </span><span class="mi">55</span><span class="p">:</span><span class="w"> </span><span class="n">invokevirtual</span><span class="w"> </span><span class="c1">#15                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V</span>
+<span class="w">        </span><span class="mi">58</span><span class="p">:</span><span class="w"> </span><span class="k">return</span>
+<span class="w">      </span><span class="n">LineNumberTable</span><span class="p">:</span>
+<span class="w">        </span><span class="n">line</span><span class="w"> </span><span class="mi">21</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">        </span><span class="n">line</span><span class="w"> </span><span class="mi">23</span><span class="p">:</span><span class="w"> </span><span class="mi">28</span>
+<span class="w">        </span><span class="n">line</span><span class="w"> </span><span class="mi">24</span><span class="p">:</span><span class="w"> </span><span class="mi">36</span>
+<span class="w">        </span><span class="n">line</span><span class="w"> </span><span class="mi">26</span><span class="p">:</span><span class="w"> </span><span class="mi">39</span>
+<span class="w">        </span><span class="n">line</span><span class="w"> </span><span class="mi">27</span><span class="p">:</span><span class="w"> </span><span class="mi">47</span>
+<span class="w">        </span><span class="n">line</span><span class="w"> </span><span class="mi">29</span><span class="p">:</span><span class="w"> </span><span class="mi">50</span>
+<span class="w">        </span><span class="n">line</span><span class="w"> </span><span class="mi">31</span><span class="p">:</span><span class="w"> </span><span class="mi">58</span>
+
+<span class="w">  </span><span class="n">public</span><span class="w"> </span><span class="nb nb-Type">void</span><span class="w"> </span><span class="n">forLoopExample</span><span class="p">();</span>
+<span class="w">    </span><span class="n">descriptor</span><span class="p">:</span><span class="w"> </span><span class="p">()</span><span class="n">V</span>
+<span class="w">    </span><span class="n">flags</span><span class="p">:</span><span class="w"> </span><span class="n">ACC_PUBLIC</span>
+<span class="w">    </span><span class="n">Code</span><span class="p">:</span>
+<span class="w">      </span><span class="n">stack</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">locals</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">args_size</span><span class="o">=</span><span class="mi">1</span>
+<span class="w">         </span><span class="mi">0</span><span class="p">:</span><span class="w"> </span><span class="n">iconst_0</span>
+<span class="w">         </span><span class="mi">1</span><span class="p">:</span><span class="w"> </span><span class="n">istore_1</span>
+<span class="w">         </span><span class="mi">2</span><span class="p">:</span><span class="w"> </span><span class="n">iload_1</span>
+<span class="w">         </span><span class="mi">3</span><span class="p">:</span><span class="w"> </span><span class="n">bipush</span><span class="w">        </span><span class="mi">10</span>
+<span class="w">         </span><span class="mi">5</span><span class="p">:</span><span class="w"> </span><span class="n">if_icmpge</span><span class="w">     </span><span class="mi">21</span>
+<span class="w">         </span><span class="mi">8</span><span class="p">:</span><span class="w"> </span><span class="n">getstatic</span><span class="w">     </span><span class="c1">#7                  // Field java/lang/System.out:Ljava/io/PrintStream;</span>
+<span class="w">        </span><span class="mi">11</span><span class="p">:</span><span class="w"> </span><span class="n">iload_1</span>
+<span class="w">        </span><span class="mi">12</span><span class="p">:</span><span class="w"> </span><span class="n">invokevirtual</span><span class="w"> </span><span class="c1">#31                 // Method java/io/PrintStream.println:(I)V</span>
+<span class="w">        </span><span class="mi">15</span><span class="p">:</span><span class="w"> </span><span class="n">iinc</span><span class="w">          </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">        </span><span class="mi">18</span><span class="p">:</span><span class="w"> </span><span class="n">goto</span><span class="w">          </span><span class="mi">2</span>
+<span class="w">        </span><span class="mi">21</span><span class="p">:</span><span class="w"> </span><span class="k">return</span>
+<span class="w">      </span><span class="n">LineNumberTable</span><span class="p">:</span>
+<span class="w">        </span><span class="n">line</span><span class="w"> </span><span class="mi">35</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">        </span><span class="n">line</span><span class="w"> </span><span class="mi">36</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span>
+<span class="w">        </span><span class="n">line</span><span class="w"> </span><span class="mi">35</span><span class="p">:</span><span class="w"> </span><span class="mi">15</span>
+<span class="w">        </span><span class="n">line</span><span class="w"> </span><span class="mi">38</span><span class="p">:</span><span class="w"> </span><span class="mi">21</span>
+
+<span class="w">  </span><span class="n">public</span><span class="w"> </span><span class="nb nb-Type">void</span><span class="w"> </span><span class="n">enhancedForLoopExample</span><span class="p">(</span><span class="n">java</span><span class="o">.</span><span class="n">lang</span><span class="o">.</span><span class="n">String</span><span class="p">[]);</span>
+<span class="w">    </span><span class="n">descriptor</span><span class="p">:</span><span class="w"> </span><span class="p">([</span><span class="n">Ljava</span><span class="o">/</span><span class="n">lang</span><span class="o">/</span><span class="nb nb-Type">String</span><span class="p">;)</span><span class="n">V</span>
+<span class="w">    </span><span class="n">flags</span><span class="p">:</span><span class="w"> </span><span class="n">ACC_PUBLIC</span>
+<span class="w">    </span><span class="n">Code</span><span class="p">:</span>
+<span class="w">      </span><span class="n">stack</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">locals</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="n">args_size</span><span class="o">=</span><span class="mi">2</span>
+<span class="w">         </span><span class="mi">0</span><span class="p">:</span><span class="w"> </span><span class="n">aload_1</span>
+<span class="w">         </span><span class="mi">1</span><span class="p">:</span><span class="w"> </span><span class="n">astore_2</span>
+<span class="w">         </span><span class="mi">2</span><span class="p">:</span><span class="w"> </span><span class="n">aload_2</span>
+<span class="w">         </span><span class="mi">3</span><span class="p">:</span><span class="w"> </span><span class="n">arraylength</span>
+<span class="w">         </span><span class="mi">4</span><span class="p">:</span><span class="w"> </span><span class="n">istore_3</span>
+<span class="w">         </span><span class="mi">5</span><span class="p">:</span><span class="w"> </span><span class="n">iconst_0</span>
+<span class="w">         </span><span class="mi">6</span><span class="p">:</span><span class="w"> </span><span class="n">istore</span><span class="w">        </span><span class="mi">4</span>
+<span class="w">         </span><span class="mi">8</span><span class="p">:</span><span class="w"> </span><span class="n">iload</span><span class="w">         </span><span class="mi">4</span>
+<span class="w">        </span><span class="mi">10</span><span class="p">:</span><span class="w"> </span><span class="n">iload_3</span>
+<span class="w">        </span><span class="mi">11</span><span class="p">:</span><span class="w"> </span><span class="n">if_icmpge</span><span class="w">     </span><span class="mi">34</span>
+<span class="w">        </span><span class="mi">14</span><span class="p">:</span><span class="w"> </span><span class="n">aload_2</span>
+<span class="w">        </span><span class="mi">15</span><span class="p">:</span><span class="w"> </span><span class="n">iload</span><span class="w">         </span><span class="mi">4</span>
+<span class="w">        </span><span class="mi">17</span><span class="p">:</span><span class="w"> </span><span class="n">aaload</span>
+<span class="w">        </span><span class="mi">18</span><span class="p">:</span><span class="w"> </span><span class="n">astore</span><span class="w">        </span><span class="mi">5</span>
+<span class="w">        </span><span class="mi">20</span><span class="p">:</span><span class="w"> </span><span class="n">getstatic</span><span class="w">     </span><span class="c1">#7                  // Field java/lang/System.out:Ljava/io/PrintStream;</span>
+<span class="w">        </span><span class="mi">23</span><span class="p">:</span><span class="w"> </span><span class="n">aload</span><span class="w">         </span><span class="mi">5</span>
+<span class="w">        </span><span class="mi">25</span><span class="p">:</span><span class="w"> </span><span class="n">invokevirtual</span><span class="w"> </span><span class="c1">#15                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V</span>
+<span class="w">        </span><span class="mi">28</span><span class="p">:</span><span class="w"> </span><span class="n">iinc</span><span class="w">          </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">        </span><span class="mi">31</span><span class="p">:</span><span class="w"> </span><span class="n">goto</span><span class="w">          </span><span class="mi">8</span>
+<span class="w">        </span><span class="mi">34</span><span class="p">:</span><span class="w"> </span><span class="k">return</span>
+<span class="w">      </span><span class="n">LineNumberTable</span><span class="p">:</span>
+<span class="w">        </span><span class="n">line</span><span class="w"> </span><span class="mi">42</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">        </span><span class="n">line</span><span class="w"> </span><span class="mi">43</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span>
+<span class="w">        </span><span class="n">line</span><span class="w"> </span><span class="mi">42</span><span class="p">:</span><span class="w"> </span><span class="mi">28</span>
+<span class="w">        </span><span class="n">line</span><span class="w"> </span><span class="mi">45</span><span class="p">:</span><span class="w"> </span><span class="mi">34</span>
+
+<span class="w">  </span><span class="n">public</span><span class="w"> </span><span class="nb nb-Type">void</span><span class="w"> </span><span class="n">whileLoopExample</span><span class="p">();</span>
+<span class="w">    </span><span class="n">descriptor</span><span class="p">:</span><span class="w"> </span><span class="p">()</span><span class="n">V</span>
+<span class="w">    </span><span class="n">flags</span><span class="p">:</span><span class="w"> </span><span class="n">ACC_PUBLIC</span>
+<span class="w">    </span><span class="n">Code</span><span class="p">:</span>
+<span class="w">      </span><span class="n">stack</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">locals</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">args_size</span><span class="o">=</span><span class="mi">1</span>
+<span class="w">         </span><span class="mi">0</span><span class="p">:</span><span class="w"> </span><span class="n">iconst_0</span>
+<span class="w">         </span><span class="mi">1</span><span class="p">:</span><span class="w"> </span><span class="n">istore_1</span>
+<span class="w">         </span><span class="mi">2</span><span class="p">:</span><span class="w"> </span><span class="n">iload_1</span>
+<span class="w">         </span><span class="mi">3</span><span class="p">:</span><span class="w"> </span><span class="n">bipush</span><span class="w">        </span><span class="mi">10</span>
+<span class="w">         </span><span class="mi">5</span><span class="p">:</span><span class="w"> </span><span class="n">if_icmpge</span><span class="w">     </span><span class="mi">21</span>
+<span class="w">         </span><span class="mi">8</span><span class="p">:</span><span class="w"> </span><span class="n">getstatic</span><span class="w">     </span><span class="c1">#7                  // Field java/lang/System.out:Ljava/io/PrintStream;</span>
+<span class="w">        </span><span class="mi">11</span><span class="p">:</span><span class="w"> </span><span class="n">iload_1</span>
+<span class="w">        </span><span class="mi">12</span><span class="p">:</span><span class="w"> </span><span class="n">invokevirtual</span><span class="w"> </span><span class="c1">#31                 // Method java/io/PrintStream.println:(I)V</span>
+<span class="w">        </span><span class="mi">15</span><span class="p">:</span><span class="w"> </span><span class="n">iinc</span><span class="w">          </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">        </span><span class="mi">18</span><span class="p">:</span><span class="w"> </span><span class="n">goto</span><span class="w">          </span><span class="mi">2</span>
+<span class="w">        </span><span class="mi">21</span><span class="p">:</span><span class="w"> </span><span class="k">return</span>
+<span class="w">      </span><span class="n">LineNumberTable</span><span class="p">:</span>
+<span class="w">        </span><span class="n">line</span><span class="w"> </span><span class="mi">49</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">        </span><span class="n">line</span><span class="w"> </span><span class="mi">50</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span>
+<span class="w">        </span><span class="n">line</span><span class="w"> </span><span class="mi">51</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span>
+<span class="w">        </span><span class="n">line</span><span class="w"> </span><span class="mi">52</span><span class="p">:</span><span class="w"> </span><span class="mi">15</span>
+<span class="w">        </span><span class="n">line</span><span class="w"> </span><span class="mi">54</span><span class="p">:</span><span class="w"> </span><span class="mi">21</span>
+<span class="p">}</span>
+<span class="n">SourceFile</span><span class="p">:</span><span class="w"> </span><span class="s2">"ControlFlowExample.java"</span>
+</code></pre></div>
+<h2 id="_3">详细说明</h2>
+<h3 id="_4">条件跳转指令</h3>
+<ul>
+<li><strong><code>ifle</code></strong> - 如果栈顶int值小于等于0，则跳转</li>
+<li><strong><code>ifge</code></strong> - 如果栈顶int值大于等于0，则跳转</li>
+<li><strong><code>if_icmpge</code></strong> - 比较两个int值，如果第一个大于等于第二个，则跳转</li>
+<li><strong><code>goto</code></strong> - 无条件跳转</li>
+</ul>
+<h3 id="if-else">if-else结构</h3>
+<p>if-else语句被转换为条件跳转指令：</p>
+<div class="hljs"><pre><span></span><code><span class="k">if</span><span class="w"> </span><span class="ss">(</span><span class="nv">value</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="ss">)</span><span class="w"> </span>{
+<span class="w">    </span><span class="o">//</span><span class="w"> </span>正数处理
+}<span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="ss">(</span><span class="nv">value</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="ss">)</span><span class="w"> </span>{
+<span class="w">    </span><span class="o">//</span><span class="w"> </span>负数处理
+}<span class="w"> </span><span class="k">else</span><span class="w"> </span>{
+<span class="w">    </span><span class="o">//</span><span class="w"> </span>零处理
+}
+</code></pre></div>
+<p>字节码实现：</p>
+<div class="hljs"><pre><span></span><code><span class="mi">0</span><span class="p">:</span><span class="w"> </span><span class="n">iload_1</span><span class="w">          </span><span class="o">//</span><span class="w"> </span><span class="err">加载</span><span class="n">value到栈</span>
+<span class="mi">1</span><span class="p">:</span><span class="w"> </span><span class="n">ifle</span><span class="w">          </span><span class="mi">15</span><span class="w">  </span><span class="o">//</span><span class="w"> </span><span class="err">如果</span><span class="o">&lt;=</span><span class="mi">0</span><span class="err">，跳转到</span><span class="mi">15</span>
+<span class="mi">4</span><span class="p">:</span><span class="w"> </span><span class="o">...</span><span class="w">              </span><span class="o">//</span><span class="w"> </span><span class="err">正数处理</span>
+<span class="mi">12</span><span class="p">:</span><span class="w"> </span><span class="n">goto</span><span class="w">          </span><span class="mi">38</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="err">跳转到结束</span>
+<span class="mi">15</span><span class="p">:</span><span class="w"> </span><span class="n">iload_1</span><span class="w">          </span><span class="o">//</span><span class="w"> </span><span class="err">重新加载</span><span class="n">value</span>
+<span class="mi">16</span><span class="p">:</span><span class="w"> </span><span class="n">ifge</span><span class="w">          </span><span class="mi">30</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="err">如果</span><span class="o">&gt;=</span><span class="mi">0</span><span class="err">，跳转到</span><span class="mi">30</span>
+<span class="mi">19</span><span class="p">:</span><span class="w"> </span><span class="o">...</span><span class="w">              </span><span class="o">//</span><span class="w"> </span><span class="err">负数处理</span>
+<span class="mi">27</span><span class="p">:</span><span class="w"> </span><span class="n">goto</span><span class="w">          </span><span class="mi">38</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="err">跳转到结束</span>
+<span class="mi">30</span><span class="p">:</span><span class="w"> </span><span class="o">...</span><span class="w">              </span><span class="o">//</span><span class="w"> </span><span class="err">零处理</span>
+<span class="mi">38</span><span class="p">:</span><span class="w"> </span><span class="k">return</span>
+</code></pre></div>
+<h3 id="switch">switch语句</h3>
+<p>switch语句使用<code>lookupswitch</code>或<code>tableswitch</code>指令：</p>
+<div class="hljs"><pre><span></span><code><span class="mi">1</span><span class="o">:</span><span class="w"> </span><span class="n">lookupswitch</span><span class="w">  </span><span class="o">{</span><span class="w"> </span><span class="c1">// 2</span>
+<span class="w">           </span><span class="mi">1</span><span class="o">:</span><span class="w"> </span><span class="mi">28</span>
+<span class="w">           </span><span class="mi">2</span><span class="o">:</span><span class="w"> </span><span class="mi">39</span>
+<span class="w">     </span><span class="k">default</span><span class="o">:</span><span class="w"> </span><span class="mi">50</span>
+<span class="o">}</span>
+</code></pre></div>
+<ul>
+<li><strong><code>lookupswitch</code></strong> - 用于稀疏的case值（case值不连续）</li>
+<li><strong><code>tableswitch</code></strong> - 用于密集的case值（case值连续）</li>
+</ul>
+<h3 id="for">for循环</h3>
+<p>for循环被转换为条件跳转结构：</p>
+<div class="hljs"><pre><span></span><code><span class="k">for</span><span class="w"> </span><span class="ss">(</span><span class="nv">int</span><span class="w"> </span><span class="nv">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="c1">; i &lt; 10; i++) {</span>
+<span class="w">    </span><span class="nv">System</span>.<span class="nv">out</span>.<span class="nv">println</span><span class="ss">(</span><span class="nv">i</span><span class="ss">)</span><span class="c1">;</span>
+}
+</code></pre></div>
+<p>字节码实现：</p>
+<div class="hljs"><pre><span></span><code><span class="mi">0</span><span class="p">:</span><span class="w"> </span><span class="n">iconst_0</span><span class="w">         </span><span class="o">//</span><span class="w"> </span><span class="err">初始化</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span>
+<span class="mi">1</span><span class="p">:</span><span class="w"> </span><span class="n">istore_1</span><span class="w">         </span><span class="o">//</span><span class="w"> </span><span class="err">存储</span><span class="n">i</span>
+<span class="mi">2</span><span class="p">:</span><span class="w"> </span><span class="n">iload_1</span><span class="w">          </span><span class="o">//</span><span class="w"> </span><span class="err">加载</span><span class="n">i</span>
+<span class="mi">3</span><span class="p">:</span><span class="w"> </span><span class="n">bipush</span><span class="w">        </span><span class="mi">10</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="err">加载</span><span class="mi">10</span>
+<span class="mi">5</span><span class="p">:</span><span class="w"> </span><span class="n">if_icmpge</span><span class="w">     </span><span class="mi">21</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="err">如果</span><span class="n">i</span><span class="o">&gt;=</span><span class="mi">10</span><span class="err">，跳转到</span><span class="mi">21</span><span class="err">（结束）</span>
+<span class="mi">8</span><span class="p">:</span><span class="w"> </span><span class="o">...</span><span class="w">              </span><span class="o">//</span><span class="w"> </span><span class="err">循环体</span>
+<span class="mi">15</span><span class="p">:</span><span class="w"> </span><span class="n">iinc</span><span class="w">          </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="w">  </span><span class="o">//</span><span class="w"> </span><span class="n">i</span><span class="o">++</span>
+<span class="mi">18</span><span class="p">:</span><span class="w"> </span><span class="n">goto</span><span class="w">          </span><span class="mi">2</span><span class="w">  </span><span class="o">//</span><span class="w"> </span><span class="err">跳转到条件判断</span>
+<span class="mi">21</span><span class="p">:</span><span class="w"> </span><span class="k">return</span>
+</code></pre></div>
+<h3 id="for_1">增强for循环</h3>
+<p>增强for循环被转换为传统的索引循环：</p>
+<div class="hljs"><pre><span></span><code><span class="k">for</span><span class="w"> </span><span class="ss">(</span><span class="nv">String</span><span class="w"> </span><span class="nv">item</span><span class="w"> </span>:<span class="w"> </span><span class="nv">array</span><span class="ss">)</span><span class="w"> </span>{
+<span class="w">    </span><span class="nv">System</span>.<span class="nv">out</span>.<span class="nv">println</span><span class="ss">(</span><span class="nv">item</span><span class="ss">)</span><span class="c1">;</span>
+}
+</code></pre></div>
+<p>字节码实现：</p>
+<div class="hljs"><pre><span></span><code><span class="mi">0</span><span class="p">:</span><span class="w"> </span><span class="n">aload_1</span><span class="w">          </span><span class="o">//</span><span class="w"> </span><span class="err">加载数组</span>
+<span class="mi">1</span><span class="p">:</span><span class="w"> </span><span class="n">astore_2</span><span class="w">         </span><span class="o">//</span><span class="w"> </span><span class="err">存储到局部变量</span><span class="mi">2</span>
+<span class="mi">2</span><span class="p">:</span><span class="w"> </span><span class="n">aload_2</span><span class="w">          </span><span class="o">//</span><span class="w"> </span><span class="err">加载数组</span>
+<span class="mi">3</span><span class="p">:</span><span class="w"> </span><span class="n">arraylength</span><span class="w">      </span><span class="o">//</span><span class="w"> </span><span class="err">获取数组长度</span>
+<span class="mi">4</span><span class="p">:</span><span class="w"> </span><span class="n">istore_3</span><span class="w">         </span><span class="o">//</span><span class="w"> </span><span class="err">存储长度</span>
+<span class="mi">5</span><span class="p">:</span><span class="w"> </span><span class="n">iconst_0</span><span class="w">         </span><span class="o">//</span><span class="w"> </span><span class="err">初始化索引</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span>
+<span class="mi">6</span><span class="p">:</span><span class="w"> </span><span class="n">istore</span><span class="w">        </span><span class="mi">4</span><span class="w">  </span><span class="o">//</span><span class="w"> </span><span class="err">存储索引</span>
+<span class="mi">8</span><span class="p">:</span><span class="w"> </span><span class="n">iload</span><span class="w">         </span><span class="mi">4</span><span class="w">  </span><span class="o">//</span><span class="w"> </span><span class="err">加载索引</span>
+<span class="mi">10</span><span class="p">:</span><span class="w"> </span><span class="n">iload_3</span><span class="w">         </span><span class="o">//</span><span class="w"> </span><span class="err">加载长度</span>
+<span class="mi">11</span><span class="p">:</span><span class="w"> </span><span class="n">if_icmpge</span><span class="w">     </span><span class="mi">34</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="err">如果</span><span class="n">i</span><span class="o">&gt;=</span><span class="n">length</span><span class="err">，跳转到</span><span class="mi">34</span>
+<span class="mi">14</span><span class="p">:</span><span class="w"> </span><span class="n">aload_2</span><span class="w">         </span><span class="o">//</span><span class="w"> </span><span class="err">加载数组</span>
+<span class="mi">15</span><span class="p">:</span><span class="w"> </span><span class="n">iload</span><span class="w">         </span><span class="mi">4</span><span class="w">  </span><span class="o">//</span><span class="w"> </span><span class="err">加载索引</span>
+<span class="mi">17</span><span class="p">:</span><span class="w"> </span><span class="n">aaload</span><span class="w">          </span><span class="o">//</span><span class="w"> </span><span class="err">获取</span><span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<span class="mi">18</span><span class="p">:</span><span class="w"> </span><span class="n">astore</span><span class="w">        </span><span class="mi">5</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="err">存储到</span><span class="n">item</span>
+<span class="mi">20</span><span class="p">:</span><span class="w"> </span><span class="o">...</span><span class="w">             </span><span class="o">//</span><span class="w"> </span><span class="err">循环体</span>
+<span class="mi">28</span><span class="p">:</span><span class="w"> </span><span class="n">iinc</span><span class="w">          </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="w">  </span><span class="o">//</span><span class="w"> </span><span class="n">i</span><span class="o">++</span>
+<span class="mi">31</span><span class="p">:</span><span class="w"> </span><span class="n">goto</span><span class="w">          </span><span class="mi">8</span><span class="w">  </span><span class="o">//</span><span class="w"> </span><span class="err">跳转到条件判断</span>
+<span class="mi">34</span><span class="p">:</span><span class="w"> </span><span class="k">return</span>
+</code></pre></div>
+<h3 id="while">while循环</h3>
+<p>while循环与for循环的字节码结构类似，都是条件跳转：</p>
+<div class="hljs"><pre><span></span><code><span class="k">while</span><span class="w"> </span><span class="ss">(</span><span class="nv">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">10</span><span class="ss">)</span><span class="w"> </span>{
+<span class="w">    </span><span class="nv">System</span>.<span class="nv">out</span>.<span class="nv">println</span><span class="ss">(</span><span class="nv">i</span><span class="ss">)</span><span class="c1">;</span>
+<span class="w">    </span><span class="nv">i</span><span class="o">++</span><span class="c1">;</span>
+}
+</code></pre></div>
+<p>字节码实现与for循环基本相同，只是初始化部分在循环外部。</p>
+        </div>
+    </div>
+
+    <script src="../../../../assets/script.js"></script>
+    <script>
+        // 初始化代码高亮
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
+        });
+    </script>
+</body>
+
+</html>

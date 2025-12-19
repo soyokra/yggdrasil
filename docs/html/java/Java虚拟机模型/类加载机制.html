@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>类加载机制 - Technology</title>
+    <link rel="stylesheet" href="../../../assets/style.css">
+    <link rel="stylesheet" href="../../../assets/github.min.css">
+    <script src="../../../assets/highlight.min.js"></script>
+    <script src="../../../assets/python.min.js"></script>
+    <script src="../../../assets/java.min.js"></script>
+    <script src="../../../assets/javascript.min.js"></script>
+    <script src="../../../assets/xml.min.js"></script>
+    <script src="../../../assets/css.min.js"></script>
+    <script src="../../../assets/bash.min.js"></script>
+    <script src="../../../assets/sql.min.js"></script>
+</head>
+
+<body>
+    <!-- 顶部导航栏 -->
+    <div class="top-navbar">
+        <div class="site-title">Technology</div>
+    </div>
+
+    <!-- 侧边导航栏 -->
+    <div class="sidebar">
+        <ul class="nav-tree">
+            <li class="nav-item">
+<div class="nav-link has-children active">
+<span class="nav-link-icon expanded" data-toggle="collapse"></span>
+<a href="../../../html/java/index.html" class="nav-link-text" data-path="html/java/index.html">java</a>
+</div>
+<ul class="nav-children expanded">
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../html/java/Java并发编程/index.html" class="nav-link-text" data-path="html/java/Java并发编程/index.html">Java并发编程</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java并发编程/Java内存模型(JMM).html" class="nav-link-text" data-path="html/java/Java并发编程/Java内存模型(JMM).html">Java内存模型(JMM)</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java并发编程/线程(Thread).html" class="nav-link-text" data-path="html/java/Java并发编程/线程(Thread).html">线程(Thread)</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children active">
+<span class="nav-link-icon expanded" data-toggle="collapse"></span>
+<a href="../../../html/java/Java虚拟机模型/index.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/index.html">Java虚拟机模型</a>
+</div>
+<ul class="nav-children expanded">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型/内存分析工具.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/内存分析工具.html">内存分析工具</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型/垃圾回收机制.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/垃圾回收机制.html">垃圾回收机制</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型/堆.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/堆.html">堆</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../html/java/Java虚拟机模型/字节码分析/index.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/index.html">字节码分析</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型/字节码分析/字节码分析-Lambda表达式.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-Lambda表达式.html">字节码分析-Lambda表达式</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型/字节码分析/字节码分析-内部类.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-内部类.html">字节码分析-内部类</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型/字节码分析/字节码分析-可变参数.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-可变参数.html">字节码分析-可变参数</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型/字节码分析/字节码分析-同步.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-同步.html">字节码分析-同步</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型/字节码分析/字节码分析-字段.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-字段.html">字节码分析-字段</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型/字节码分析/字节码分析-异常处理.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-异常处理.html">字节码分析-异常处理</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型/字节码分析/字节码分析-控制流.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-控制流.html">字节码分析-控制流</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型/字节码分析/字节码分析-方法.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-方法.html">字节码分析-方法</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型/字节码分析/字节码分析-方法引用.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-方法引用.html">字节码分析-方法引用</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型/字节码分析/字节码分析-泛型.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-泛型.html">字节码分析-泛型</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型/字节码分析/字节码分析-类加载机制.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-类加载机制.html">字节码分析-类加载机制</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型/字节码分析/字节码分析-继承.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码分析-继承.html">字节码分析-继承</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型/字节码分析/字节码增强技术.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/字节码分析/字节码增强技术.html">字节码增强技术</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型/执行引擎.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/执行引擎.html">执行引擎</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型/方法区.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/方法区.html">方法区</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link active">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型/类加载机制.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/类加载机制.html">类加载机制</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/java/Java虚拟机模型/虚拟机栈.html" class="nav-link-text" data-path="html/java/Java虚拟机模型/虚拟机栈.html">虚拟机栈</a>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../html/spring/index.html" class="nav-link-text" data-path="html/spring/index.html">spring</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../html/spring/spring-boot/index.html" class="nav-link-text" data-path="html/spring/spring-boot/index.html">spring-boot</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-boot/SpringBoot事件机制.html" class="nav-link-text" data-path="html/spring/spring-boot/SpringBoot事件机制.html">SpringBoot事件机制</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-boot/SpringBoot启动流程.html" class="nav-link-text" data-path="html/spring/spring-boot/SpringBoot启动流程.html">SpringBoot启动流程</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-boot/SpringBoot日志体系.html" class="nav-link-text" data-path="html/spring/spring-boot/SpringBoot日志体系.html">SpringBoot日志体系</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-boot/SpringBoot自动装配.html" class="nav-link-text" data-path="html/spring/spring-boot/SpringBoot自动装配.html">SpringBoot自动装配</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../html/spring/spring-framework/index.html" class="nav-link-text" data-path="html/spring/spring-framework/index.html">spring-framework</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-framework/BeanDefinition创建流程.html" class="nav-link-text" data-path="html/spring/spring-framework/BeanDefinition创建流程.html">BeanDefinition创建流程</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-framework/BeanLifecycle.html" class="nav-link-text" data-path="html/spring/spring-framework/BeanLifecycle.html">BeanLifecycle</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-framework/Bean创建流程.html" class="nav-link-text" data-path="html/spring/spring-framework/Bean创建流程.html">Bean创建流程</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../html/spring/spring-mysql/index.html" class="nav-link-text" data-path="html/spring/spring-mysql/index.html">spring-mysql</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../html/spring/spring-mysql/mybatis/index.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis/index.html">mybatis</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-mysql/mybatis/Mapper源码分析.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis/Mapper源码分析.html">Mapper源码分析</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../html/spring/spring-mysql/mybatis-plus/index.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis-plus/index.html">mybatis-plus</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-mysql/mybatis-plus/DataSource源码分析.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis-plus/DataSource源码分析.html">DataSource源码分析</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-mysql/mybatis-plus/Mapper源码分析.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis-plus/Mapper源码分析.html">Mapper源码分析</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-mysql/mybatis-plus/SQL执行源码分析.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis-plus/SQL执行源码分析.html">SQL执行源码分析</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring-mysql/mybatis-plus/SQL模板注册源码分析.html" class="nav-link-text" data-path="html/spring/spring-mysql/mybatis-plus/SQL模板注册源码分析.html">SQL模板注册源码分析</a>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../html/spring/spring启动源码分析/index.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/index.html">spring启动源码分析</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/AbstractApplicationContext.cancelRefresh.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.cancelRefresh.html">AbstractApplicationContext.cancelRefresh</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/AbstractApplicationContext.destroyBeans.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.destroyBeans.html">AbstractApplicationContext.destroyBeans</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/AbstractApplicationContext.finishBeanFactoryInitialization.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.finishBeanFactoryInitialization.html">AbstractApplicationContext.finishBeanFactoryInitialization</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/AbstractApplicationContext.finishRefresh.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.finishRefresh.html">AbstractApplicationContext.finishRefresh</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/AbstractApplicationContext.initApplicationEventMulticaster.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.initApplicationEventMulticaster.html">AbstractApplicationContext.initApplicationEventMulticaster</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/AbstractApplicationContext.initMessageSource.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.initMessageSource.html">AbstractApplicationContext.initMessageSource</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/AbstractApplicationContext.invokeBeanFactoryPostProcessors.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.invokeBeanFactoryPostProcessors.html">AbstractApplicationContext.invokeBeanFactoryPostProcessors</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/AbstractApplicationContext.obtainFreshBeanFactory.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.obtainFreshBeanFactory.html">AbstractApplicationContext.obtainFreshBeanFactory</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/AbstractApplicationContext.onRefresh.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.onRefresh.html">AbstractApplicationContext.onRefresh</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/AbstractApplicationContext.postProcessBeanFactory.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.postProcessBeanFactory.html">AbstractApplicationContext.postProcessBeanFactory</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/AbstractApplicationContext.prepareBeanFactory.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.prepareBeanFactory.html">AbstractApplicationContext.prepareBeanFactory</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/AbstractApplicationContext.prepareRefresh.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.prepareRefresh.html">AbstractApplicationContext.prepareRefresh</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/AbstractApplicationContext.registerBeanPostProcessors.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.registerBeanPostProcessors.html">AbstractApplicationContext.registerBeanPostProcessors</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/AbstractApplicationContext.registerListeners.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.registerListeners.html">AbstractApplicationContext.registerListeners</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/AbstractApplicationContext.resetCommonCaches.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AbstractApplicationContext.resetCommonCaches.html">AbstractApplicationContext.resetCommonCaches</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/Application.createApplicationContext.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/Application.createApplicationContext.html">Application.createApplicationContext</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/Application.refreshContext.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/Application.refreshContext.html">Application.refreshContext</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/Application.run.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/Application.run.html">Application.run</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/AutoConfigurationImportSelector.getAutoConfigurationEntry.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/AutoConfigurationImportSelector.getAutoConfigurationEntry.html">AutoConfigurationImportSelector.getAutoConfigurationEntry</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/ClassPathMapperScanner.scan.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/ClassPathMapperScanner.scan.html">ClassPathMapperScanner.scan</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/ConfigurationClassParser.parse.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/ConfigurationClassParser.parse.html">ConfigurationClassParser.parse</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/ConfigurationClassPostProcessor.processConfigBeanDefinitions.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/ConfigurationClassPostProcessor.processConfigBeanDefinitions.html">ConfigurationClassPostProcessor.processConfigBeanDefinitions</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/MapperScannerConfigurer.postProcessBeanDefinitionRegistry.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/MapperScannerConfigurer.postProcessBeanDefinitionRegistry.html">MapperScannerConfigurer.postProcessBeanDefinitionRegistry</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/spring/spring启动源码分析/ServletWebServerApplicationContext.onRefresh.html" class="nav-link-text" data-path="html/spring/spring启动源码分析/ServletWebServerApplicationContext.onRefresh.html">ServletWebServerApplicationContext.onRefresh</a>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../html/云原生/index.html" class="nav-link-text" data-path="html/云原生/index.html">云原生</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/云原生/docker/index.html" class="nav-link-text" data-path="html/云原生/docker/index.html">docker</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../html/云原生/k8s/index.html" class="nav-link-text" data-path="html/云原生/k8s/index.html">k8s</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/云原生/k8s/K8S网络架构.html" class="nav-link-text" data-path="html/云原生/k8s/K8S网络架构.html">K8S网络架构</a>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../html/中间件/index.html" class="nav-link-text" data-path="html/中间件/index.html">中间件</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/中间件/clickhouse/index.html" class="nav-link-text" data-path="html/中间件/clickhouse/index.html">clickhouse</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/中间件/elasticsearch/index.html" class="nav-link-text" data-path="html/中间件/elasticsearch/index.html">elasticsearch</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/中间件/kakfa/index.html" class="nav-link-text" data-path="html/中间件/kakfa/index.html">kakfa</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/中间件/mongodb/index.html" class="nav-link-text" data-path="html/中间件/mongodb/index.html">mongodb</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/中间件/rabbitmq/index.html" class="nav-link-text" data-path="html/中间件/rabbitmq/index.html">rabbitmq</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/中间件/redis/index.html" class="nav-link-text" data-path="html/中间件/redis/index.html">redis</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../html/监控/index.html" class="nav-link-text" data-path="html/监控/index.html">监控</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/监控/prometheus/index.html" class="nav-link-text" data-path="html/监控/prometheus/index.html">prometheus</a>
+</div>
+</li>
+</ul>
+</li>
+<li class="nav-item">
+<div class="nav-link has-children">
+<span class="nav-link-icon" data-toggle="collapse"></span>
+<a href="../../../html/基础/index.html" class="nav-link-text" data-path="html/基础/index.html">基础</a>
+</div>
+<ul class="nav-children">
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/基础/数据结构/index.html" class="nav-link-text" data-path="html/基础/数据结构/index.html">数据结构</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/基础/画图/index.html" class="nav-link-text" data-path="html/基础/画图/index.html">画图</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/基础/算法/index.html" class="nav-link-text" data-path="html/基础/算法/index.html">算法</a>
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link">
+<span class="nav-link-icon" style="width: 20px; margin-right: 4px;"></span>
+<a href="../../../html/基础/设计模式/index.html" class="nav-link-text" data-path="html/基础/设计模式/index.html">设计模式</a>
+</div>
+</li>
+</ul>
+</li>
+        </ul>
+    </div>
+
+    <!-- 主内容区 -->
+    <div class="main-content">
+        <div class="content-body">
+            <h1 id="_1">类加载机制</h1>
+<h2 id="_2">类加载过程</h2>
+<p><img alt="class_lifecycle.png" src="class_lifecycle.png"/></p>
+<h4 id="1-loading">1. 加载（Loading）</h4>
+<p><strong>核心作用</strong>：找到目标类的<code>.class</code>字节流，加载到JVM内存，生成代表该类的<code>java.lang.Class</code>对象（作为访问类数据的入口）。</p>
+<p><strong>具体执行步骤</strong>：<br/>
+1. <strong>获取字节流</strong>：通过类的全限定名（如<code>com.example.User</code>），从不同来源读取<code>.class</code>字节流（常见来源：本地硬盘、jar包、网络、动态生成（如动态代理）、数据库等）。<br/>
+2. <strong>转化存储结构</strong>：将字节流的静态存储结构（.class文件格式）转化为JVM<strong>方法区</strong>的运行时数据结构（存储类的元数据：字段、方法、常量池等）。<br/>
+3. <strong>生成Class对象</strong>：在<strong>堆内存</strong>中创建一个<code>Class</code>对象（唯一标识该类），作为程序访问方法区中类数据的“接口”。</p>
+<p><strong>示例场景</strong>：当你执行<code>new User()</code>时，JVM先检查<code>User</code>类是否已加载，若未加载则先执行加载阶段。</p>
+<h4 id="2-verification">2. 验证（Verification）</h4>
+<p><strong>核心作用</strong>：校验加载的<code>.class</code>文件是否符合JVM规范，排除恶意/非法字节码，保证运行安全。</p>
+<p><strong>四大校验维度</strong>（按执行顺序）：</p>
+<table>
+<thead>
+<tr>
+<th>校验类型</th>
+<th>校验内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>文件格式验证</td>
+<td>校验字节流的基础格式（如魔数是否为<code>0xCAFEBABE</code>、版本号是否兼容JVM、字节码长度合法等）。</td>
+</tr>
+<tr>
+<td>元数据验证</td>
+<td>语义校验类的元数据（如类是否有父类、是否继承了<code>final</code>类、方法参数/返回值类型合法等）。</td>
+</tr>
+<tr>
+<td>字节码验证</td>
+<td>校验方法体的字节码指令（如栈操作是否合法、类型转换是否安全、避免栈溢出/空指针等）。</td>
+</tr>
+<tr>
+<td>符号引用验证</td>
+<td>校验常量池中的符号引用（如引用的类/方法/字段是否存在、权限是否足够）。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>异常提示</strong>：若验证失败，JVM会抛出<code>VerifyError</code>（或其子类，如<code>NoClassDefFoundError</code>），程序直接终止。</p>
+<h4 id="3-preparation">3. 准备（Preparation）</h4>
+<p><strong>核心作用</strong>：为类的<strong>静态变量（类变量，static修饰）</strong> 在方法区分配内存，并设置<strong>默认初始值（零值）</strong>。</p>
+<p><strong>关键注意点</strong>：</p>
+<ol>
+<li><strong>仅处理静态变量</strong>：实例变量（非static）的内存分配在对象实例化时（new）进行，不在此阶段处理。</li>
+<li><strong>初始值是“零值”</strong>：静态变量会被赋JVM默认值，而非代码中定义的初始值。<br/>
+        - 基本类型零值：<code>int→0</code>、<code>boolean→false</code>、<code>long→0L</code>；<br/>
+        - 引用类型零值：<code>null</code>。</li>
+<li><strong>final静态常量例外</strong>：如果是<code>static final</code>修饰的常量（编译期常量），此阶段会直接赋代码中定义的初始值（如<code>public static final int NUM = 10</code>，准备阶段<code>NUM</code>直接设为10）。</li>
+</ol>
+<h4 id="4-resolution">4. 解析（Resolution）</h4>
+<p><strong>核心作用</strong>：将方法区常量池中的<strong>符号引用</strong>转化为<strong>直接引用</strong>（内存地址）。</p>
+<ul>
+<li><strong>符号引用</strong>：用一组符号描述目标（如类的全限定名、方法名+参数类型），与内存布局无关（编译期就能确定）；</li>
+<li><strong>直接引用</strong>：直接指向目标的内存地址/偏移量，与内存布局绑定（运行时才能确定）。</li>
+</ul>
+<p><strong>解析对象</strong>：类/接口、字段、类方法、接口方法、方法句柄等。</p>
+<p><strong>灵活执行</strong>：解析阶段不是必须在准备后立即执行，JVM可在“需要时”（如执行到调用方法的指令时）才解析（动态解析），目的是支持Java的<strong>动态绑定（多态）</strong>。</p>
+<h4 id="5-initialization">5. 初始化（Initialization）</h4>
+<p>执行真正的赋值和静态代码块</p>
+<p><strong>核心作用</strong>：执行类的初始化方法<code>&lt;clinit&gt;()</code>，为静态变量赋代码中定义的初始值，执行静态代码块（<code>static{}</code>）。</p>
+<p><strong>关键特性</strong>：<br/>
+1. <strong><clinit>()方法的生成</clinit></strong>：由编译器自动收集类中所有静态变量的赋值语句和静态代码块，按代码书写顺序合并生成（无需手动定义）。<br/>
+2. <strong>执行顺序</strong>：父类的<code>&lt;clinit&gt;()</code>先于子类执行（因此父类的静态代码块/静态变量赋值会先完成）。<br/>
+3. <strong>触发条件</strong>：仅当类被<strong>主动使用</strong>时才会触发初始化（被动使用不触发），主动使用场景包括：<br/>
+        - 创建类的实例（<code>new</code>、反射、克隆、反序列化）；<br/>
+        - 调用类的静态方法；<br/>
+        - 访问类的非final静态变量；<br/>
+        - 反射调用（如<code>Class.forName("com.example.User")</code>）；<br/>
+        - 初始化子类时，父类会先初始化（除非子类仅访问父类的final静态变量）；<br/>
+        - JVM启动时指定的主类（包含<code>main()</code>方法的类）。</p>
+<h2 id="_3">类加载器</h2>
+<p><img alt="class_load.png" src="class_load.png"/></p>
+<p>类加载器有两种，一种是JVM内置，C++实现的Bootstrap Classloader，另一种是承自java.lang.ClassLoader，<br/>
+使用java实现的类加载器，包括官方实现的Extension ClassLoader，Application ClassLoader, 以及用户可能自定义的类加载器</p>
+<h3 id="bootstrap-classloader">Bootstrap ClassLoader</h3>
+<p>Bootstrap ClassLoader 默认加载 <java_home>/jre/lib 目录下的核心 jar 包（如rt.jar、charsets.jar、sunrsasign.jar等），<br/>
+这些 jar 包包含了 Java 核心类（如java.lang.String、java.lang.Object、java.util.ArrayList等）</java_home></p>
+<p>由于 Bootstrap ClassLoader 是原生代码实现，并非 Java 对象，因此在 Java 代码中获取核心类的类加载器时，返回值为null</p>
+<p>如果rt.jar缺失或损坏，Bootstrap ClassLoader 无法加载核心类，JVM 会直接启动失败，抛出NoClassDefFoundError</p>
+<p>查看Bootstrap ClassLoader 加载路径</p>
+<div class="hljs"><pre><span></span><code><span class="n">package</span> <span class="n">com</span><span class="o">.</span><span class="n">yggdrasil</span><span class="o">.</span><span class="n">learn</span><span class="o">.</span><span class="n">classloader</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">java.io.File</span><span class="p">;</span>
+
+<span class="n">public</span> <span class="k">class</span><span class="w"> </span><span class="nc">BootstrapClassLoaderTest</span> <span class="p">{</span>
+    <span class="n">public</span> <span class="n">static</span> <span class="n">void</span> <span class="n">main</span><span class="p">(</span><span class="n">String</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span> <span class="p">{</span>
+        <span class="o">//</span> <span class="n">获取Bootstrap</span> <span class="n">ClassLoader的加载路径</span><span class="err">（</span><span class="n">系统属性</span><span class="err">）</span>
+        <span class="n">String</span> <span class="n">bootClassPath</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="n">getProperty</span><span class="p">(</span><span class="s2">"sun.boot.class.path"</span><span class="p">);</span>
+        <span class="o">//</span> <span class="n">按系统路径分隔符拆分</span><span class="err">（</span><span class="n">Windows是</span><span class="p">;</span><span class="err">，</span><span class="n">Linux</span><span class="o">/</span><span class="n">Mac是</span><span class="p">:</span><span class="err">）</span>
+        <span class="n">String</span><span class="p">[]</span> <span class="n">paths</span> <span class="o">=</span> <span class="n">bootClassPath</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">File</span><span class="o">.</span><span class="n">pathSeparator</span><span class="p">);</span>
+
+        <span class="n">System</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="s2">"Bootstrap ClassLoader 加载路径："</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">String</span> <span class="n">path</span> <span class="p">:</span> <span class="n">paths</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">System</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="n">path</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>输出</p>
+<div class="hljs"><pre><span></span><code>Bootstrap ClassLoader 加载路径：
+C:\Program Files\Java\jdk1.8.0_333\jre\lib\resources.jar
+C:\Program Files\Java\jdk1.8.0_333\jre\lib\rt.jar
+C:\Program Files\Java\jdk1.8.0_333\jre\lib\sunrsasign.jar
+C:\Program Files\Java\jdk1.8.0_333\jre\lib\jsse.jar
+C:\Program Files\Java\jdk1.8.0_333\jre\lib\jce.jar
+C:\Program Files\Java\jdk1.8.0_333\jre\lib\charsets.jar
+C:\Program Files\Java\jdk1.8.0_333\jre\lib\jfr.jar
+C:\Program Files\Java\jdk1.8.0_333\jre\classes
+</code></pre></div>
+<h3 id="extension-classloader">Extension ClassLoader</h3>
+<p><img alt="class_load_extension.png" src="class_load_extension.png"/></p>
+<p>Extension ClassLoader具体指的是 sun.misc.Launcher$ExtClassLoader,<br/>
+ExtClassLoader主要负责加载 %JRE_HOME%/lib/ext 目录下的 jar 包和类以及被 java.ext.dirs 系统变量所指定的路径下的所有类。</p>
+<h3 id="application-classloader">Application ClassLoader</h3>
+<p><img alt="class_load_app.png" src="class_load_app.png"/></p>
+<p>Application ClassLoader具体指的是 sun.misc.Launcher$AppClassLoader,</p>
+<p>AppClassLoader(应用程序类加载器)：面向我们用户的加载器，负责加载当前应用 classpath 下的所有 jar 包和类。</p>
+<h2 id="_4">双亲委派机制</h2>
+<p><img alt="class_load_parent.png" src="class_load_parent.png"/></p>
+<p>当一个类加载器需要加载某个类时，它不会先自己动手，而是先把这个“加载请求”交给自己的<strong>父类加载器</strong>去处理；父类加载器也会重复这个行为，直到请求传到最顶层的类加载器； <br/>
+只有当顶层加载器无法加载这个类时，请求才会“向下回退”，由子类加载器自己尝试加载。</p>
+<p>这里的“双亲”并不是指父类和母类，而是指<strong>父级类加载器</strong>（是组合关系，不是继承关系）。</p>
+<h3 id="classloader">双亲委派的核心实现（ClassLoader源码解析）</h3>
+<div class="hljs"><pre><span></span><code><span class="kd">protected</span><span class="w"> </span><span class="n">Class</span><span class="o">&lt;?&gt;</span><span class="w"> </span><span class="nf">loadClass</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="n">resolve</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">ClassNotFoundException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="n">getClassLoadingLock</span><span class="p">(</span><span class="n">name</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// 1. 先检查这个类是否已经被加载过（缓存）</span>
+<span class="w">        </span><span class="n">Class</span><span class="o">&lt;?&gt;</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">findLoadedClass</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">c</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="kt">long</span><span class="w"> </span><span class="n">t0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">System</span><span class="p">.</span><span class="na">nanoTime</span><span class="p">();</span>
+<span class="w">            </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// 2. 如果有父加载器，委派给父加载器加载</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">parent</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parent</span><span class="p">.</span><span class="na">loadClass</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">);</span>
+<span class="w">                </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="c1">// 3. 没有父加载器（说明是Bootstrap），直接找Bootstrap加载</span>
+<span class="w">                    </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">findBootstrapClassOrNull</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">ClassNotFoundException</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// 父加载器加载失败，捕获异常（不抛出）</span>
+<span class="w">            </span><span class="p">}</span>
+
+<span class="w">            </span><span class="c1">// 4. 父加载器加载失败，自己尝试加载</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">c</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="kt">long</span><span class="w"> </span><span class="n">t1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">System</span><span class="p">.</span><span class="na">nanoTime</span><span class="p">();</span>
+<span class="w">                </span><span class="c1">// findClass是自定义加载器需要重写的方法（核心加载逻辑）</span>
+<span class="w">                </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">findClass</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="c1">// 5. 解析类（可选）</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">resolve</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">resolveClass</span><span class="p">(</span><span class="n">c</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">c</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="_5">双亲委派机制的核心作用</h3>
+<ol>
+<li><strong>保证类的唯一性</strong>：避免同一个类被不同加载器重复加载。比如<code>java.lang.String</code>只会被Bootstrap加载，无论哪个子类加载器请求，最终都是顶层加载，保证JVM中只有一个<code>String</code>类的Class对象。</li>
+<li><strong>保护核心API安全</strong>：防止核心类被篡改。比如你自定义一个<code>java.lang.String</code>类，由于双亲委派，请求会先到Bootstrap加载器，它会加载核心库的<code>String</code>，而不会加载你自定义的，避免恶意替换核心类。</li>
+<li><strong>遵循类加载的优先级</strong>：核心类（JDK自带）优先加载，应用类后加载，符合Java的设计逻辑。</li>
+</ol>
+<h3 id="_6">打破双亲委派的场景</h3>
+<p>双亲委派不是强制规则，某些场景下会被打破（重写<code>loadClass()</code>方法）：<br/>
+- <strong>SPI机制</strong>：比如JDBC驱动加载（<code>java.sql.Driver</code>），核心类<code>DriverManager</code>由Bootstrap加载，但它需要加载应用中的驱动类，因此通过<code>Thread.currentThread().getContextClassLoader()</code>获取应用类加载器，打破委派；<br/>
+- <strong>Tomcat类加载</strong>：Tomcat为了实现不同Web应用的类隔离，自定义了类加载器，打破了双亲委派；<br/>
+- <strong>OSGi框架</strong>：为了实现模块化热部署，也会自定义类加载逻辑。</p>
+        </div>
+    </div>
+
+    <script src="../../../assets/script.js"></script>
+    <script>
+        // 初始化代码高亮
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
+        });
+    </script>
+</body>
+
+</html>
