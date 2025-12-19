@@ -586,15 +586,11 @@
     <!-- 主内容区 -->
     <div class="main-content">
         <div class="content-body">
-            <h1 id="rabbitmq">rabbitmq</h1>
-<h2 id="_1">集群架构</h2>
-<ul>
-<li>Clustering</li>
-<li>Federation</li>
-<li>Shovels</li>
-</ul>
+            <h1 id="rabbitmq">RabbitMQ</h1>
+<h2 id="_1">服务架构</h2>
+<p>RabbitMQ集群架构主要有三种，Clustering，Federation，Shovels</p>
 <h3 id="clustering">Clustering</h3>
-<p>rabbitmq集群的节点都是平等的，没有所谓的主从节点。主从是在队列层面，早期版本的classic queue需要设置队列为Durable和HA mode，队列才会在不同的节点<br/>
+<p>RabbitMQ集群的节点都是平等的，没有所谓的主从节点。主从是在队列层面，早期版本的classic queue需要设置队列为Durable和HA mode，队列才会在不同的节点<br/>
 形成主从副本和持久化。新版本的Quorum Queues基于Raft协议，默认就是durable, replicated, highly available queue</p>
 <p><img alt="clustering.png" src="clustering.png"/></p>
         </div>

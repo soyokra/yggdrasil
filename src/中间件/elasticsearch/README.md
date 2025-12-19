@@ -1,4 +1,4 @@
-# elasticsearch
+# ElasticSearch
 
-## 集群架构
+## 服务架构
 ![cluster.png](cluster.png)

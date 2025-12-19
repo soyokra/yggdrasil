@@ -1,4 +1,4 @@
-# kafka
+# Kafka
 
-## 集群架构
+## 服务架构
 ![cluster.jpg](cluster.jpg)

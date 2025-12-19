@@ -1,12 +1,11 @@
-# mongodb
+# MongoDB
 
-## 架构
+## 服务架构
 
-mongodb有三种架构方案，单点(Standalone)，副本集(Replica Set)，
+MongoDB的集群架构主要有两种，副本集(Replica Set)，分片集群(Sharded Cluster)
 
 
-### 三节点副本集
-副本集的最小推荐架构
+### 副本集
 
 要实现副本集的优势，副本集至少需要三个节点。三节点副本集可以具有三个数据承载节点（主节点-从节点-从节点）（推荐），如果情况（例如成本）禁止添加第三个数据承载节点，则可以是两个数据承载节点加一个仲裁节点（主节点-从节点-仲裁节点）
 
@@ -35,17 +34,15 @@ mongodb有三种架构方案，单点(Standalone)，副本集(Replica Set)，
 
 ![psa2.png](psa2.png)
 
-> 参见文档: https://www.mongodb.com/zh-cn/docs/manual/core/replica-set-architecture-three-members/
 
-### 分片集群
+### 分片集群 
 MongoDB 分片集群由以下组件构成：
 - 分片：每个分片都包含分片数据的一个子集。每个分片都必须作为一个副本集进行部署。
 - 使用 mongos 进行路由：mongos 充当查询路由器，在客户端应用程序和分片集群之间提供接口。
 - 配置服务器：配置服务器会存储集群的元数据和配置设置。配置服务器必须部署为副本集 (CSRS)。
 
+这种模式，某一条数据是全部存在某个shard，正常不会冗余在不同的shard，假如某个shard主节点和从节点全部挂掉，会导致部分数据无法访问。
+
 ![shard.png](shard.png)
 
-> 参见文档：https://www.mongodb.com/zh-cn/docs/manual/core/sharded-cluster-components/
-
-## 监控告警
 
