@@ -11,6 +11,7 @@ public class StackTest {
         int b = 2;
         int c = a + b;
         int f = add(c, d);
+        int m;
         return f;
     }
 
